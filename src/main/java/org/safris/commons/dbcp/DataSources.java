@@ -60,11 +60,11 @@ public final class DataSources {
         if (defaults.get_transactionIsolation() != null && defaults.get_transactionIsolation().size() != 0 && defaults.get_transactionIsolation().get(0).getText() != null) {
             if ($dbcp_dbcpType._default._transactionIsolation.NONE.getText().equals(defaults.get_transactionIsolation().get(0).getText()))
                 dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_NONE);
-            else if ($dbcp_dbcpType._default._transactionIsolation.READ_COMMITTED.getText().equals(defaults.get_transactionIsolation().get(0).getText()))
+            else if ($dbcp_dbcpType._default._transactionIsolation.READ__COMMITTED.getText().equals(defaults.get_transactionIsolation().get(0).getText()))
                 dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-            else if ($dbcp_dbcpType._default._transactionIsolation.READ_UNCOMMITTED.getText().equals(defaults.get_transactionIsolation().get(0).getText()))
+            else if ($dbcp_dbcpType._default._transactionIsolation.READ__UNCOMMITTED.getText().equals(defaults.get_transactionIsolation().get(0).getText()))
                 dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-            else if ($dbcp_dbcpType._default._transactionIsolation.REPEATABLE_READ.getText().equals(defaults.get_transactionIsolation().get(0).getText()))
+            else if ($dbcp_dbcpType._default._transactionIsolation.REPEATABLE__READ.getText().equals(defaults.get_transactionIsolation().get(0).getText()))
                 dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
             else if ($dbcp_dbcpType._default._transactionIsolation.SERIALIZABLE.getText().equals(defaults.get_transactionIsolation().get(0).getText()))
                 dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
