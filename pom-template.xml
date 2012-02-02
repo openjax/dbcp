@@ -28,7 +28,7 @@
   <groupId>org.safris.commons</groupId>
   <artifactId>dbcp</artifactId>
   <version>${dev:org.safris.commons.dbcp}</version>
-  <name>${project.groupdId}.${project.artifactId}</name>
+  <name>${project.groupId}.${project.artifactId}</name>
   <description>
     The purpose of this module is to provide an intuitive configuration wrapper over apache's dbcp libraries.
   </description>
