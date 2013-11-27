@@ -47,7 +47,7 @@ public final class DataSources {
 
     final $dbcp_dbcpType._default defaults = dbcpType.get_default(0);
     if (defaults.get_connectionProperties() != null && defaults.get_connectionProperties().size() != 0 && defaults.get_connectionProperties(0).get_property() != null && defaults.get_connectionProperties(0).get_property().size() != 0)
-      for ($dbcp_dbcpType._default._connectionProperties._property property : defaults.get_connectionProperties(0).get_property())
+      for (final $dbcp_dbcpType._default._connectionProperties._property property : defaults.get_connectionProperties(0).get_property())
         if (property.get_name$() != null && property.get_name$().getText() != null && property.get_value$() != null && property.get_value$().getText() != null)
           dataSource.addConnectionProperty(property.get_name$().getText(), property.get_value$().getText());
 
