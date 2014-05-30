@@ -5,17 +5,17 @@ import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+
 import javax.sql.DataSource;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.safris.xml.generator.compiler.runtime.Bindings;
 import org.safris.xml.schema.binding.dbcp.$dbcp_dbcpType;
 import org.xml.sax.InputSource;
 
-import static org.junit.Assert.*;
-
-public class DataSourcesTest {
-  public static void main(String[] args) throws Exception {
+public final class DataSourcesTest {
+  public static void main(final String[] args) throws Exception {
     final DataSourcesTest dataSourcesTest = new DataSourcesTest();
     dataSourcesTest.testJNDIDataSource();
   }
@@ -23,7 +23,7 @@ public class DataSourcesTest {
   @Test
   @Ignore("Need to have an in-memory DB to test against.")
   public void testJNDIDataSource() throws Exception {
-    final $dbcp_dbcpType<?> dbcpType = ($dbcp_dbcpType<?>)Bindings.parse(new InputSource(new FileInputStream(new File("src/test/resources/xml/dbcp.xml"))));
+    final $dbcp_dbcpType dbcpType = ($dbcp_dbcpType)Bindings.parse(new InputSource(new FileInputStream(new File("src/test/resources/xml/dbcp.xml"))));
     final DataSource dataSource = DataSources.createDataSource(dbcpType);
     final Connection connection = dataSource.getConnection();
     if (connection != null) {
