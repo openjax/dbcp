@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2008 Seva Safris
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  You should have received a copy of The MIT License (MIT) along with this
+  program. If not, see <http://opensource.org/licenses/MIT/>.
+-->
+
+<xs:schema
+  elementFormDefault="qualified" 
+  targetNamespace="http://commons.safris.org/dbcp.xsd"
+  xmlns:dbcp="http://commons.safris.org/dbcp.xsd"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:simpleType name="integer">
+    <xs:annotation>
+      <xs:documentation>
+        Type that represents integer values accepted by DBCP parameters. A value of -1 represents the indefinite value.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="-1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="dbcp">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="jdbc">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="url" type="xs:anyURI">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The connection URL to be passed to our JDBC driver to establish a connection.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="driverClassName" type="xs:NCName">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The fully qualified Java class name of the JDBC driver to be used.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="username" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The connection username to be passed to our JDBC driver to establish a connection.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="password" type="xs:string">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The connection password to be passed to our JDBC driver to establish a connection.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="loginTimeout" type="dbcp:integer" default="-1" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The login timeout (in seconds) for connecting to the database.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="default" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="connectionProperties" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The connection properties that will be sent to our JDBC driver when establishing new connections.
+                  	NOTE: The "user" and "password" properties will be passed explicitly, so they do not need to be included here.
+                  </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence maxOccurs="unbounded">
+                  	<xs:element name="property">
+                  		<xs:complexType>
+                  			<xs:attribute name="name" type="xs:string" use="required"/>
+                  			<xs:attribute name="value" type="xs:string" use="required"/>
+                  		</xs:complexType>
+                  	</xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="autoCommit" type="xs:boolean" default="true" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The default auto-commit state of connections created by this pool.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="readOnly" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The default read-only state of connections created by this pool. If not set then the setReadOnly method will not be called.
+                  	NOTE: Some drivers don't support read only mode, ex: Informix.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="transactionIsolation" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The default TransactionIsolation state of connections created by this pool.
+                  </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                  <xs:restriction base="xs:NCName">
+                  	<xs:enumeration value="NONE">
+                  		<xs:annotation>
+                  			<xs:documentation>
+                  				A constant indicating that transactions are not supported.
+                  			</xs:documentation>
+                  		</xs:annotation>
+                  	</xs:enumeration>
+                  	<xs:enumeration value="READ_UNCOMMITTED">
+                  		<xs:annotation>
+                  			<xs:documentation>
+                  				A constant indicating that dirty reads, non-repeatable reads and phantom reads can occur.
+                  			</xs:documentation>
+                  		</xs:annotation>
+                  	</xs:enumeration>
+                  	<xs:enumeration value="READ_COMMITTED">
+                  		<xs:annotation>
+                  			<xs:documentation>
+                  				A constant indicating that dirty reads are prevented; non-repeatable reads and phantom reads can occur.
+                  			</xs:documentation>
+                  		</xs:annotation>
+                  	</xs:enumeration>
+                  	<xs:enumeration value="REPEATABLE_READ">
+                  		<xs:annotation>
+                  			<xs:documentation>
+                  				A constant indicating that dirty reads and non-repeatable reads are prevented; phantom reads can occur.
+                  			</xs:documentation>
+                  		</xs:annotation>
+                  	</xs:enumeration>
+                  	<xs:enumeration value="SERIALIZABLE">
+                  		<xs:annotation>
+                  			<xs:documentation>
+                  				A constant indicating that dirty reads, non-repeatable reads and phantom reads are prevented.
+                  			</xs:documentation>
+                  		</xs:annotation>
+                  	</xs:enumeration>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="size" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="initialSize" type="xs:nonNegativeInteger" default="0" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The initial number of connections that are created when the pool is started.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="maxActive" type="dbcp:integer" default="8" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The maximum number of active connections that can be allocated from this pool at the same time, or -1 for no limit.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="maxIdle" type="dbcp:integer" default="8" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                    The maximum number of connections that can remain idle in the pool, without extra ones being released, or -1 for no limit.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="minIdle" type="xs:nonNegativeInteger" default="0" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The minimum number of connections that can remain idle in the pool, without extra ones being created, or zero to create none.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="maxWait" type="dbcp:integer" default="-1" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The maximum number of milliseconds that the pool will wait (when there are no available connections) for a connection to be returned before throwing an exception, or INDEFINITELY for no limit.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="management" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="validationQuery" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The SQL query that will be used to validate connections from this pool before returning them to the caller.
+                  	If specified, this query MUST be an SQL SELECT statement that returns at least one row.
+                  </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                  	<xs:pattern value="SELECT.*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="testOnBorrow" type="xs:boolean" default="true" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The indication of whether objects will be validated before being borrowed from the pool.
+                  	If the object fails to validate, it will be dropped from the pool, and we will attempt to borrow another.
+                  	NOTE: for a true value to have any effect, the validationQuery parameter must be set to a non-null string.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="testOnReturn" type="xs:boolean" default="false" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The indication of whether objects will be validated before being returned to the pool.
+                  	NOTE: for a true value to have any effect, the validationQuery parameter must be set to a non-null string.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="testWhileIdle" type="xs:boolean" default="false" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The indication of whether objects will be validated by the idle object evictor (if any).
+                  	If an object fails to validate, it will be dropped from the pool.
+                  	NOTE: for a true value to have any effect, the validationQuery parameter must be set to a non-null string.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="timeBetweenEvictionRuns" type="dbcp:integer" default="-1" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The number of milliseconds to sleep between runs of the idle object evictor thread.
+                  	When non-positive, no idle object evictor thread will be run.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="numTestsPerEvictionRun" type="xs:nonNegativeInteger" default="3" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The number of objects to examine during each run of the idle object evictor thread (if any).
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="minEvictableIdleTime" type="xs:nonNegativeInteger" default="1800000" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The minimum amount of time an object may sit idle in the pool before it is eligable for eviction by the idle object evictor (if any).
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="preparedStatements" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="poolPreparedStatements" type="xs:boolean" default="false" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	Enable prepared statement pooling for this pool.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="maxOpenPreparedStatements" type="dbcp:integer" default="-1" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	The maximum number of open statements that can be allocated from the statement pool at the same time, or zero for no limit.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="removal" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="removeAbandoned" type="xs:boolean" default="false" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	Flag to remove abandoned connections if they exceed the removeAbandonedTimout.
+                  	If set to true a connection is considered abandoned and eligible for removal if it has been idle longer than the removeAbandonedTimeout.
+                  	Setting this to true can recover db connections from poorly written applications which fail to close a connection.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="removeAbandonedTimeout" type="xs:nonNegativeInteger" default="300" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	Timeout in seconds before an abandoned connection can be removed.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="logAbandoned" type="xs:boolean" default="false" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>
+                  	Flag to log stack traces for application code which abandoned a Statement or Connection.
+                  	Logging of abandoned Statements and Connections adds overhead for every Connection open or new Statement because a stack trace has to be generated.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:NCName" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  
+</xs:schema>
