@@ -4,51 +4,48 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.safris.xml.schema.binding.dbcp.$dbcp_dbcpType;
+import org.safris.xml.generator.compiler.runtime.BindingRuntimeException;
 
 public final class DataSources {
-  public static BasicDataSource createDataSource(final $dbcp_dbcpType dbcpType) throws SQLException {
-    if (dbcpType._jdbc() == null || dbcpType._jdbc().size() == 0)
-      throw new SQLException("jdbc is not present");
+  public static BasicDataSource createDataSource(final $dbcp_dbcp dbcp) throws SQLException {
+    if (dbcp._jdbc() == null || dbcp._jdbc().size() == 0)
+      throw new BindingRuntimeException("/dbcp:jdbc is missing");
 
-    final $dbcp_dbcpType._jdbc jdbc = dbcpType._jdbc(0);
+    final dbcp_dbcp._jdbc jdbc = dbcp._jdbc(0);
     final BasicDataSource dataSource = new BasicDataSource();
     if (jdbc._driverClassName() == null || jdbc._driverClassName().size() == 0 || jdbc._driverClassName(0).text() == null)
-      throw new SQLException("jdbc.driverClassName is not present");
+      throw new BindingRuntimeException("/dbcp:jdbc/dbcp:driverClassName is missing");
 
     dataSource.setDriverClassName(jdbc._driverClassName(0).text());
 
-//      if(jdbc._loginTimeout() != null && jdbc._loginTimeout().size() != 0 && jdbc._loginTimeout(0).text() != null)
-//      {
+//    if(jdbc._loginTimeout() != null && jdbc._loginTimeout().size() != 0 && jdbc._loginTimeout(0).text() != null) {
 // FIXME: This causes a ClassNotFoundException: com.sybase.jdbc3.jdbc.SybDriver
-//          try
-//          {
-//              dataSource.setLoginTimeout(jdbc._loginTimeout(0).text());
-//          }
-//          catch(final SQLException e)
-//          {
-//              throw new SQLException(e);
-//          }
+//      try {
+//        dataSource.setLoginTimeout(jdbc._loginTimeout(0).text());
 //      }
+//      catch(final SQLException e) {
+//        throw new SQLException(e);
+//      }
+//  }
 
     if (jdbc._url() == null || jdbc._url().size() == 0 || jdbc._url(0).text() == null)
-      throw new SQLException("jdbc.url is not present");
+      throw new BindingRuntimeException("/dbcp:jdbc/dbcp:url is missing");
 
     dataSource.setUrl(jdbc._url(0).text());
 
     if (jdbc._username() == null || jdbc._username().size() == 0 || jdbc._username(0).text() == null)
-      throw new SQLException("jdbc.username is not present");
+      throw new BindingRuntimeException("/dbcp:jdbc/dbcp:username is missing");
 
     dataSource.setUsername(jdbc._username(0).text());
 
     if (jdbc._password() == null || jdbc._password().size() == 0 || jdbc._password(0).text() == null)
-      throw new SQLException("jdbc.password is not present");
+      throw new BindingRuntimeException("/dbcp:jdbc/dbcp:password is missing");
 
     dataSource.setPassword(jdbc._password(0).text());
 
-    final $dbcp_dbcpType._default defaults = dbcpType._default(0);
+    final dbcp_dbcp._default defaults = dbcp._default(0);
     if (defaults._connectionProperties() != null && defaults._connectionProperties().size() != 0 && defaults._connectionProperties(0)._property() != null && defaults._connectionProperties(0)._property().size() != 0)
-      for (final $dbcp_dbcpType._default._connectionProperties._property property : defaults._connectionProperties(0)._property())
+      for (final dbcp_dbcp._default._connectionProperties._property property : defaults._connectionProperties(0)._property())
         if (property._name$() != null && property._name$().text() != null && property._value$() != null && property._value$().text() != null)
           dataSource.addConnectionProperty(property._name$().text(), property._value$().text());
 
@@ -59,20 +56,20 @@ public final class DataSources {
       dataSource.setDefaultReadOnly(defaults._readOnly(0).text());
 
     if (defaults._transactionIsolation() != null && defaults._transactionIsolation().size() != 0 && defaults._transactionIsolation(0).text() != null) {
-      if ($dbcp_dbcpType._default._transactionIsolation.NONE.text().equals(defaults._transactionIsolation(0).text()))
+      if (dbcp_dbcp._default._transactionIsolation.NONE.text().equals(defaults._transactionIsolation(0).text()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_NONE);
-      else if ($dbcp_dbcpType._default._transactionIsolation.READ_5FCOMMITTED.text().equals(defaults._transactionIsolation(0).text()))
+      else if (dbcp_dbcp._default._transactionIsolation.READ_5FCOMMITTED.text().equals(defaults._transactionIsolation(0).text()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-      else if ($dbcp_dbcpType._default._transactionIsolation.READ_5FUNCOMMITTED.text().equals(defaults._transactionIsolation(0).text()))
+      else if (dbcp_dbcp._default._transactionIsolation.READ_5FUNCOMMITTED.text().equals(defaults._transactionIsolation(0).text()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-      else if ($dbcp_dbcpType._default._transactionIsolation.REPEATABLE_5FREAD.text().equals(defaults._transactionIsolation(0).text()))
+      else if (dbcp_dbcp._default._transactionIsolation.REPEATABLE_5FREAD.text().equals(defaults._transactionIsolation(0).text()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
-      else if ($dbcp_dbcpType._default._transactionIsolation.SERIALIZABLE.text().equals(defaults._transactionIsolation(0).text()))
+      else if (dbcp_dbcp._default._transactionIsolation.SERIALIZABLE.text().equals(defaults._transactionIsolation(0).text()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
     }
 
-    if (dbcpType._size() != null && dbcpType._size().size() != 0) {
-      final $dbcp_dbcpType._size size = dbcpType._size(0);
+    if (dbcp._size() != null && dbcp._size().size() != 0) {
+      final dbcp_dbcp._size size = dbcp._size(0);
 
       if (size._initialSize() != null && size._initialSize().size() != 0 && size._initialSize(0).text() != null)
         dataSource.setInitialSize(size._initialSize(0).text());
@@ -90,8 +87,8 @@ public final class DataSources {
         dataSource.setMaxWait(size._maxWait(0).text());
     }
 
-    if (dbcpType._management() != null && dbcpType._management().size() != 0) {
-      final $dbcp_dbcpType._management management = dbcpType._management(0);
+    if (dbcp._management() != null && dbcp._management().size() != 0) {
+      final dbcp_dbcp._management management = dbcp._management(0);
 
       if (management._validationQuery() != null && management._validationQuery().size() != 0 && management._validationQuery(0).text() != null)
         dataSource.setValidationQuery(management._validationQuery(0).text());
@@ -115,8 +112,8 @@ public final class DataSources {
         dataSource.setMinEvictableIdleTimeMillis(management._minEvictableIdleTime(0).text());
     }
 
-    if (dbcpType._preparedStatements() != null && dbcpType._preparedStatements().size() != 0) {
-      final $dbcp_dbcpType._preparedStatements preparedStatements = dbcpType._preparedStatements(0);
+    if (dbcp._preparedStatements() != null && dbcp._preparedStatements().size() != 0) {
+      final dbcp_dbcp._preparedStatements preparedStatements = dbcp._preparedStatements(0);
 
       if (preparedStatements._poolPreparedStatements() != null && preparedStatements._poolPreparedStatements().size() != 0 && preparedStatements._poolPreparedStatements(0).text() != null)
         dataSource.setPoolPreparedStatements(preparedStatements._poolPreparedStatements(0).text());
@@ -125,8 +122,8 @@ public final class DataSources {
         dataSource.setMaxOpenPreparedStatements(preparedStatements._maxOpenPreparedStatements(0).text());
     }
 
-    if (dbcpType._removal() != null && dbcpType._removal().size() != 0) {
-      final $dbcp_dbcpType._removal removal = dbcpType._removal(0);
+    if (dbcp._removal() != null && dbcp._removal().size() != 0) {
+      final dbcp_dbcp._removal removal = dbcp._removal(0);
 
       if (removal._removeAbandoned() != null && removal._removeAbandoned().size() != 0 && removal._removeAbandoned(0).text() != null)
         dataSource.setRemoveAbandoned(removal._removeAbandoned(0).text());

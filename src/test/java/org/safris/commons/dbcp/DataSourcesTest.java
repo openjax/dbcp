@@ -6,19 +6,19 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 
+import org.safris.commons.dbcp.dbcp_dbcp;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.safris.commons.lang.Resources;
 import org.safris.xml.generator.compiler.runtime.Bindings;
-import org.safris.xml.schema.binding.dbcp.$dbcp_dbcpType;
 import org.xml.sax.InputSource;
 
 public final class DataSourcesTest {
   @Test
   @Ignore("Need to have an embedded DB to test against.")
   public void testJNDIDataSource() throws Exception {
-    final $dbcp_dbcpType dbcpType = ($dbcp_dbcpType)Bindings.parse(new InputSource(Resources.getResource("xml/dbcp.xml").getURL().openStream()));
-    final DataSource dataSource = DataSources.createDataSource(dbcpType);
+    final dbcp_dbcp dbcp = (dbcp_dbcp)Bindings.parse(new InputSource(Resources.getResource("dbcp.xml").getURL().openStream()));
+    final DataSource dataSource = DataSources.createDataSource(dbcp);
     final Connection connection = dataSource.getConnection();
     if (connection != null) {
       final Statement statement = connection.createStatement();
