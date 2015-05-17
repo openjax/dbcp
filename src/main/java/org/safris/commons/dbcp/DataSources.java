@@ -71,67 +71,67 @@ public final class DataSources {
     if (dbcp._size() != null && dbcp._size().size() != 0) {
       final dbcp_dbcp._size size = dbcp._size(0);
 
-      if (size._initialSize() != null && size._initialSize().size() != 0 && size._initialSize(0).text() != null)
-        dataSource.setInitialSize(size._initialSize(0).text());
+      if (!size._initialSize(0).isNull())
+        dataSource.setInitialSize(size._initialSize(0).text().intValue());
 
-      if (size._maxActive() != null && size._maxActive().size() != 0 && size._maxActive(0).text() != null)
-        dataSource.setMaxActive(size._maxActive(0).text());
+      if (!size._maxActive(0).isNull())
+        dataSource.setMaxActive(size._maxActive(0).text().intValue());
 
-      if (size._maxIdle() != null && size._maxIdle().size() != 0 && size._maxIdle(0).text() != null)
-        dataSource.setMaxIdle(size._maxIdle(0).text());
+      if (!size._maxIdle(0).isNull())
+        dataSource.setMaxIdle(size._maxIdle(0).text().intValue());
 
-      if (size._minIdle() != null && size._minIdle().size() != 0 && size._minIdle(0).text() != null)
-        dataSource.setMinIdle(size._minIdle(0).text());
+      if (!size._minIdle(0).isNull())
+        dataSource.setMinIdle(size._minIdle(0).text().intValue());
 
-      if (size._maxWait() != null && size._maxWait().size() != 0 && size._maxWait(0).text() != null)
-        dataSource.setMaxWait(size._maxWait(0).text());
+      if (!size._maxWait(0).isNull())
+        dataSource.setMaxWait(size._maxWait(0).text().intValue());
     }
 
     if (dbcp._management() != null && dbcp._management().size() != 0) {
       final dbcp_dbcp._management management = dbcp._management(0);
 
-      if (management._validationQuery() != null && management._validationQuery().size() != 0 && management._validationQuery(0).text() != null)
+      if (!management._validationQuery(0).isNull())
         dataSource.setValidationQuery(management._validationQuery(0).text());
 
-      if (management._testOnBorrow() != null && management._testOnBorrow().size() != 0 && management._testOnBorrow(0).text() != null)
+      if (!management._testOnBorrow(0).isNull())
         dataSource.setTestOnBorrow(management._testOnBorrow(0).text());
 
-      if (management._testOnReturn() != null && management._testOnReturn().size() != 0 && management._testOnReturn(0).text() != null)
+      if (!management._testOnReturn(0).isNull())
         dataSource.setTestOnReturn(management._testOnReturn(0).text());
 
-      if (management._testWhileIdle() != null && management._testWhileIdle().size() != 0 && management._testWhileIdle(0).text() != null)
+      if (!management._testWhileIdle(0).isNull())
         dataSource.setTestWhileIdle(management._testWhileIdle(0).text());
 
-      if (management._timeBetweenEvictionRuns() != null && management._timeBetweenEvictionRuns().size() != 0 && management._timeBetweenEvictionRuns(0).text() != null)
-        dataSource.setTimeBetweenEvictionRunsMillis(management._timeBetweenEvictionRuns(0).text());
+      if (!management._timeBetweenEvictionRuns(0).isNull())
+        dataSource.setTimeBetweenEvictionRunsMillis(management._timeBetweenEvictionRuns(0).text().intValue());
 
-      if (management._numTestsPerEvictionRun() != null && management._numTestsPerEvictionRun().size() != 0 && management._numTestsPerEvictionRun(0).text() != null)
-        dataSource.setNumTestsPerEvictionRun(management._numTestsPerEvictionRun(0).text());
+      if (!management._numTestsPerEvictionRun(0).isNull())
+        dataSource.setNumTestsPerEvictionRun(management._numTestsPerEvictionRun(0).text().intValue());
 
-      if (management._minEvictableIdleTime() != null && management._minEvictableIdleTime().size() != 0 && management._minEvictableIdleTime(0).text() != null)
-        dataSource.setMinEvictableIdleTimeMillis(management._minEvictableIdleTime(0).text());
+      if (!management._minEvictableIdleTime(0).isNull())
+        dataSource.setMinEvictableIdleTimeMillis(management._minEvictableIdleTime(0).text().intValue());
     }
 
     if (dbcp._preparedStatements() != null && dbcp._preparedStatements().size() != 0) {
       final dbcp_dbcp._preparedStatements preparedStatements = dbcp._preparedStatements(0);
 
-      if (preparedStatements._poolPreparedStatements() != null && preparedStatements._poolPreparedStatements().size() != 0 && preparedStatements._poolPreparedStatements(0).text() != null)
+      if (!preparedStatements._poolPreparedStatements(0).isNull())
         dataSource.setPoolPreparedStatements(preparedStatements._poolPreparedStatements(0).text());
 
-      if (preparedStatements._maxOpenPreparedStatements() != null && preparedStatements._maxOpenPreparedStatements().size() != 0 && preparedStatements._maxOpenPreparedStatements(0).text() != null)
-        dataSource.setMaxOpenPreparedStatements(preparedStatements._maxOpenPreparedStatements(0).text());
+      if (!preparedStatements._maxOpenPreparedStatements(0).isNull())
+        dataSource.setMaxOpenPreparedStatements(preparedStatements._maxOpenPreparedStatements(0).text().intValue());
     }
 
     if (dbcp._removal() != null && dbcp._removal().size() != 0) {
       final dbcp_dbcp._removal removal = dbcp._removal(0);
 
-      if (removal._removeAbandoned() != null && removal._removeAbandoned().size() != 0 && removal._removeAbandoned(0).text() != null)
+      if (!removal._removeAbandoned(0).isNull())
         dataSource.setRemoveAbandoned(removal._removeAbandoned(0).text());
 
-      if (removal._removeAbandonedTimeout() != null && removal._removeAbandonedTimeout().size() != 0 && removal._removeAbandonedTimeout(0).text() != null)
-        dataSource.setRemoveAbandonedTimeout(removal._removeAbandonedTimeout(0).text());
+      if (!removal._removeAbandonedTimeout(0).isNull())
+        dataSource.setRemoveAbandonedTimeout(removal._removeAbandonedTimeout(0).text().intValue());
 
-      if (removal._logAbandoned() != null && removal._logAbandoned().size() != 0 && removal._logAbandoned(0).text() != null)
+      if (!removal._logAbandoned(0).isNull())
         dataSource.setLogAbandoned(removal._logAbandoned(0).text());
     }
 
