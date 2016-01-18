@@ -320,7 +320,6 @@
         </xs:complexType>
       </xs:element>
     </xs:sequence>
-    <xs:attribute name="name" type="xs:NCName" use="required"/>
   </xs:complexType>
   
   <xs:element name="dbcp" type="dbcp:dbcp"/>
