@@ -2,13 +2,22 @@ package org.safris.commons.dbcp;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.safris.xml.generator.compiler.runtime.BindingRuntimeException;
 
 public final class DataSources {
+  public static BasicDataSource createDataSource(final List<$dbcp_dbcp> dbcps, final String name) throws SQLException {
+    for (final $dbcp_dbcp dbcp : dbcps)
+      if (name.equals(dbcp._name$().text()))
+        return createDataSource(dbcp);
+
+    return null;
+  }
+
   public static BasicDataSource createDataSource(final $dbcp_dbcp dbcp) throws SQLException {
-    if (dbcp._jdbc() == null || dbcp._jdbc().size() == 0)
+    if (dbcp.isNull())
       throw new BindingRuntimeException("/dbcp:jdbc is missing");
 
     final dbcp_dbcp._jdbc jdbc = dbcp._jdbc(0);
