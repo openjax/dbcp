@@ -11,8 +11,6 @@ import org.safris.commons.logging.LoggerPrintWriter;
 import org.safris.xml.generator.compiler.runtime.BindingRuntimeException;
 
 public final class DataSources {
-  private static final Logger logger = Logger.getLogger(DataSources.class.getName());
-
   public static BasicDataSource createDataSource(final List<$dbcp_dbcp> dbcps, final String name) throws SQLException {
     for (final $dbcp_dbcp dbcp : dbcps)
       if (name.equals(dbcp._name$().text()))
@@ -27,7 +25,7 @@ public final class DataSources {
 
     final dbcp_dbcp._jdbc jdbc = dbcp._jdbc(0);
     final BasicDataSource dataSource = new BasicDataSource();
-    if (!jdbc._driverClassName(0).isNull())
+    if (jdbc._driverClassName(0).isNull())
       throw new BindingRuntimeException("/dbcp:jdbc/dbcp:driverClassName is missing");
 
     dataSource.setDriverClassName(jdbc._driverClassName(0).text());
@@ -42,17 +40,17 @@ public final class DataSources {
 //      }
 //  }
 
-    if (!jdbc._url(0).isNull())
+    if (jdbc._url(0).isNull())
       throw new BindingRuntimeException("/dbcp:jdbc/dbcp:url is missing");
 
     dataSource.setUrl(jdbc._url(0).text());
 
-    if (!jdbc._username(0).isNull())
+    if (jdbc._username(0).isNull())
       throw new BindingRuntimeException("/dbcp:jdbc/dbcp:username is missing");
 
     dataSource.setUsername(jdbc._username(0).text());
 
-    if (!jdbc._password(0).isNull())
+    if (jdbc._password(0).isNull())
       throw new BindingRuntimeException("/dbcp:jdbc/dbcp:password is missing");
 
     dataSource.setPassword(jdbc._password(0).text());
@@ -148,6 +146,7 @@ public final class DataSources {
 
     final dbcp_dbcp._logging logging = dbcp._logging(0);
     if (!logging.isNull()) {
+      final Logger logger = Logger.getLogger(DataSources.class.getName());
       final LoggerPrintWriter loggerPrintWriter = new LoggerPrintWriter(logger, Level.parse(logging._level(0).text()));
       dataSource.setLogWriter(loggerPrintWriter);
       dataSource.setLogExpiredConnections(!logging._logExpiredConnections(0).isNull() && logging._logExpiredConnections(0).text());
