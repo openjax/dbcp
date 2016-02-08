@@ -319,6 +319,29 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="logging" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="level">
+              <xs:simpleType>
+                <xs:restriction base="xs:token">
+                  <xs:enumeration value="OFF"/>
+                  <xs:enumeration value="SEVERE"/>
+                  <xs:enumeration value="WARNING"/>
+                  <xs:enumeration value="INFO"/>
+                  <xs:enumeration value="CONFIG"/>
+                  <xs:enumeration value="FINE"/>
+                  <xs:enumeration value="FINER"/>
+                  <xs:enumeration value="FINEST"/>
+                  <xs:enumeration value="ALL"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="logExpiredConnections" type="xs:boolean"/>
+            <xs:element name="logAbandoned" type="xs:boolean"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
     </xs:sequence>
     <xs:attribute name="name" type="xs:NCName" use="required"/>
   </xs:complexType>
