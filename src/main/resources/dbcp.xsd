@@ -70,6 +70,7 @@
               <xs:annotation>
                 <xs:documentation>
                   The login timeout (in seconds) for connecting to the database.
+                  CURRENTLY UNSUPPORTED
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
