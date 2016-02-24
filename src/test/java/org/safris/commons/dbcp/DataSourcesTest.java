@@ -12,7 +12,7 @@ import org.safris.commons.lang.Resources;
 import org.safris.xml.generator.compiler.runtime.Bindings;
 import org.xml.sax.InputSource;
 
-public final class DataSourcesTest {
+public class DataSourcesTest {
   @Test
   @Ignore("Need to have an embedded DB to test against.")
   public void testJNDIDataSource() throws Exception {
