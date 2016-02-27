@@ -9,10 +9,11 @@ import javax.sql.DataSource;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.safris.commons.lang.Resources;
+import org.safris.commons.test.LoggableTest;
 import org.safris.xml.generator.compiler.runtime.Bindings;
 import org.xml.sax.InputSource;
 
-public class DataSourcesTest {
+public class DataSourcesTest extends LoggableTest {
   @Test
   @Ignore("Need to have an embedded DB to test against.")
   public void testJNDIDataSource() throws Exception {
@@ -24,7 +25,7 @@ public class DataSourcesTest {
       final ResultSet resultSet = statement.executeQuery("SELECT 1");
       while (resultSet.next()) {
         final String string = resultSet.getString(1);
-        System.out.println("C : " + string);
+        log("C : " + string);
       }
 
       resultSet.close();
