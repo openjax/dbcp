@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.safris.commons.lang.Throwables;
 import org.safris.commons.logging.LoggerPrintWriter;
 import org.safris.xml.generator.compiler.runtime.BindingRuntimeException;
 
@@ -40,7 +41,22 @@ public final class DataSources {
       throw new BindingRuntimeException("/dbcp:jdbc is missing");
 
     final dbcp_dbcp._jdbc jdbc = dbcp._jdbc(0);
-    final BasicDataSource dataSource = new BasicDataSource();
+    final BasicDataSource dataSource = new BasicDataSource() {
+      @Override
+      public Connection getConnection() throws SQLException {
+        try {
+          return super.getConnection();
+        }
+        catch (final SQLException e) {
+          // TODO: Finish this!
+          if ("Cannot get a connection, pool error Timeout waiting for idle object".equals(e.getMessage()))
+            Throwables.set(e, "XX" + e.getMessage());
+
+          throw e;
+        }
+      }
+    };
+
     if (jdbc._driverClassName(0).isNull())
       throw new BindingRuntimeException("/dbcp:jdbc/dbcp:driverClassName is missing");
 
