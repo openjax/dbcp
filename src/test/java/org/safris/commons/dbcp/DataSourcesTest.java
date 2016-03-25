@@ -35,18 +35,18 @@ public class DataSourcesTest extends LoggableTest {
   public void testJNDIDataSource() throws Exception {
     final dbcp_dbcp dbcp = (dbcp_dbcp)Bindings.parse(new InputSource(Resources.getResource("dbcp.xml").getURL().openStream()));
     final DataSource dataSource = DataSources.createDataSource(dbcp);
-    final Connection connection = dataSource.getConnection();
-    if (connection != null) {
-      final Statement statement = connection.createStatement();
-      final ResultSet resultSet = statement.executeQuery("SELECT 1");
-      while (resultSet.next()) {
-        final String string = resultSet.getString(1);
-        log("C : " + string);
+    try (final Connection connection = dataSource.getConnection()) {
+      if (connection != null) {
+        try (
+          final Statement statement = connection.createStatement();
+          final ResultSet resultSet = statement.executeQuery("SELECT 1");
+        ) {
+          while (resultSet.next()) {
+            final String string = resultSet.getString(1);
+            log("C : " + string);
+          }
+        }
       }
-
-      resultSet.close();
-      statement.close();
-      connection.close();
     }
   }
 }
