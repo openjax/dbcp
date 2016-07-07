@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.safris.commons.dbcp.xe.$dbcp_dbcp;
 import org.safris.commons.dbcp.xe.dbcp_dbcp;
-import org.safris.commons.lang.Throwables;
 import org.safris.commons.logging.LoggerPrintWriter;
 import org.safris.xml.generator.compiler.runtime.BindingRuntimeException;
 
@@ -46,16 +45,16 @@ public final class DataSources {
     final BasicDataSource dataSource = new BasicDataSource() {
       @Override
       public Connection getConnection() throws SQLException {
-        try {
+//        try {
           return super.getConnection();
-        }
-        catch (final SQLException e) {
-          // TODO: Finish this!
-          if ("Cannot get a connection, pool error Timeout waiting for idle object".equals(e.getMessage()))
-            Throwables.set(e, "XX" + e.getMessage());
-
-          throw e;
-        }
+//        }
+//        catch (final SQLException e) {
+//          // TODO: Finish this!
+//          if ("Cannot get a connection, pool error Timeout waiting for idle object".equals(e.getMessage()))
+//            Throwables.set(e, "XX" + e.getMessage());
+//
+//          throw e;
+//        }
       }
     };
 
@@ -64,7 +63,7 @@ public final class DataSources {
 
     dataSource.setDriverClassName(jdbc._driverClassName(0).text());
 
-//    if(jdbc._loginTimeout() != null && jdbc._loginTimeout().size() != 0 && jdbc._loginTimeout(0).text() != null) {
+//    if (jdbc._loginTimeout() != null && jdbc._loginTimeout().size() != 0 && jdbc._loginTimeout(0).text() != null) {
 // FIXME: This causes a ClassNotFoundException: com.sybase.jdbc3.jdbc.SybDriver
 //      try {
 //        dataSource.setLoginTimeout(jdbc._loginTimeout(0).text());
