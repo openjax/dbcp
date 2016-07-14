@@ -14,7 +14,6 @@
   You should have received a copy of The MIT License (MIT) along with this
   program. If not, see <http://opensource.org/licenses/MIT/>.
 -->
-
 <project
   xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -46,7 +45,7 @@
         </executions>
         <configuration>
           <manifest xmlns="http://xml.safris.org/toolkit/binding/manifest.xsd">
-            <destdir explodeJars="true">${project.build.directory}/generated-sources/xmlbinding</destdir>
+            <destdir explodeJars="true">${project.build.directory}/generated-sources/xsb</destdir>
             <schemas>
               <schema>${basedir}/src/main/resources/dbcp.xsd</schema>
             </schemas>
