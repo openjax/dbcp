@@ -22,19 +22,21 @@
   <parent>
     <groupId>org.safris</groupId>
     <artifactId>commons</artifactId>
-    <version>1.8.2-SNAPSHOT</version>
+    <version>1.8.2</version>
   </parent>
   <groupId>org.safris.commons</groupId>
   <artifactId>dbcp</artifactId>
-  <version>2.0.2-SNAPSHOT</version>
+  <version>2.0.2</version>
   <name>${project.groupId}.${project.artifactId}</name>
-  <description>Provide an intuitive configuration wrapper over apache's dbcp libraries.</description>
+  <description>
+    Provide an intuitive configuration wrapper over apache's dbcp libraries.
+  </description>
   <build>
     <plugins>
       <plugin>
         <groupId>org.safris.maven.plugin</groupId>
         <artifactId>xsb</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <version>2.1.2</version>
         <executions>
           <execution>
             <phase>generate-sources</phase>
@@ -58,12 +60,12 @@
     <dependency>
       <groupId>org.safris.xsb</groupId>
       <artifactId>runtime</artifactId>
-      <version>2.1.2-SNAPSHOT</version>
+      <version>2.1.2</version>
     </dependency>
     <dependency>
       <groupId>org.safris.commons</groupId>
       <artifactId>logging</artifactId>
-      <version>1.0.6-SNAPSHOT</version>
+      <version>1.0.6</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -72,7 +74,7 @@
     <dependency>
       <groupId>org.safris.commons</groupId>
       <artifactId>jndi</artifactId>
-      <version>1.0.1-SNAPSHOT</version>
+      <version>1.0.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
