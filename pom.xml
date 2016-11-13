@@ -29,7 +29,7 @@
   <version>2.0.2</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <description>
-    Provide an intuitive configuration wrapper over apache's dbcp libraries.
+    Provide a XSB-based, intuitive configuration wrapper over Apache's DBCP libraries.
   </description>
   <build>
     <plugins>
@@ -49,7 +49,7 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>org.safris.xsb</groupId>
+      <groupId>org.safris.cf.xsb</groupId>
       <artifactId>generator</artifactId>
       <version>2.1.2</version>
     </dependency>
