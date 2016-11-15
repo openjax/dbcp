@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright (c) 2008 Seva Safris
   
@@ -15,7 +14,6 @@
   You should have received a copy of The MIT License (MIT) along with this
   program. If not, see <http://opensource.org/licenses/MIT/>.
 -->
-
 <dbcp
   name="asg_db"
   xmlns="http://commons.safris.org/dbcp.xsd"
