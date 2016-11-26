@@ -14,11 +14,11 @@ Developed with the CohesionFirst™ approach, DBCP is the cohesive alternative t
 
 ### Complete Solution
 
-DBCP allows a developer to configure a Connection Pool with a [standardized XML Schema](https://cf.safris.org/xdl.xsd), which is used by a consumer class to initiate the pool. DBCP uses the XSB framework for [XML Schema Binding](https://github.com/SevaSafris/xsb/) to significantly reduce the boilerplate code, thus providing a lean API with support for the full space of DBCP configuration variations.
+DBCP allows a developer to configure a Connection Pool with a [standardized XML Schema](https://xdb.safris.org/xds.xsd), which is used by a consumer class to initiate the pool. DBCP uses the XSB framework for [XML Schema Binding](https://github.com/SevaSafris/xsb/) to significantly reduce the boilerplate code, thus providing a lean API with support for the full space of DBCP configuration variations.
 
 ### Validating and Fail-Fast
 
-DBCP is based on a [XML Schema](https://cf.safris.org/xdl.xsd) used to specify the formal of XML documents accepted by the configuration consumer. The XML Schema is designed to use the full power of XML Validation to allow a developer to qiuckly determine errors in his draft. Once a `dbcp.xml` passes the validation checks, it is almost guaranteed to properly initialize the Connection Pool configured by the file.
+DBCP is based on a [XML Schema](https://xdb.safris.org/xds.xsd) used to specify the formal of XML documents accepted by the configuration consumer. The XML Schema is designed to use the full power of XML Validation to allow a developer to qiuckly determine errors in his draft. Once a `dbcp.xml` passes the validation checks, it is almost guaranteed to properly initialize the Connection Pool configured by the file.
 
 ## Getting Started
 
