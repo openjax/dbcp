@@ -24,10 +24,10 @@ import javax.sql.DataSource;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.safris.cf.xsb.runtime.Bindings;
 import org.safris.commons.dbcp.xe.dbcp_dbcp;
 import org.safris.commons.lang.Resources;
 import org.safris.commons.test.LoggableTest;
+import org.safris.xsb.runtime.Bindings;
 import org.xml.sax.InputSource;
 
 public class DataSourcesTest extends LoggableTest {
