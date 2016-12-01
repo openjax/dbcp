@@ -1,35 +1,35 @@
 <img src="http://safris.org/logo.png" align="right"/>
-# commons-dbcp<br>[![JavaCommons](https://img.shields.io/badge/java-commons-orange.svg)](https://cohesionfirst.com/) [![CohesionFirst](https://img.shields.io/badge/CohesionFirst%E2%84%A2--blue.svg)](https://cohesionfirst.com/)
+## commons-dbcp<br>![java-commons][java-commons] [![CohesionFirst™][cohesionfirst_badge]][cohesionfirst]
 > Commons Database Connection Pool
 
-## Introduction
+### Introduction
 
-**commons-dbcp** is a light wrapper around the [Apache Commons DBCP](https://commons.apache.org/proper/commons-dbcp/) library, which provides a simple API to describe and initialize a JDBC Database Connection Pool.
+**commons-dbcp** is a light wrapper around the [Apache Commons DBCP][commons-dbcp] library, which provides a simple API to describe and initialize a JDBC Database Connection Pool.
 
-## Why **commons-dbcp**?
+### Why **commons-dbcp**?
 
-### CohesionFirst™
+#### CohesionFirst™
 
 Developed with the CohesionFirst™ approach, **commons-dbcp** is an easy-to-use and simple solution that separates itself from the rest with the strength of its cohesion and ease of usability. Made possible by the rigorous conformance to best practices in every line of its implementation, **commons-dbcp** considers the needs of the developer as primary, and offers a complete solution for the command line arguments facet of an application.
 
-### Complete Solution
+#### Complete Solution
 
 **commons-dbcp** allows a developer to configure a Connection Pool with a [standardized XML Schema][dbcp-schema], which is used by a consumer class to initiate the connection pool. **commons-dbcp** uses the XSB framework for [XML Schema Binding](https://github.com/SevaSafris/xsb/) to significantly reduce the boilerplate code, thus providing a lean API with support for the all possible connection pool configuration variations.
 
-### Validating and Fail-Fast
+#### Validating and Fail-Fast
 
 **commons-dbcp** is based on a [XML Schema][dbcp-schema] used to specify the formal of XML documents accepted by the configuration consumer. The XML Schema is designed to use the full power of XML Validation to allow a developer to qiuckly determine errors in his draft. Once a `dbcp.xml` passes the validation checks, it is almost guaranteed to properly initialize the Connection Pool configured by the file.
 
-## Getting Started
+### Getting Started
 
-### Prerequisites
+#### Prerequisites
 
-* [Java 7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html) - The minimum required JDK version.
-* [Maven](https://maven.apache.org/) - The dependency management system.
+* [Java 7][jdk7-download] - The minimum required JDK version.
+* [Maven][maven] - The dependency management system.
 
-### Example (Quick-&-Easy)
+#### Example (Quick-&-Easy)
 
-1. In your preferred development directory, create a [`dbcp-maven-archetype`](https://github.com/SevaSafris/dbcp-maven-archetype) project.
+1. In your preferred development directory, create a [`dbcp-maven-archetype`][dbcp-maven-archetype] project.
 
     ```tcsh
     mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
@@ -37,9 +37,9 @@ Developed with the CohesionFirst™ approach, **commons-dbcp** is an easy-to-use
     -DarchetypeCatalog=http://mvn.repo.safris.org -DinteractiveMode=false
     ```
 
-### Example (Hands-on)
+#### Example (Hands-on)
 
-1. In your preferred development directory, create a [`maven-archetype-quickstart`](http://maven.apache.org/archetypes/maven-archetype-quickstart/) project.
+1. In your preferred development directory, create a [`maven-archetype-quickstart`][maven-archetype-quickstart] project.
 
     ```tcsh
     mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
@@ -129,8 +129,16 @@ Developed with the CohesionFirst™ approach, **commons-dbcp** is an easy-to-use
 
     The `dataSource` object is a reference to the initialized JDBC Connection Pool configured in `dbcp.xml`.
 
-## License
+### License
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
 
+[cohesionfirst]: https://www.cohesionfirst.com/
+[cohesionfirst_badge]: https://img.shields.io/badge/CohesionFirst%E2%84%A2--blue.svg
+[commons-dbcp]: https://commons.apache.org/proper/commons-dbcp
+[dbcp-maven-archetype]: https://github.com/SevaSafris/dbcp-maven-archetype
 [dbcp-schema]: https://github.com/SevaSafris/commons-dbcp/blob/master/src/main/resources/dbcp.xsd
+[java-commons]: https://img.shields.io/badge/java-commons-orange.svg
+[jdk7-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
+[maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/
+[maven]: https://maven.apache.org/
