@@ -1,5 +1,5 @@
 <img src="https://www.cohesionfirst.org/logo.png" align="right"/>
-## commons-dbcp<br>![java-commons][java-commons] [![CohesionFirst™][cohesionfirst_badge]][cohesionfirst]
+## commons-dbcp<br>![java-commons][java-commons] <a href="https://www.cohesionfirst.org/"><img src="https://img.shields.io/badge/CohesionFirst%E2%84%A2--blue.svg"></a>
 > Commons Database Connection Pool
 
 ### Introduction
@@ -133,8 +133,6 @@ Developed with the CohesionFirst™ approach, **commons-dbcp** is an easy-to-use
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
 
-[cohesionfirst]: https://www.cohesionfirst.com/
-[cohesionfirst_badge]: https://img.shields.io/badge/CohesionFirst%E2%84%A2--blue.svg
 [commons-dbcp]: https://commons.apache.org/proper/commons-dbcp
 [dbcp-maven-archetype]: https://github.com/SevaSafris/dbcp-maven-archetype
 [dbcp-schema]: https://github.com/SevaSafris/commons-dbcp/blob/master/src/main/resources/dbcp.xsd
