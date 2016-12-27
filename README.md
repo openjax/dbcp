@@ -24,7 +24,7 @@ Developed with the CohesionFirst™ approach, **commons-dbcp** is an easy-to-use
 
 #### Prerequisites
 
-* [Java 7][jdk7-download] - The minimum required JDK version.
+* [Java 8][jdk8-download] - The minimum required JDK version.
 * [Maven][maven] - The dependency management system.
 
 #### Example (Quick-&-Easy)
@@ -137,6 +137,6 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 [dbcp-maven-archetype]: https://github.com/SevaSafris/dbcp-maven-archetype
 [dbcp-schema]: https://github.com/SevaSafris/commons-dbcp/blob/master/src/main/resources/dbcp.xsd
 [java-commons]: https://img.shields.io/badge/java-commons-orange.svg
-[jdk7-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
+[jdk8-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/
 [maven]: https://maven.apache.org/
