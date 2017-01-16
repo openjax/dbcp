@@ -110,7 +110,7 @@ Developed with the CohesionFirst™ approach, **commons-dbcp** is an easy-to-use
     </dbcp>
     ```
 
-4. Add `org.safris.commons`:`dbcp` dependency to the POM.
+4. Add `org.safris.commons:dbcp` dependency to the POM.
 
     ```xml
     <dependency>
