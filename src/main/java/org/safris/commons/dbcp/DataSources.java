@@ -19,14 +19,15 @@ package org.safris.commons.dbcp;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.safris.commons.dbcp.xe.$dbcp_dbcp;
 import org.safris.commons.dbcp.xe.dbcp_dbcp;
 import org.safris.commons.logging.LoggerPrintWriter;
 import org.safris.xsb.runtime.BindingRuntimeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 public final class DataSources {
   public static BasicDataSource createDataSource(final List<$dbcp_dbcp> dbcps, final String name) throws SQLException {
@@ -179,8 +180,8 @@ public final class DataSources {
 
     final dbcp_dbcp._logging logging = dbcp._logging(0);
     if (!logging.isNull()) {
-      final Logger logger = Logger.getLogger(DataSources.class.getName());
-      final LoggerPrintWriter loggerPrintWriter = new LoggerPrintWriter(logger, Level.parse(logging._level(0).text()));
+      final Logger logger = LoggerFactory.getLogger(DataSources.class);
+      final LoggerPrintWriter loggerPrintWriter = new LoggerPrintWriter(logger, Level.valueOf(logging._level(0).text()));
       dataSource.setLogWriter(loggerPrintWriter);
       dataSource.setLogExpiredConnections(!logging._logExpiredConnections(0).isNull() && logging._logExpiredConnections(0).text());
       if (!logging._logAbandoned(0).isNull() && logging._logAbandoned(0).text()) {

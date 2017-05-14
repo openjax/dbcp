@@ -43,7 +43,7 @@
         <artifactId>xsb-maven-plugin</artifactId>
         <configuration>
           <manifest xmlns="http://maven.safris.org/common/manifest.xsd">
-            <destdir>${project.build.directory}/generated-sources/xsb</destdir>
+            <destdir>generated-sources/xsb</destdir>
             <resources>
               <resource>src/main/resources/dbcp.xsd</resource>
             </resources>
