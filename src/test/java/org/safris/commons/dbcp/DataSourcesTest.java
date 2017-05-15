@@ -26,11 +26,14 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.safris.commons.dbcp.xe.dbcp_dbcp;
 import org.safris.commons.lang.Resources;
-import org.safris.commons.test.LoggableTest;
 import org.safris.xsb.runtime.Bindings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
-public class DataSourcesTest extends LoggableTest {
+public class DataSourcesTest {
+  private static final Logger logger = LoggerFactory.getLogger(DataSourcesTest.class);
+
   @Test
   @Ignore("Need to have an embedded DB to test against.")
   public void testJNDIDataSource() throws Exception {
@@ -44,7 +47,7 @@ public class DataSourcesTest extends LoggableTest {
         ) {
           while (resultSet.next()) {
             final String string = resultSet.getString(1);
-            log("C : " + string);
+            logger.info("C : " + string);
           }
         }
       }
