@@ -29,7 +29,6 @@ import org.safris.commons.lang.Resources;
 import org.safris.xsb.runtime.Bindings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.InputSource;
 
 public class DataSourcesTest {
   private static final Logger logger = LoggerFactory.getLogger(DataSourcesTest.class);
@@ -37,7 +36,7 @@ public class DataSourcesTest {
   @Test
   @Ignore("Need to have an embedded DB to test against.")
   public void testJNDIDataSource() throws Exception {
-    final dbcp_dbcp dbcp = (dbcp_dbcp)Bindings.parse(new InputSource(Resources.getResource("dbcp.xml").getURL().openStream()));
+    final dbcp_dbcp dbcp = (dbcp_dbcp)Bindings.parse(Resources.getResource("dbcp.xml").getURL());
     final DataSource dataSource = DataSources.createDataSource(dbcp);
     try (final Connection connection = dataSource.getConnection()) {
       if (connection != null) {
