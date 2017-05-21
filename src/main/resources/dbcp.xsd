@@ -324,15 +324,11 @@
             <xs:element name="level">
               <xs:simpleType>
                 <xs:restriction base="xs:token">
-                  <xs:enumeration value="OFF"/>
-                  <xs:enumeration value="SEVERE"/>
-                  <xs:enumeration value="WARNING"/>
+                  <xs:enumeration value="ERROR"/>
+                  <xs:enumeration value="WARN"/>
                   <xs:enumeration value="INFO"/>
-                  <xs:enumeration value="CONFIG"/>
-                  <xs:enumeration value="FINE"/>
-                  <xs:enumeration value="FINER"/>
-                  <xs:enumeration value="FINEST"/>
-                  <xs:enumeration value="ALL"/>
+                  <xs:enumeration value="DEBUG"/>
+                  <xs:enumeration value="TRACE"/>
                 </xs:restriction>
               </xs:simpleType>
             </xs:element>
