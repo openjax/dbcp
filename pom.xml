@@ -24,8 +24,8 @@
     <artifactId>lib4j</artifactId>
     <version>1.7.1</version>
   </parent>
-  <groupId>org.lib4j</groupId>
-  <artifactId>lib4j-dbcp</artifactId>
+  <groupId>org.lib4jx</groupId>
+  <artifactId>lib4jx-dbcp</artifactId>
   <version>2.0.2</version>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
