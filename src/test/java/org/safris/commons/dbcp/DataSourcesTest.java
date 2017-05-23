@@ -24,9 +24,9 @@ import javax.sql.DataSource;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.lib4j.lang.Resources;
 import org.libx4j.xsb.runtime.Bindings;
 import org.safris.commons.dbcp.xe.dbcp_dbcp;
-import org.safris.commons.lang.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
