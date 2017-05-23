@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.safris.commons.dbcp;
+package org.libx4j.dbcp;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
