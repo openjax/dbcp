@@ -16,9 +16,9 @@
 -->
 <dbcp
   name="asg_db"
-  xmlns="http://commons.safris.org/dbcp.xsd"
+  xmlns="http://libx4j.org/dbcp.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://commons.safris.org/dbcp.xsd http://commons.safris.org/dbcp.xsd">
+  xsi:schemaLocation="http://libx4j.org/dbcp.xsd http://libx4j.org/dbcp.xsd">
   <jdbc>
     <url>jdbc:sybase:Tds:SYBPRD_GAA1:14112?asg_db=DBN</url>
     <driverClassName>com.sybase.jdbc3.jdbc.SybDriver</driverClassName>

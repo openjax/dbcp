@@ -16,8 +16,8 @@
 -->
 <xs:schema
   elementFormDefault="qualified" 
-  targetNamespace="http://commons.safris.org/dbcp.xsd"
-  xmlns:dbcp="http://commons.safris.org/dbcp.xsd"
+  targetNamespace="http://libx4j.org/dbcp.xsd"
+  xmlns:dbcp="http://libx4j.org/dbcp.xsd"
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:simpleType name="integer">
