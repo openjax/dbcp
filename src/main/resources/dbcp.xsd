@@ -36,10 +36,10 @@
   </xs:simpleType>
   
   <xs:complexType name="dbcp">
-    <xs:sequence>
+    <xs:all>
       <xs:element name="jdbc">
         <xs:complexType>
-          <xs:sequence>
+          <xs:all>
             <xs:element name="url" type="xs:anyURI">
               <xs:annotation>
                 <xs:documentation>
@@ -68,12 +68,12 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-          </xs:sequence>
+          </xs:all>
         </xs:complexType>
       </xs:element>
       <xs:element name="default" minOccurs="0">
         <xs:complexType>
-          <xs:sequence>
+          <xs:all>
             <xs:element name="catalog" type="dt:stringNonEmpty" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
@@ -148,12 +148,12 @@
                 </xs:restriction>
               </xs:simpleType>
             </xs:element>
-          </xs:sequence>
+          </xs:all>
         </xs:complexType>
       </xs:element>
       <xs:element name="connection" minOccurs="0">
         <xs:complexType>
-          <xs:sequence>
+          <xs:all>
             <xs:element name="properties" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
@@ -184,12 +184,12 @@
                 </xs:sequence>
               </xs:complexType>
             </xs:element>
-          </xs:sequence>
+          </xs:all>
         </xs:complexType>
       </xs:element>
       <xs:element name="size" minOccurs="0">
         <xs:complexType>
-          <xs:sequence>
+          <xs:all>
             <xs:element name="initialSize" type="dt:nonNegativeInt" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
@@ -226,12 +226,12 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-          </xs:sequence>
+          </xs:all>
         </xs:complexType>
       </xs:element>
       <xs:element name="pool" minOccurs="0">
         <xs:complexType>
-          <xs:sequence>
+          <xs:all>
             <xs:element name="queue" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
@@ -343,7 +343,7 @@
                 </xs:documentation>
               </xs:annotation>
               <xs:complexType>
-                <xs:sequence>
+                <xs:all>
                   <xs:element name="timeBetweenRuns" type="dt:positiveLong">
                     <xs:annotation>
                       <xs:documentation>
@@ -381,15 +381,15 @@
                       </xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                </xs:sequence>
+                </xs:all>
               </xs:complexType>
             </xs:element>
-          </xs:sequence>
+          </xs:all>
         </xs:complexType>
       </xs:element>
       <xs:element name="validation" minOccurs="0">
         <xs:complexType>
-          <xs:sequence>
+          <xs:all>
             <xs:element name="query" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
@@ -437,7 +437,7 @@
                 </xs:documentation>
               </xs:annotation>
               <xs:complexType>
-                <xs:sequence>
+                <xs:all>
                   <xs:element name="disconnectionSqlCodes" type="dt:stringNonEmpty" minOccurs="0">
                     <xs:annotation>
                       <xs:documentation>
@@ -450,10 +450,10 @@
                       </xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                </xs:sequence>
+                </xs:all>
               </xs:complexType>
             </xs:element>
-          </xs:sequence>
+          </xs:all>
         </xs:complexType>
       </xs:element>
       <xs:element name="logging" minOccurs="0">
@@ -464,7 +464,7 @@
           </xs:documentation>
         </xs:annotation>
         <xs:complexType>
-          <xs:sequence>
+          <xs:all>
             <xs:element name="level">
               <xs:annotation>
                 <xs:documentation>
@@ -499,10 +499,10 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-          </xs:sequence>
+          </xs:all>
         </xs:complexType>
       </xs:element>
-    </xs:sequence>
+    </xs:all>
     <xs:attribute name="name" type="xs:NCName" use="required"/>
   </xs:complexType>
   
