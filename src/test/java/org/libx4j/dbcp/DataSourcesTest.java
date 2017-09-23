@@ -16,40 +16,37 @@
 
 package org.libx4j.dbcp;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
 import javax.sql.DataSource;
 
-import org.junit.Ignore;
+import org.junit.Assert;
 import org.junit.Test;
 import org.lib4j.lang.Resources;
 import org.libx4j.dbcp.xe.dbcp_dbcp;
 import org.libx4j.xsb.runtime.Bindings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class DataSourcesTest {
-  private static final Logger logger = LoggerFactory.getLogger(DataSourcesTest.class);
-
   @Test
-  @Ignore("Need to have an embedded DB to test against.")
-  public void testJNDIDataSource() throws Exception {
+  public void test() throws Exception {
     final dbcp_dbcp dbcp = (dbcp_dbcp)Bindings.parse(Resources.getResource("dbcp.xml").getURL());
     final DataSource dataSource = DataSources.createDataSource(dbcp);
     try (final Connection connection = dataSource.getConnection()) {
       if (connection != null) {
         try (
           final Statement statement = connection.createStatement();
-          final ResultSet resultSet = statement.executeQuery("SELECT 1");
+          final ResultSet resultSet = statement.executeQuery("SELECT 1 FROM SYSIBM.SYSDUMMY1");
         ) {
-          while (resultSet.next()) {
-            final String string = resultSet.getString(1);
-            logger.info("C : " + string);
-          }
+          Assert.assertTrue(resultSet.next());
+          Assert.assertEquals(1, resultSet.getInt(1));
+          Assert.assertFalse(resultSet.next());
         }
       }
     }
+
+    new File("derby.log").delete();
   }
 }

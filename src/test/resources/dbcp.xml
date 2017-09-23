@@ -15,41 +15,70 @@
   program. If not, see <http://opensource.org/licenses/MIT/>.
 -->
 <dbcp
-  name="asg_db"
+  name="test"
   xmlns="http://libx4j.org/dbcp.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://libx4j.org/dbcp.xsd http://libx4j.org/dbcp.xsd">
+  xsi:schemaLocation="http://libx4j.org/dbcp.xsd ../../main/resources/dbcp.xsd">
   <jdbc>
-    <url>jdbc:sybase:Tds:SYBPRD_GAA1:14112?asg_db=DBN</url>
-    <driverClassName>com.sybase.jdbc3.jdbc.SybDriver</driverClassName>
-    <username>asg_night_loader</username>
-    <password>Market</password>
-    <loginTimeout>-1</loginTimeout>
+    <url>jdbc:derby:memory:test;create=true</url>
+    <driverClassName>org.apache.derby.jdbc.EmbeddedDriver</driverClassName>
+    <username>test</username>
+    <password>test</password>
   </jdbc>
   <default>
+    <catalog>catalog</catalog>
     <autoCommit>true</autoCommit>
     <readOnly>false</readOnly>
+    <queryTimeout>300000</queryTimeout>
     <transactionIsolation>READ_UNCOMMITTED</transactionIsolation>
   </default>
+  <connection>
+    <properties>
+      <property name="prop1" value="value1"/>
+      <property name="prop2" value="value2"/>
+    </properties>
+    <initSqls>
+      <initSql>SELECT 1 FROM SYSIBM.SYSDUMMY1</initSql>
+      <initSql>SELECT 1 FROM SYSIBM.SYSDUMMY1</initSql>
+    </initSqls>
+  </connection>
   <size>
     <initialSize>0</initialSize>
-    <maxActive>8</maxActive>
+    <maxTotal>8</maxTotal>
     <maxIdle>8</maxIdle>
     <minIdle>0</minIdle>
-    <maxWait>-1</maxWait>
+    <maxOpenPreparedStatements>INDEFINITE</maxOpenPreparedStatements>
   </size>
-  <management>
-    <timeBetweenEvictionRuns>-1</timeBetweenEvictionRuns>
-    <numTestsPerEvictionRun>3</numTestsPerEvictionRun>
-    <minEvictableIdleTime>1800000</minEvictableIdleTime>
-  </management>
-  <preparedStatements>
-    <poolPreparedStatements>false</poolPreparedStatements>
-    <maxOpenPreparedStatements>-1</maxOpenPreparedStatements>
-  </preparedStatements>
-  <removal>
-    <removeAbandoned>false</removeAbandoned>
-    <removeAbandonedTimeout>300</removeAbandonedTimeout>
-    <logAbandoned>false</logAbandoned>
-  </removal>
+  <pool>
+    <queue>lifo</queue>
+    <cacheState>false</cacheState>
+    <maxWait>INDEFINITE</maxWait>
+    <maxConnectionLifetime>INDEFINITE</maxConnectionLifetime>
+    <enableAutoCommitOnReturn>true</enableAutoCommitOnReturn>
+    <rollbackOnReturn>true</rollbackOnReturn>
+    <removeAbandoned on="maintenance" timeout="300"/>
+    <abandonedUsageTracking>true</abandonedUsageTracking>
+    <allowAccessToUnderlyingConnection>false</allowAccessToUnderlyingConnection>
+    <evictor>
+      <timeBetweenRuns>300000</timeBetweenRuns>
+      <numTestsPerRun>3</numTestsPerRun>
+      <minIdleTime>1800000</minIdleTime>
+      <softMinIdleTime>INDEFINITE</softMinIdleTime>
+      <policyClassName>org.libx4j.dbcp.MockEvictionPolicy</policyClassName>
+    </evictor>
+  </pool>
+  <validation>
+    <query>SELECT 1 FROM SYSIBM.SYSDUMMY1</query>
+    <testOnBorrow>false</testOnBorrow>
+    <testOnReturn>false</testOnReturn>
+    <testWhileIdle>false</testWhileIdle>
+    <fastFail>
+      <disconnectionSqlCodes>42X01 42X02 42X03</disconnectionSqlCodes>
+    </fastFail>
+  </validation>
+  <logging>
+    <level>INFO</level>
+    <logExpiredConnections>true</logExpiredConnections>
+    <logAbandoned>true</logAbandoned>
+  </logging>
 </dbcp>
