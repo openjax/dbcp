@@ -116,8 +116,8 @@ Developed with the CohesionFirst™ approach, **libx4j-dbcp** is an easy-to-use 
     ```xml
     <dependency>
       <groupId>org.libx4j</groupId>
-      <artifactId>dbcp</artifactId>
-      <version>2.0.2</version>
+      <artifactId>libx4j-dbcp</artifactId>
+      <version>2.0.3-SNAPSHOT</version>
     </dependency>
     ```
 
