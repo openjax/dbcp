@@ -16,9 +16,9 @@
 -->
 <dbcp
   name="test"
-  xmlns="http://libx4j.org/dbcp.xsd"
+  xmlns="http://lib4j.org/dbcp.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://libx4j.org/dbcp.xsd ../../main/resources/dbcp.xsd">
+  xsi:schemaLocation="http://lib4j.org/dbcp.xsd ../../main/resources/dbcp.xsd">
   <jdbc>
     <url>jdbc:derby:memory:test;create=true</url>
     <driverClassName>org.apache.derby.jdbc.EmbeddedDriver</driverClassName>
@@ -59,13 +59,13 @@
     <removeAbandoned on="maintenance" timeout="300"/>
     <abandonedUsageTracking>true</abandonedUsageTracking>
     <allowAccessToUnderlyingConnection>false</allowAccessToUnderlyingConnection>
-    <evictor>
+    <eviction>
       <timeBetweenRuns>300000</timeBetweenRuns>
       <numTestsPerRun>3</numTestsPerRun>
       <minIdleTime>1800000</minIdleTime>
       <softMinIdleTime>INDEFINITE</softMinIdleTime>
-      <policyClassName>org.libx4j.dbcp.MockEvictionPolicy</policyClassName>
-    </evictor>
+      <policyClassName>org.lib4j.dbcp.MockEvictionPolicy</policyClassName>
+    </eviction>
   </pool>
   <validation>
     <query>SELECT 1 FROM SYSIBM.SYSDUMMY1</query>

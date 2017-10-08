@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.libx4j.dbcp;
+package org.lib4j.dbcp;
 
 import java.io.File;
 import java.sql.Connection;
@@ -25,15 +25,12 @@ import javax.sql.DataSource;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lib4j.lang.Resources;
-import org.libx4j.dbcp.xe.dbcp_dbcp;
-import org.libx4j.xsb.runtime.Bindings;
+import org.lib4j.dbcp.DataSources;
 
 public class DataSourcesTest {
   @Test
   public void test() throws Exception {
-    final dbcp_dbcp dbcp = (dbcp_dbcp)Bindings.parse(Resources.getResource("dbcp.xml").getURL());
-    final DataSource dataSource = DataSources.createDataSource(dbcp);
+    final DataSource dataSource = DataSources.createDataSource(Thread.currentThread().getContextClassLoader().getResource("dbcp.xml"));
     try (final Connection connection = dataSource.getConnection()) {
       if (connection != null) {
         try (

@@ -16,8 +16,8 @@
 -->
 <xs:schema
   elementFormDefault="qualified" 
-  targetNamespace="http://libx4j.org/dbcp.xsd"
-  xmlns:dbcp="http://libx4j.org/dbcp.xsd"
+  targetNamespace="http://lib4j.org/dbcp.xsd"
+  xmlns:dbcp="http://lib4j.org/dbcp.xsd"
   xmlns:dt="http://xml.lib4j.org/datatypes.xsd"
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
@@ -335,7 +335,7 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="evictor" minOccurs="0">
+            <xs:element name="eviction" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   Configuration for eviction of stale connections.
