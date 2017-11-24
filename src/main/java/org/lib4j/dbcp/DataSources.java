@@ -37,6 +37,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.lib4j.dbcp_2_0_3.Dbcp;
 import org.lib4j.logging.LoggerPrintWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,125 +145,125 @@ public final class DataSources {
 
     final BasicDataSource dataSource = new BasicDataSource();
 
-    final Dbcp.Jdbc jdbc = dbcp.jdbc;
-    dataSource.setDriverClassName(jdbc.driverClassName);
+    final Dbcp.Jdbc jdbc = dbcp.getJdbc();
+    dataSource.setDriverClassName(jdbc.getDriverClassName());
     dataSource.setDriverClassLoader(driverClassLoader);
 
-    dataSource.setUrl(jdbc.url);
+    dataSource.setUrl(jdbc.getUrl());
 
-    dataSource.setUsername(jdbc.username);
-    dataSource.setPassword(jdbc.password);
+    dataSource.setUsername(jdbc.getUsername());
+    dataSource.setPassword(jdbc.getPassword());
 
-    final Dbcp.Default _default = dbcp._default;
-    if (_default != null && _default.catalog != null)
-      dataSource.setDefaultCatalog(_default.catalog);
+    final Dbcp.Default _default = dbcp.getDefault();
+    if (_default != null && _default.getCatalog() != null)
+      dataSource.setDefaultCatalog(_default.getCatalog());
 
-    dataSource.setDefaultAutoCommit(_default == null || _default.autoCommit == null || _default.autoCommit);
-    dataSource.setDefaultReadOnly(_default != null && _default.readOnly != null && _default.readOnly);
-    if (_default != null && _default.queryTimeout != null)
-      dataSource.setDefaultQueryTimeout(_default.queryTimeout);
+    dataSource.setDefaultAutoCommit(_default == null || _default.getAutoCommit() == null || _default.getAutoCommit());
+    dataSource.setDefaultReadOnly(_default != null && _default.getReadOnly() != null && _default.getReadOnly());
+    if (_default != null && _default.getQueryTimeout() != null)
+      dataSource.setDefaultQueryTimeout(_default.getQueryTimeout());
 
-    if (_default != null && _default.transactionIsolation != null) {
-      if ("NONE".equals(_default.transactionIsolation))
+    if (_default != null && _default.getTransactionIsolation() != null) {
+      if ("NONE".equals(_default.getTransactionIsolation()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_NONE);
-      else if ("READ_COMMITTED".equals(_default.transactionIsolation))
+      else if ("READ_COMMITTED".equals(_default.getTransactionIsolation()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-      else if ("READ_UNCOMMITTED".equals(_default.transactionIsolation))
+      else if ("READ_UNCOMMITTED".equals(_default.getTransactionIsolation()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-      else if ("REPEATABLE_READ".equals(_default.transactionIsolation))
+      else if ("REPEATABLE_READ".equals(_default.getTransactionIsolation()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
-      else if ("SERIALIZABLE".equals(_default.transactionIsolation))
+      else if ("SERIALIZABLE".equals(_default.getTransactionIsolation()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
       else
-        throw new UnsupportedOperationException("Unsupported transaction isolation: " + _default.transactionIsolation);
+        throw new UnsupportedOperationException("Unsupported transaction isolation: " + _default.getTransactionIsolation());
     }
 
-    final Dbcp.Connection connection = dbcp.connection;
+    final Dbcp.Connection connection = dbcp.getConnection();
     if (connection != null) {
-      if (connection.properties != null)
-        for (final Dbcp.Connection.Properties.Property property : connection.properties.property)
-          if (property.name != null && property.value != null)
-            dataSource.addConnectionProperty(property.name, property.value);
+      if (connection.getProperties() != null)
+        for (final Dbcp.Connection.Properties.Property property : connection.getProperties().getProperty())
+          if (property.getName() != null && property.getValue() != null)
+            dataSource.addConnectionProperty(property.getName(), property.getValue());
 
-      if (connection.initSqls != null) {
+      if (connection.getInitSqls() != null) {
         final List<String> initSqls = new ArrayList<String>();
-        for (final String initSql : connection.initSqls.initSql)
+        for (final String initSql : connection.getInitSqls().getInitSql())
           initSqls.add(initSql);
 
         dataSource.setConnectionInitSqls(initSqls);
       }
     }
 
-    final Dbcp.Size size = dbcp.size;
-    dataSource.setInitialSize(size == null || size.initialSize == null ? 0 : size.initialSize);
-    dataSource.setMaxTotal(size == null || size.maxTotal == null ? 8 : INDEFINITE.equals(size.maxTotal) ? -1 : Integer.parseInt(size.maxTotal));
-    dataSource.setMaxIdle(size == null || size.maxIdle == null ? 8 : INDEFINITE.equals(size.maxIdle) ? -1 : Integer.parseInt(size.maxIdle));
-    dataSource.setMinIdle(size == null || size.minIdle == null ? 9 : size.minIdle);
-    if (size == null || size.maxOpenPreparedStatements == null || INDEFINITE.equals(size.maxOpenPreparedStatements)) {
+    final Dbcp.Size size = dbcp.getSize();
+    dataSource.setInitialSize(size == null || size.getInitialSize() == null ? 0 : size.getInitialSize());
+    dataSource.setMaxTotal(size == null || size.getMaxTotal() == null ? 8 : INDEFINITE.equals(size.getMaxTotal()) ? -1 : Integer.parseInt(size.getMaxTotal()));
+    dataSource.setMaxIdle(size == null || size.getMaxIdle() == null ? 8 : INDEFINITE.equals(size.getMaxIdle()) ? -1 : Integer.parseInt(size.getMaxIdle()));
+    dataSource.setMinIdle(size == null || size.getMinIdle() == null ? 9 : size.getMinIdle());
+    if (size == null || size.getMaxOpenPreparedStatements() == null || INDEFINITE.equals(size.getMaxOpenPreparedStatements())) {
       dataSource.setPoolPreparedStatements(false);
     }
     else {
       dataSource.setPoolPreparedStatements(true);
-      dataSource.setMaxOpenPreparedStatements(Integer.parseInt(size.maxOpenPreparedStatements));
+      dataSource.setMaxOpenPreparedStatements(Integer.parseInt(size.getMaxOpenPreparedStatements()));
     }
 
-    final Dbcp.Pool pool = dbcp.pool;
-    if (pool == null || pool.queue == null || "lifo".equals(pool.queue))
+    final Dbcp.Pool pool = dbcp.getPool();
+    if (pool == null || pool.getQueue() == null || "lifo".equals(pool.getQueue()))
       dataSource.setLifo(true);
-    else if ("fifo".equals(pool.queue))
+    else if ("fifo".equals(pool.getQueue()))
       dataSource.setLifo(false);
     else
-      throw new UnsupportedOperationException("Unsupported queue spec: " + pool.queue);
+      throw new UnsupportedOperationException("Unsupported queue spec: " + pool.getQueue());
 
-    dataSource.setCacheState(pool != null && pool.cacheState != null && pool.cacheState);
-    dataSource.setMaxWaitMillis(pool == null || pool.maxWait != null || INDEFINITE.equals(pool.maxWait) ? -1 : Long.parseLong(pool.maxWait));
-    dataSource.setMaxConnLifetimeMillis(pool == null || pool.maxConnectionLifetime == null || INDEFINITE.equals(pool.maxConnectionLifetime) ? 0 : Long.parseLong(pool.maxConnectionLifetime));
-    dataSource.setEnableAutoCommitOnReturn(_default == null || pool.enableAutoCommitOnReturn == null || pool.enableAutoCommitOnReturn);
-    dataSource.setRollbackOnReturn(pool == null || pool.rollbackOnReturn == null || pool.rollbackOnReturn);
-    if (pool != null && pool.removeAbandoned != null) {
-      if ("borrow".equals(pool.removeAbandoned.on))
+    dataSource.setCacheState(pool != null && pool.getCacheState() != null && pool.getCacheState());
+    dataSource.setMaxWaitMillis(pool == null || pool.getMaxWait() != null || INDEFINITE.equals(pool.getMaxWait()) ? -1 : Long.parseLong(pool.getMaxWait()));
+    dataSource.setMaxConnLifetimeMillis(pool == null || pool.getMaxConnectionLifetime() == null || INDEFINITE.equals(pool.getMaxConnectionLifetime()) ? 0 : Long.parseLong(pool.getMaxConnectionLifetime()));
+    dataSource.setEnableAutoCommitOnReturn(_default == null || pool.getEnableAutoCommitOnReturn() == null || pool.getEnableAutoCommitOnReturn());
+    dataSource.setRollbackOnReturn(pool == null || pool.getRollbackOnReturn() == null || pool.getRollbackOnReturn());
+    if (pool != null && pool.getRemoveAbandoned() != null) {
+      if ("borrow".equals(pool.getRemoveAbandoned().getOn()))
         dataSource.setRemoveAbandonedOnBorrow(true);
-      else if ("maintenance".equals(pool.removeAbandoned.on))
+      else if ("maintenance".equals(pool.getRemoveAbandoned().getOn()))
         dataSource.setRemoveAbandonedOnMaintenance(true);
       else
-        throw new UnsupportedOperationException("Unsupported remove abandoned spec: " + pool.removeAbandoned.on);
+        throw new UnsupportedOperationException("Unsupported remove abandoned spec: " + pool.getRemoveAbandoned().getOn());
 
-      dataSource.setRemoveAbandonedTimeout(pool.removeAbandoned.timeout);
+      dataSource.setRemoveAbandonedTimeout(pool.getRemoveAbandoned().getTimeout());
     }
 
-    dataSource.setAbandonedUsageTracking(pool != null && pool.abandonedUsageTracking != null && pool.abandonedUsageTracking);
-    dataSource.setAccessToUnderlyingConnectionAllowed(pool != null && pool.allowAccessToUnderlyingConnection != null && pool.allowAccessToUnderlyingConnection);
+    dataSource.setAbandonedUsageTracking(pool != null && pool.getAbandonedUsageTracking() != null && pool.getAbandonedUsageTracking());
+    dataSource.setAccessToUnderlyingConnectionAllowed(pool != null && pool.getAllowAccessToUnderlyingConnection() != null && pool.getAllowAccessToUnderlyingConnection());
 
-    final Dbcp.Pool.Eviction evictor = pool != null && pool.eviction != null ? pool.eviction : null;
+    final Dbcp.Pool.Eviction evictor = pool != null && pool.getEviction() != null ? pool.getEviction() : null;
     if (evictor != null) {
-      dataSource.setTimeBetweenEvictionRunsMillis(evictor.timeBetweenRuns);
-      dataSource.setNumTestsPerEvictionRun(evictor.numTestsPerRun);
-      dataSource.setMinEvictableIdleTimeMillis(evictor.minIdleTime == null ? 1800000 : evictor.minIdleTime);
-      dataSource.setSoftMinEvictableIdleTimeMillis(evictor.softMinIdleTime == null || INDEFINITE.equals(evictor.softMinIdleTime) ? -1 : Long.parseLong(evictor.softMinIdleTime));
-      if (evictor.policyClassName != null)
-        dataSource.setEvictionPolicyClassName(evictor.policyClassName);
+      dataSource.setTimeBetweenEvictionRunsMillis(evictor.getTimeBetweenRuns());
+      dataSource.setNumTestsPerEvictionRun(evictor.getNumTestsPerRun());
+      dataSource.setMinEvictableIdleTimeMillis(evictor.getMinIdleTime() == null ? 1800000 : evictor.getMinIdleTime());
+      dataSource.setSoftMinEvictableIdleTimeMillis(evictor.getSoftMinIdleTime() == null || INDEFINITE.equals(evictor.getSoftMinIdleTime()) ? -1 : Long.parseLong(evictor.getSoftMinIdleTime()));
+      if (evictor.getPolicyClassName() != null)
+        dataSource.setEvictionPolicyClassName(evictor.getPolicyClassName());
     }
 
-    final Dbcp.Validation validation = dbcp.validation;
-    if (validation != null && validation.query != null)
-      dataSource.setValidationQuery(validation.query);
+    final Dbcp.Validation validation = dbcp.getValidation();
+    if (validation != null && validation.getQuery() != null)
+      dataSource.setValidationQuery(validation.getQuery());
 
-    dataSource.setTestOnBorrow(validation == null || validation.testOnBorrow == null || validation.testOnBorrow);
-    dataSource.setTestOnReturn(validation != null && validation.testOnReturn != null && validation.testOnReturn);
-    dataSource.setTestWhileIdle(validation != null && validation.testWhileIdle != null && validation.testWhileIdle);
-    if (validation != null && validation.fastFail != null) {
+    dataSource.setTestOnBorrow(validation == null || validation.getTestOnBorrow() == null || validation.getTestOnBorrow());
+    dataSource.setTestOnReturn(validation != null && validation.getTestOnReturn() != null && validation.getTestOnReturn());
+    dataSource.setTestWhileIdle(validation != null && validation.getTestWhileIdle() != null && validation.getTestWhileIdle());
+    if (validation != null && validation.getFastFail() != null) {
       dataSource.setFastFailValidation(true);
-      if (validation.fastFail.disconnectionSqlCodes != null)
-        dataSource.setDisconnectionSqlCodes(Arrays.asList(validation.fastFail.disconnectionSqlCodes.split(" ")));
+      if (validation.getFastFail().getDisconnectionSqlCodes() != null)
+        dataSource.setDisconnectionSqlCodes(Arrays.asList(validation.getFastFail().getDisconnectionSqlCodes().split(" ")));
     }
 
-    final Dbcp.Logging logging = dbcp.logging;
+    final Dbcp.Logging logging = dbcp.getLogging();
     if (logging != null) {
       final Logger logger = LoggerFactory.getLogger(DataSources.class);
-      final LoggerPrintWriter loggerPrintWriter = new LoggerPrintWriter(logger, Level.valueOf(logging.level.toString()));
+      final LoggerPrintWriter loggerPrintWriter = new LoggerPrintWriter(logger, Level.valueOf(logging.getLevel().toString()));
       dataSource.setLogWriter(loggerPrintWriter);
-      dataSource.setLogExpiredConnections(logging.logExpiredConnections);
-      if (logging.logAbandoned) {
+      dataSource.setLogExpiredConnections(logging.isLogExpiredConnections());
+      if (logging.isLogAbandoned()) {
         dataSource.setAbandonedLogWriter(loggerPrintWriter);
         dataSource.setLogAbandoned(true);
       }
