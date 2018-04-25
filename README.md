@@ -117,7 +117,7 @@ Developed with the CohesionFirst™ approach, **lib4j-dbcp** is an easy-to-use a
     <dependency>
       <groupId>org.lib4j</groupId>
       <artifactId>lib4j-dbcp</artifactId>
-      <version>2.0.3-SNAPSHOT</version>
+      <version>2.0.4-SNAPSHOT</version>
     </dependency>
     ```
 
