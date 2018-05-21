@@ -32,15 +32,13 @@ public class DataSourcesTest {
   public void test() throws Exception {
     final DataSource dataSource = DataSources.createDataSource(Thread.currentThread().getContextClassLoader().getResource("dbcp.xml"));
     try (final Connection connection = dataSource.getConnection()) {
-      if (connection != null) {
-        try (
-          final Statement statement = connection.createStatement();
-          final ResultSet resultSet = statement.executeQuery("SELECT 1 FROM SYSIBM.SYSDUMMY1");
-        ) {
-          Assert.assertTrue(resultSet.next());
-          Assert.assertEquals(1, resultSet.getInt(1));
-          Assert.assertFalse(resultSet.next());
-        }
+      try (
+        final Statement statement = connection.createStatement();
+        final ResultSet resultSet = statement.executeQuery("SELECT 1 FROM SYSIBM.SYSDUMMY1");
+      ) {
+        Assert.assertTrue(resultSet.next());
+        Assert.assertEquals(1, resultSet.getInt(1));
+        Assert.assertFalse(resultSet.next());
       }
     }
 
