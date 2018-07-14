@@ -141,7 +141,7 @@ public final class DataSources {
    */
   public static BasicDataSource createDataSource(final Dbcp dbcp, final ClassLoader driverClassLoader) throws SQLException {
     if (dbcp == null)
-      throw new NullPointerException("dbcp == null");
+      throw new IllegalArgumentException("dbcp == null");
 
     final BasicDataSource dataSource = new BasicDataSource();
 
