@@ -186,7 +186,7 @@ public final class DataSources {
             dataSource.addConnectionProperty(property.getName(), property.getValue());
 
       if (connection.getInitSqls() != null) {
-        final List<String> initSqls = new ArrayList<String>();
+        final List<String> initSqls = new ArrayList<>();
         for (final String initSql : connection.getInitSqls().getInitSql())
           initSqls.add(initSql);
 
