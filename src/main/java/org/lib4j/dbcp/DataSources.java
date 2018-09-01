@@ -140,9 +140,6 @@ public final class DataSources {
    * @throws SQLException If a database access error occurs.
    */
   public static BasicDataSource createDataSource(final Dbcp dbcp, final ClassLoader driverClassLoader) throws SQLException {
-    if (dbcp == null)
-      throw new IllegalArgumentException("dbcp == null");
-
     final BasicDataSource dataSource = new BasicDataSource();
 
     final Dbcp.Jdbc jdbc = dbcp.getJdbc();
