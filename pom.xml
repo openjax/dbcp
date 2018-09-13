@@ -1,5 +1,5 @@
 <!--
-  Copyright (c) 2008 lib4j
+  Copyright (c) 2008 EasyJAX
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -21,11 +21,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org</groupId>
-    <artifactId>lib4j</artifactId>
-    <version>3.2.3-SNAPSHOT</version>
+    <artifactId>easyjax</artifactId>
+    <version>0.9.1-SNAPSHOT</version>
   </parent>
-  <groupId>org.lib4j</groupId>
-  <artifactId>lib4j-dbcp</artifactId>
+  <groupId>org.easyjax</groupId>
+  <artifactId>easyjax-dbcp</artifactId>
   <version>2.0.4-SNAPSHOT</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <properties>
@@ -36,7 +36,7 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.lib4j.maven.plugin</groupId>
+        <groupId>org.fastjax.maven.plugin</groupId>
         <artifactId>xjc-maven-plugin</artifactId>
         <configuration>
           <destDir>${project.build.directory}/generated-sources/jaxb</destDir>
@@ -48,11 +48,6 @@
     </plugins>
   </build>
   <dependencies>
-    <dependency>
-      <groupId>org.fastjax.xml</groupId>
-      <artifactId>xml-jaxb</artifactId>
-      <version>1.0.4-SNAPSHOT</version>
-    </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-dbcp2</artifactId>
@@ -68,6 +63,11 @@
       <groupId>org.fastjax</groupId>
       <artifactId>fastjax-logging</artifactId>
       <version>1.0.7-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.fastjax.xml</groupId>
+      <artifactId>xml-jaxb</artifactId>
+      <version>1.0.4-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.fastjax</groupId>

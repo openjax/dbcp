@@ -1,4 +1,4 @@
-/* Copyright (c) 2008 lib4j
+/* Copyright (c) 2008 FastJAX
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.lib4j.dbcp;
+package org.easyjax.dbcp;
 
 import java.io.File;
 import java.sql.Connection;
@@ -23,9 +23,9 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 
+import org.easyjax.dbcp.DataSources;
 import org.junit.Assert;
 import org.junit.Test;
-import org.lib4j.dbcp.DataSources;
 
 public class DataSourcesTest {
   @Test
