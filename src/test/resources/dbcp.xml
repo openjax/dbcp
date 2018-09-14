@@ -16,9 +16,9 @@
 -->
 <dbcp
   name="test"
-  xmlns="http://lib4j.org/dbcp-2.0.4.xsd"
+  xmlns="http://easyjax.org/dbcp-2.0.4.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://lib4j.org/dbcp.xsd ../../main/resources/dbcp.xsd">
+  xsi:schemaLocation="http://easyjax.org/dbcp-2.0.4.xsd ../../main/resources/dbcp.xsd">
   <jdbc>
     <url>jdbc:derby:memory:test;create=true</url>
     <driverClassName>org.apache.derby.jdbc.EmbeddedDriver</driverClassName>
