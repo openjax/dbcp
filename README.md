@@ -1,6 +1,6 @@
-<img src="https://www.cohesionfirst.org/logo.png" align="right">
+<img src="https://images.cooltext.com/5195724.png" align="right">
 
-## easyjax-dbcp<br>![java-commons][java-commons] <a href="https://www.cohesionfirst.org/"><img src="https://img.shields.io/badge/CohesionFirst%E2%84%A2--blue.svg"></a>
+## easyjax-dbcp<br><a href="https://www.easyjax.org/"><img src="https://img.shields.io/badge/EasyJAX--blue.svg"></a>
 > Database Connection Pool
 
 ### Introduction
@@ -9,9 +9,9 @@
 
 ### Why **easyjax-dbcp**?
 
-#### CohesionFirst™
+#### CohesionFirst
 
-Developed with the CohesionFirst™ approach, **easyjax-dbcp** is an easy-to-use and simple solution that separates itself from the rest with the strength of its cohesion and ease of usability. Made possible by the rigorous conformance to best practices in every line of its implementation, **easyjax-dbcp** considers the needs of the developer as primary, and offers a complete solution for the command line arguments facet of an application.
+Developed with the CohesionFirst approach, **easyjax-dbcp** is an easy-to-use and simple solution that separates itself from the rest with the strength of its cohesion and ease of usability. Made possible by the rigorous conformance to best practices in every line of its implementation, **easyjax-dbcp** considers the needs of the developer as primary, and offers a complete solution for the command line arguments facet of an application.
 
 #### Complete Solution
 
@@ -66,10 +66,11 @@ Developed with the CohesionFirst™ approach, **easyjax-dbcp** is an easy-to-use
 3. Create a `dbcp.xml` in `src/main/resources/`.
 
     ```xml
-    <dbcp name="basis"
-      xmlns="http://easyjax.org/dbcp-2.0.4.xsd"
+    <dbcp
+      xmlns="http://easyjax.org/dbcp-1.0.4.xsd"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://easyjax.org/dbcp-2.0.4.xsd http://easyjax.org/dbcp.xsd">
+      xsi:schemaLocation="http://easyjax.org/dbcp-1.0.4.xsd http://easyjax.org/dbcp.xsd"
+      name="basis">
       <jdbc>
         <url>jdbc:postgresql://localhost/basis</url>
         <driverClassName>org.postgresql.Driver</driverClassName>
@@ -117,14 +118,14 @@ Developed with the CohesionFirst™ approach, **easyjax-dbcp** is an easy-to-use
     <dependency>
       <groupId>org.easyjax</groupId>
       <artifactId>easyjax-dbcp</artifactId>
-      <version>2.0.4-SNAPSHOT</version>
+      <version>1.0.4-SNAPSHOT</version>
     </dependency>
     ```
 
 5. In the `main()` method in `App.java`, add the following line and let your IDE resolve the missing imports.
 
     ```java
-    final DataSource dataSource = DataSources.createDataSource(Resources.getResourceOrFile("dbcp.xml").getURL());
+    DataSource dataSource = DataSources.createDataSource(Thread.currentThread().getContextClassLoader().getResource("dbcp.xml"));
     ```
 
     The `dataSource` object is a reference to the initialized JDBC Connection Pool configured in `dbcp.xml`.
@@ -133,10 +134,11 @@ Developed with the CohesionFirst™ approach, **easyjax-dbcp** is an easy-to-use
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
 
+<a href="http://cooltext.com" target="_top"><img src="https://cooltext.com/images/ct_pixel.gif" width="80" height="15" alt="Cool Text: Logo and Graphics Generator" border="0" /></a>
+
 [apache-commons-dbcp]: https://commons.apache.org/proper/commons-dbcp
-[dbcp-maven-archetype]: https://github.com/easyjax/dbcp-maven-archetype
-[dbcp-schema]: https://github.com/easyjax/easyjax-dbcp/blob/master/src/main/resources/dbcp.xsd
-[java-commons]: https://img.shields.io/badge/java-easyjax-orange.svg
+[dbcp-maven-archetype]: /easyjax/dbcp-maven-archetype
+[dbcp-schema]: /easyjax/easyjax-dbcp/blob/master/src/main/resources/dbcp.xsd
 [jdk8-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/
 [maven]: https://maven.apache.org/
