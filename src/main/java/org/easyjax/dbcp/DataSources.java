@@ -37,7 +37,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.easyjax.dbcp_2_0_4.Dbcp;
+import org.easyjax.dbcp_1_0_4.Dbcp;
 import org.fastjax.logging.LoggerPrintWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

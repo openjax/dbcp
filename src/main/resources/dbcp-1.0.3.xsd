@@ -16,12 +16,12 @@
 -->
 <xs:schema
   elementFormDefault="qualified" 
-  targetNamespace="http://easyjax.org/dbcp-2.0.4.xsd"
-  xmlns:dbcp="http://easyjax.org/dbcp-2.0.4.xsd"
-  xmlns:dt="http://xml.fastjax.org/datatypes-1.0.4.xsd"
+  targetNamespace="http://easyjax.org/dbcp-1.0.3.xsd"
+  xmlns:dbcp="http://easyjax.org/dbcp-1.0.3.xsd"
+  xmlns:dt="http://xml.fastjax.org/datatypes-0.9.2.xsd"
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <xs:import namespace="http://xml.fastjax.org/datatypes-1.0.4.xsd" schemaLocation="http://xml.fastjax.org/datatypes-1.0.4.xsd"/>
+  <xs:import namespace="http://xml.fastjax.org/datatypes-0.9.2.xsd" schemaLocation="http://xml.fastjax.org/datatypes-0.9.2.xsd"/>
   
   <xs:simpleType name="indefinitePositiveInt">
     <xs:restriction base="xs:string">
