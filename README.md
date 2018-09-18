@@ -1,25 +1,25 @@
 <img src="https://images.cooltext.com/5195724.png" align="right">
 
-## easyjax-dbcp<br><a href="https://www.easyjax.org/"><img src="https://img.shields.io/badge/EasyJAX--blue.svg"></a>
+## dbcp<br><a href="https://www.easyjax.org/"><img src="https://img.shields.io/badge/EasyJAX--blue.svg"></a>
 > Database Connection Pool
 
 ### Introduction
 
-**easyjax-dbcp** is a light wrapper around the [Apache Commons DBCP][apache-commons-dbcp] library, which provides a simple API to describe and initialize a JDBC Database Connection Pool.
+**dbcp** is a light wrapper around the [Apache Commons DBCP][apache-commons-dbcp] library, which provides a simple API to describe and initialize a JDBC Database Connection Pool.
 
-### Why **easyjax-dbcp**?
+### Why **dbcp**?
 
 #### CohesionFirst
 
-Developed with the CohesionFirst approach, **easyjax-dbcp** is an easy-to-use and simple solution that separates itself from the rest with the strength of its cohesion and ease of usability. Made possible by the rigorous conformance to best practices in every line of its implementation, **easyjax-dbcp** considers the needs of the developer as primary, and offers a complete solution for the command line arguments facet of an application.
+Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple solution that separates itself from the rest with the strength of its cohesion and ease of usability. Made possible by the rigorous conformance to best practices in every line of its implementation, **dbcp** considers the needs of the developer as primary, and offers a complete solution for the command line arguments facet of an application.
 
 #### Complete Solution
 
-**easyjax-dbcp** allows a developer to configure a Connection Pool with a [standardized XML Schema][dbcp-schema], which is used by a consumer class to initiate the connection pool. **easyjax-dbcp** uses the JAXB framework to significantly reduce the boilerplate code, thus providing a lean API with support for the all possible connection pool configuration variations.
+**dbcp** allows a developer to configure a Connection Pool with a [standardized XML Schema][dbcp-schema], which is used by a consumer class to initiate the connection pool. **dbcp** uses the JAXB framework to significantly reduce the boilerplate code, thus providing a lean API with support for the all possible connection pool configuration variations.
 
 #### Validating and Fail-Fast
 
-**easyjax-dbcp** is based on a [XML Schema][dbcp-schema] used to specify the formal of XML documents accepted by the configuration consumer. The XML Schema is designed to use the full power of XML Validation to allow a developer to qiuckly determine errors in his draft. Once a `dbcp.xml` passes the validation checks, it is almost guaranteed to properly initialize the Connection Pool configured by the file.
+**dbcp** is based on a [XML Schema][dbcp-schema] used to specify the formal of XML documents accepted by the configuration consumer. The XML Schema is designed to use the full power of XML Validation to allow a developer to qiuckly determine errors in his draft. Once a `dbcp.xml` passes the validation checks, it is almost guaranteed to properly initialize the Connection Pool configured by the file.
 
 ### Getting Started
 
@@ -112,12 +112,12 @@ Developed with the CohesionFirst approach, **easyjax-dbcp** is an easy-to-use an
     </dbcp>
     ```
 
-4. Add `org.easyjax:easyjax-dbcp` dependency to the POM.
+4. Add `org.easyjax:dbcp` dependency to the POM.
 
     ```xml
     <dependency>
       <groupId>org.easyjax</groupId>
-      <artifactId>easyjax-dbcp</artifactId>
+      <artifactId>dbcp</artifactId>
       <version>1.0.4-SNAPSHOT</version>
     </dependency>
     ```
@@ -138,7 +138,7 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 
 [apache-commons-dbcp]: https://commons.apache.org/proper/commons-dbcp
 [dbcp-maven-archetype]: /../../../../easyjax/dbcp-maven-archetype
-[dbcp-schema]: /../../../../easyjax/easyjax-dbcp/blob/master/src/main/resources/dbcp.xsd
+[dbcp-schema]: /../../../../easyjax/dbcp/blob/master/src/main/resources/dbcp.xsd
 [jdk8-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/
 [maven]: https://maven.apache.org/
