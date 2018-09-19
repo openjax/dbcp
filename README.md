@@ -138,7 +138,7 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 
 [apache-commons-dbcp]: https://commons.apache.org/proper/commons-dbcp
 [dbcp-maven-archetype]: /../../../../easyjax/dbcp-maven-archetype
-[dbcp-schema]: /../../../../easyjax/dbcp/blob/master/src/main/resources/dbcp.xsd
+[dbcp-schema]: /src/main/resources/dbcp.xsd
 [jdk8-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/
 [maven]: https://maven.apache.org/
