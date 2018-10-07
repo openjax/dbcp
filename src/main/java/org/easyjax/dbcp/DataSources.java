@@ -47,12 +47,14 @@ import org.xml.sax.SAXException;
 public final class DataSources {
   private static final String INDEFINITE = "INDEFINITE";
   private static Schema schema;
+
   /**
-   * Create a <code>BasicDataSource</code> given a dbcp JAXB binding.
-   * <code>ClassLoader.getSystemClassLoader()</code> is used as the <code>driverClassLoader</code> parameter.
+   * Create a {@code BasicDataSource} given a dbcp JAXB binding.
+   * {@code ClassLoader.getSystemClassLoader()} is used as the
+   * {@code driverClassLoader} parameter.
    *
    * @param dbcpXml URL of dbcp xml resource.
-   * @return the <code>BasicDataSource</code> instance.
+   * @return The {@code BasicDataSource} instance.
    * @throws SAXException If a XML validation error occurs.
    * @throws SQLException If a database access error occurs.
    * @throws IOException If an IO exception occurs.
@@ -62,11 +64,11 @@ public final class DataSources {
   }
 
   /**
-   * Create a <code>BasicDataSource</code> given a dbcp JAXB binding.
+   * Create a {@code BasicDataSource} given a dbcp JAXB binding.
    *
    * @param dbcpXml URL of dbcp xml resource.
    * @param driverClassLoader Class loader to be used to load the JDBC driver.
-   * @return the <code>BasicDataSource</code> instance.
+   * @return The {@code BasicDataSource} instance.
    * @throws SAXException If a XML validation error occurs.
    * @throws SQLException If a database access error occurs.
    * @throws IOException If an IO exception occurs.
@@ -89,14 +91,15 @@ public final class DataSources {
     }
   }
 
-
   /**
-   * Create a <code>BasicDataSource</code> given a list of dbcp XSB bindings.
-   * <code>ClassLoader.getSystemClassLoader()</code> is used as the <code>driverClassLoader</code> parameter.
+   * Create a {@code BasicDataSource} given a list of dbcp XSB bindings.
+   * {@code ClassLoader.getSystemClassLoader()} is used as the
+   * {@code driverClassLoader} parameter.
    *
-   * @param dbcp JAXB dbcp binding.
-   * @param name The name of the pool to create. (The name is declared in the list of <code>dbcps</code>).
-   * @return the <code>BasicDataSource</code> instance.
+   * @param dbcps List of {@code Dbcp} descriptor objects.
+   * @param name The name of the pool to create. (The name is declared in the
+   *          list of {@code dbcps}).
+   * @return The {@code BasicDataSource} instance.
    * @throws SQLException If a database access error occurs.
    */
   public static BasicDataSource createDataSource(final List<Dbcp> dbcps, final String name) throws SQLException {
@@ -104,12 +107,13 @@ public final class DataSources {
   }
 
   /**
-   * Create a <code>BasicDataSource</code> given a list of dbcp XSB bindings.
+   * Create a {@code BasicDataSource} given a list of dbcp XSB bindings.
    *
-   * @param dbcp JAXB dbcp binding.
-   * @param name The name of the pool to create. (The name is declared in the list of <code>dbcps</code>).
+   * @param dbcps List of {@code Dbcp} descriptor objects.
+   * @param name The name of the pool to create. (The name is declared in the
+   *          list of {@code dbcps}).
    * @param driverClassLoader Class loader to be used to load the JDBC driver.
-   * @return the <code>BasicDataSource</code> instance.
+   * @return The {@code BasicDataSource} instance.
    * @throws SQLException If a database access error occurs.
    */
   public static BasicDataSource createDataSource(final List<Dbcp> dbcps, final String name, final ClassLoader driverClassLoader) throws SQLException {
@@ -121,10 +125,10 @@ public final class DataSources {
   }
 
   /**
-   * Create a <code>BasicDataSource</code> given a dbcp JAXB binding.
+   * Create a {@code BasicDataSource} given a dbcp JAXB binding.
    *
-   * @param dbcp JAXB dbcp binding.
-   * @return the <code>BasicDataSource</code> instance.
+   * @param dbcp The {@code Dbcp} descriptor object.
+   * @return The {@code BasicDataSource} instance.
    * @throws SQLException If a database access error occurs.
    */
   public static BasicDataSource createDataSource(final Dbcp dbcp) throws SQLException {
@@ -132,11 +136,11 @@ public final class DataSources {
   }
 
   /**
-   * Create a <code>BasicDataSource</code> given a dbcp JAXB binding.
+   * Create a {@code BasicDataSource} given a dbcp JAXB binding.
    *
-   * @param dbcp JAXB dbcp binding.
+   * @param dbcp The {@code Dbcp} descriptor object.
    * @param driverClassLoader Class loader to be used to load the JDBC driver.
-   * @return the <code>BasicDataSource</code> instance.
+   * @return The {@code BasicDataSource} instance.
    * @throws SQLException If a database access error occurs.
    */
   public static BasicDataSource createDataSource(final Dbcp dbcp, final ClassLoader driverClassLoader) throws SQLException {
