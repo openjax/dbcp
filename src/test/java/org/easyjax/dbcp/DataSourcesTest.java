@@ -16,6 +16,8 @@
 
 package org.easyjax.dbcp;
 
+import static org.junit.Assert.*;
+
 import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,8 +25,6 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 
-import org.easyjax.dbcp.DataSources;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class DataSourcesTest {
@@ -36,9 +36,9 @@ public class DataSourcesTest {
         final Statement statement = connection.createStatement();
         final ResultSet resultSet = statement.executeQuery("SELECT 1 FROM SYSIBM.SYSDUMMY1");
       ) {
-        Assert.assertTrue(resultSet.next());
-        Assert.assertEquals(1, resultSet.getInt(1));
-        Assert.assertFalse(resultSet.next());
+        assertTrue(resultSet.next());
+        assertEquals(1, resultSet.getInt(1));
+        assertFalse(resultSet.next());
       }
     }
 
