@@ -16,15 +16,6 @@
 
 package org.easyjax.dbcp;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -35,6 +26,13 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.easyjax.dbcp_1_0_4.Dbcp;
@@ -186,13 +184,8 @@ public final class DataSources {
           if (property.getName() != null && property.getValue() != null)
             dataSource.addConnectionProperty(property.getName(), property.getValue());
 
-      if (connection.getInitSqls() != null) {
-        final List<String> initSqls = new ArrayList<>();
-        for (final String initSql : connection.getInitSqls().getInitSql())
-          initSqls.add(initSql);
-
-        dataSource.setConnectionInitSqls(initSqls);
-      }
+      if (connection.getInitSqls() != null)
+        dataSource.setConnectionInitSqls(connection.getInitSqls().getInitSql());
     }
 
     final Dbcp.Size size = dbcp.getSize();
