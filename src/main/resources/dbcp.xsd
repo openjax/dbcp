@@ -47,7 +47,7 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="driverClassName" type="dt:javaQualifiedIdentifier">
+            <xs:element name="driverClassName" type="dt:qualifiedIdentifier">
               <xs:annotation>
                 <xs:documentation>
                   The fully qualified Java class name of the JDBC driver to be used.
@@ -374,7 +374,7 @@
                       </xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="policyClassName" type="dt:javaQualifiedIdentifier" minOccurs="0">
+                  <xs:element name="policyClassName" type="dt:qualifiedIdentifier" minOccurs="0">
                     <xs:annotation>
                       <xs:documentation>
                         Specifies the EvictionPolicy implementation to use by the idle object evictor.
