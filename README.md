@@ -1,7 +1,6 @@
-<img src="https://images.cooltext.com/5195724.png" align="right">
+# EasyJAX DBCP
 
-## dbcp<br><a href="https://www.easyjax.org/"><img src="https://img.shields.io/badge/EasyJAX--blue.svg"></a>
-> Database Connection Pool
+**Database Connection Pool**
 
 ### Introduction
 
@@ -129,6 +128,16 @@ Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple
     ```
 
     The `dataSource` object is a reference to the initialized JDBC Connection Pool configured in `dbcp.xml`.
+
+### JavaDocs
+
+JavaDocs are available [here](https://www.easyjax.org/dbcp/javadocs/).
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
 
 ### License
 
