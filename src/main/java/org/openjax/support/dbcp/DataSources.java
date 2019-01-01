@@ -1,4 +1,4 @@
-/* Copyright (c) 2008 EasyJAX
+/* Copyright (c) 2008 OpenJAX
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,7 +14,15 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.easyjax.dbcp;
+package org.openjax.support.dbcp;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -26,17 +34,10 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.easyjax.dbcp_1_0_4.Dbcp;
-import org.fastjax.logging.LoggerPrintWriter;
+import org.openjax.classic.logging.LoggerPrintWriter;
+import org.openjax.support.dbcp_1_0_4.Dbcp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;

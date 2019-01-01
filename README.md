@@ -1,4 +1,4 @@
-# EasyJAX DBCP
+# OpenJAX Support DBCP
 
 **Database Connection Pool**
 
@@ -66,9 +66,9 @@ Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple
 
     ```xml
     <dbcp
-      xmlns="http://easyjax.org/dbcp-1.0.4.xsd"
+      xmlns="http://support.openjax.org/dbcp-1.0.4.xsd"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://easyjax.org/dbcp-1.0.4.xsd http://easyjax.org/dbcp.xsd"
+      xsi:schemaLocation="http://support.openjax.org/dbcp-1.0.4.xsd http://support.openjax.org/dbcp.xsd"
       name="basis">
       <jdbc>
         <url>jdbc:postgresql://localhost/basis</url>
@@ -111,12 +111,12 @@ Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple
     </dbcp>
     ```
 
-4. Add `org.easyjax:dbcp` dependency to the POM.
+4. Add `org.openjax.support:dbcp` dependency to the POM.
 
     ```xml
     <dependency>
-      <groupId>org.easyjax</groupId>
-      <artifactId>dbcp</artifactId>
+      <groupId>org.openjax.support</groupId>
+      <artifactId>support-dbcp</artifactId>
       <version>1.0.4-SNAPSHOT</version>
     </dependency>
     ```
@@ -131,7 +131,7 @@ Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple
 
 ### JavaDocs
 
-JavaDocs are available [here](https://www.easyjax.org/dbcp/javadocs/).
+JavaDocs are available [here](https://support.openjax.org/dbcp/apidocs/).
 
 ## Contributing
 
@@ -146,7 +146,7 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 <a href="http://cooltext.com" target="_top"><img src="https://cooltext.com/images/ct_pixel.gif" width="80" height="15" alt="Cool Text: Logo and Graphics Generator" border="0" /></a>
 
 [apache-commons-dbcp]: https://commons.apache.org/proper/commons-dbcp
-[dbcp-maven-archetype]: /../../../../easyjax/dbcp-maven-archetype
+[dbcp-maven-archetype]: /../../../../openjax/dbcp-maven-archetype
 [dbcp-schema]: /src/main/resources/dbcp.xsd
 [jdk8-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/
