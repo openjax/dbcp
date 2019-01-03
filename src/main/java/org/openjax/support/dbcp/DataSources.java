@@ -36,7 +36,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.openjax.classic.logging.LoggerPrintWriter;
+import org.openjax.standard.logging.LoggerPrintWriter;
 import org.openjax.support.dbcp_1_0_4.Dbcp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
