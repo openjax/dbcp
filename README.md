@@ -1,6 +1,8 @@
 # OpenJAX Support DBCP
 
-**Database Connection Pool**
+> Database Connection Pool
+
+[![Build Status](https://travis-ci.org/openjax/support-dbcp.png)](https://travis-ci.org/openjax/support-dbcp)
 
 ### Introduction
 
