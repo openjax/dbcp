@@ -3,6 +3,7 @@
 > Database Connection Pool
 
 [![Build Status](https://travis-ci.org/openjax/support-dbcp.png)](https://travis-ci.org/openjax/support-dbcp)
+[![Coverage Status](https://coveralls.io/repos/github/openjax/support-dbcp/badge.svg)](https://coveralls.io/github/openjax/support-dbcp)
 
 ### Introduction
 
