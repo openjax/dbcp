@@ -26,11 +26,31 @@ import java.sql.Statement;
 import javax.sql.DataSource;
 
 import org.junit.Test;
+import org.openjax.support.dbcp_1_0_4.xL4gluGCXYYJc.$Dbcp;
+import org.openjax.xsb.runtime.Bindings;
 
 public class DataSourcesTest {
   @Test
-  public void test() throws Exception {
+  public void testJaxb() throws Exception {
     final DataSource dataSource = DataSources.createDataSource(Thread.currentThread().getContextClassLoader().getResource("dbcp.xml"));
+    try (final Connection connection = dataSource.getConnection()) {
+      try (
+        final Statement statement = connection.createStatement();
+        final ResultSet resultSet = statement.executeQuery("SELECT 1 FROM SYSIBM.SYSDUMMY1");
+      ) {
+        assertTrue(resultSet.next());
+        assertEquals(1, resultSet.getInt(1));
+        assertFalse(resultSet.next());
+      }
+    }
+
+    new File("derby.log").delete();
+  }
+
+  @Test
+  public void testXsb() throws Exception {
+    final $Dbcp dbcp = ($Dbcp)Bindings.parse(Thread.currentThread().getContextClassLoader().getResource("dbcp.xml"));
+    final DataSource dataSource = DataSources.createDataSource(dbcp);
     try (final Connection connection = dataSource.getConnection()) {
       try (
         final Statement statement = connection.createStatement();
