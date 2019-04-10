@@ -32,7 +32,7 @@ import org.openjax.xsb.runtime.Bindings;
 public class DataSourcesTest {
   @Test
   public void testJaxb() throws Exception {
-    final DataSource dataSource = DataSources.createDataSource(Thread.currentThread().getContextClassLoader().getResource("dbcp.xml"));
+    final DataSource dataSource = DataSources.createDataSource(ClassLoader.getSystemClassLoader().getResource("dbcp.xml"));
     try (final Connection connection = dataSource.getConnection()) {
       try (
         final Statement statement = connection.createStatement();
@@ -49,7 +49,7 @@ public class DataSourcesTest {
 
   @Test
   public void testXsb() throws Exception {
-    final $Dbcp dbcp = ($Dbcp)Bindings.parse(Thread.currentThread().getContextClassLoader().getResource("dbcp.xml"));
+    final $Dbcp dbcp = ($Dbcp)Bindings.parse(ClassLoader.getSystemClassLoader().getResource("dbcp.xml"));
     final DataSource dataSource = DataSources.createDataSource(dbcp);
     try (final Connection connection = dataSource.getConnection()) {
       try (
