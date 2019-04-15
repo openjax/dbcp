@@ -34,7 +34,7 @@ Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple
 
 1. In your preferred development directory, create a [`dbcp-maven-archetype`][dbcp-maven-archetype] project.
 
-    ```tcsh
+    ```bash
     mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
     -DarchetypeGroupId=org.openjax.maven.archetype -DarchetypeArtifactId=dbcp-maven-archetype \
     -DarchetypeCatalog=http://mvn.repo.openjax.org -DinteractiveMode=false
@@ -44,7 +44,7 @@ Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple
 
 1. In your preferred development directory, create a [`maven-archetype-quickstart`][maven-archetype-quickstart] project.
 
-    ```tcsh
+    ```bash
     mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
     ```
 
