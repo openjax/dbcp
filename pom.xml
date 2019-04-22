@@ -24,14 +24,14 @@
     <artifactId>support</artifactId>
     <version>3.7.5-SNAPSHOT</version>
   </parent>
-  <artifactId>support-dbcp</artifactId>
+  <artifactId>dbcp</artifactId>
   <version>1.0.4-SNAPSHOT</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
+        <groupId>org.safris.maven</groupId>
+        <artifactId>offlinejavadoc-maven-plugin</artifactId>
         <configuration>
           <sourcepath>${project.build.directory}/generated-sources/jaxb</sourcepath>
         </configuration>
@@ -91,22 +91,22 @@
     </dependency>
     <dependency>
       <groupId>org.openjax.standard</groupId>
-      <artifactId>standard-logging</artifactId>
+      <artifactId>logging</artifactId>
       <version>0.4.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.openjax.standard.jaxb</groupId>
-      <artifactId>jaxb-xjc</artifactId>
+      <artifactId>xjc</artifactId>
       <version>0.8.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.openjax.xsb</groupId>
-      <artifactId>xsb-runtime</artifactId>
+      <artifactId>runtime</artifactId>
       <version>2.1.4-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.openjax.standard</groupId>
-      <artifactId>standard-test</artifactId>
+      <artifactId>test</artifactId>
       <version>0.6.9-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
