@@ -37,8 +37,8 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.openjax.standard.logging.LoggerPrintWriter;
-import org.openjax.standard.xml.datatypes_0_9_2.xNxQJbgwJdgwJcA;
+import org.openjax.ext.logging.LoggerPrintWriter;
+import org.openjax.ext.xml.datatypes_0_9_2.xL9gluGCXYYJc;
 import org.openjax.support.dbcp_1_0_4.Dbcp;
 import org.openjax.support.dbcp_1_0_4.xL4gluGCXYYJc;
 import org.openjax.support.dbcp_1_0_4.xL4gluGCXYYJc.$Dbcp;
@@ -269,7 +269,7 @@ public final class DataSources {
     dataSource.setCacheState(pool != null && pool.getCacheState() != null && pool.getCacheState());
     dataSource.setMaxWaitMillis(pool == null || pool.getMaxWait() != null || INDEFINITE.equals(pool.getMaxWait()) ? -1 : Long.parseLong(pool.getMaxWait()));
     dataSource.setMaxConnLifetimeMillis(pool == null || pool.getMaxConnectionLifetime() == null || INDEFINITE.equals(pool.getMaxConnectionLifetime()) ? 0 : Long.parseLong(pool.getMaxConnectionLifetime()));
-    dataSource.setEnableAutoCommitOnReturn(_default == null || pool.getEnableAutoCommitOnReturn() == null || pool.getEnableAutoCommitOnReturn());
+    dataSource.setAutoCommitOnReturn(_default == null || pool.getAutoCommitOnReturn() == null || pool.getAutoCommitOnReturn());
     dataSource.setRollbackOnReturn(pool == null || pool.getRollbackOnReturn() == null || pool.getRollbackOnReturn());
     if (pool != null && pool.getRemoveAbandoned() != null) {
       if ("borrow".equals(pool.getRemoveAbandoned().getOn()))
@@ -377,7 +377,7 @@ public final class DataSources {
 
       if (connection.getInitSqls() != null) {
         final List<String> initSqls = new ArrayList<>(connection.getInitSqls().getInitSql().size());
-        for (final xNxQJbgwJdgwJcA.$StringNonEmpty initSql : connection.getInitSqls().getInitSql())
+        for (final xL9gluGCXYYJc.$StringNonEmpty initSql : connection.getInitSqls().getInitSql())
           initSqls.add(initSql.text());
 
         dataSource.setConnectionInitSqls(initSqls);
@@ -408,7 +408,7 @@ public final class DataSources {
     dataSource.setCacheState(pool != null && pool.getCacheState() != null && pool.getCacheState().text());
     dataSource.setMaxWaitMillis(pool == null || pool.getMaxWait() != null || INDEFINITE.equals(pool.getMaxWait().text()) ? -1 : Long.parseLong(pool.getMaxWait().text()));
     dataSource.setMaxConnLifetimeMillis(pool == null || pool.getMaxConnectionLifetime() == null || INDEFINITE.equals(pool.getMaxConnectionLifetime().text()) ? 0 : Long.parseLong(pool.getMaxConnectionLifetime().text()));
-    dataSource.setEnableAutoCommitOnReturn(_default == null || pool.getEnableAutoCommitOnReturn() == null || pool.getEnableAutoCommitOnReturn().text());
+    dataSource.setAutoCommitOnReturn(_default == null || pool.getAutoCommitOnReturn() == null || pool.getAutoCommitOnReturn().text());
     dataSource.setRollbackOnReturn(pool == null || pool.getRollbackOnReturn() == null || pool.getRollbackOnReturn().text());
     if (pool != null && pool.getRemoveAbandoned() != null) {
       if ("borrow".equals(pool.getRemoveAbandoned().getOn$().text()))

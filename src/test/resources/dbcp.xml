@@ -54,7 +54,7 @@
     <cacheState>false</cacheState>
     <maxWait>INDEFINITE</maxWait>
     <maxConnectionLifetime>INDEFINITE</maxConnectionLifetime>
-    <enableAutoCommitOnReturn>true</enableAutoCommitOnReturn>
+    <autoCommitOnReturn>true</autoCommitOnReturn>
     <rollbackOnReturn>true</rollbackOnReturn>
     <removeAbandoned on="maintenance" timeout="300"/>
     <abandonedUsageTracking>true</abandonedUsageTracking>
