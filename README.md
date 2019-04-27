@@ -4,6 +4,8 @@
 
 [![Build Status](https://travis-ci.org/openjax/support-dbcp.png)](https://travis-ci.org/openjax/support-dbcp)
 [![Coverage Status](https://coveralls.io/repos/github/openjax/support-dbcp/badge.svg)](https://coveralls.io/github/openjax/support-dbcp)
+[![Javadocs](https://www.javadoc.io/badge/org.openjax.support/dbcp.svg)](https://www.javadoc.io/doc/org.openjax.support/dbcp)
+[![Released Version](https://img.shields.io/maven-central/v/org.openjax.support/dbcp.svg)](https://mvnrepository.com/artifact/org.openjax.support/dbcp)
 
 ### Introduction
 
@@ -131,10 +133,6 @@ Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple
     ```
 
     The `dataSource` object is a reference to the initialized JDBC Connection Pool configured in `dbcp.xml`.
-
-### JavaDocs
-
-JavaDocs are available [here](https://support.openjax.org/dbcp/apidocs/).
 
 ## Contributing
 
