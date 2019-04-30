@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.support.dbcp;
+package org.openjax.std.dbcp;
 
 import static org.junit.Assert.*;
 
@@ -26,7 +26,7 @@ import java.sql.Statement;
 import javax.sql.DataSource;
 
 import org.junit.Test;
-import org.openjax.support.dbcp_1_0_4.xL4gluGCXYYJc.$Dbcp;
+import org.openjax.std.dbcp_1_0_4.xL0gluGCXYYJc.$Dbcp;
 import org.openjax.xsb.runtime.Bindings;
 
 public class DataSourcesTest {

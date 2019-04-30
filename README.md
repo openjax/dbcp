@@ -1,11 +1,11 @@
-# OpenJAX Support DBCP
+# OpenJAX Std DBCP
 
 > Database Connection Pool
 
-[![Build Status](https://travis-ci.org/openjax/support-dbcp.png)](https://travis-ci.org/openjax/support-dbcp)
-[![Coverage Status](https://coveralls.io/repos/github/openjax/support-dbcp/badge.svg)](https://coveralls.io/github/openjax/support-dbcp)
-[![Javadocs](https://www.javadoc.io/badge/org.openjax.support/dbcp.svg)](https://www.javadoc.io/doc/org.openjax.support/dbcp)
-[![Released Version](https://img.shields.io/maven-central/v/org.openjax.support/dbcp.svg)](https://mvnrepository.com/artifact/org.openjax.support/dbcp)
+[![Build Status](https://travis-ci.org/openjax/std-dbcp.png)](https://travis-ci.org/openjax/std-dbcp)
+[![Coverage Status](https://coveralls.io/repos/github/openjax/std-dbcp/badge.svg)](https://coveralls.io/github/openjax/std-dbcp)
+[![Javadocs](https://www.javadoc.io/badge/org.openjax.std/dbcp.svg)](https://www.javadoc.io/doc/org.openjax.std/dbcp)
+[![Released Version](https://img.shields.io/maven-central/v/org.openjax.std/dbcp.svg)](https://mvnrepository.com/artifact/org.openjax.std/dbcp)
 
 ### Introduction
 
@@ -71,9 +71,9 @@ Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple
 
     ```xml
     <dbcp
-      xmlns="http://support.openjax.org/dbcp-1.0.4.xsd"
+      xmlns="http://std.openjax.org/dbcp-1.0.4.xsd"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://support.openjax.org/dbcp-1.0.4.xsd http://support.openjax.org/dbcp.xsd"
+      xsi:schemaLocation="http://std.openjax.org/dbcp-1.0.4.xsd http://std.openjax.org/dbcp.xsd"
       name="basis">
       <jdbc>
         <url>jdbc:postgresql://localhost/basis</url>
@@ -116,12 +116,12 @@ Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple
     </dbcp>
     ```
 
-4. Add `org.openjax.support:dbcp` dependency to the POM.
+4. Add `org.openjax.std:dbcp` dependency to the POM.
 
     ```xml
     <dependency>
-      <groupId>org.openjax.support</groupId>
-      <artifactId>support-dbcp</artifactId>
+      <groupId>org.openjax.std</groupId>
+      <artifactId>dbcp</artifactId>
       <version>1.0.4-SNAPSHOT</version>
     </dependency>
     ```

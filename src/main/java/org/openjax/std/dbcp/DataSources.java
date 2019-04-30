@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.support.dbcp;
+package org.openjax.std.dbcp;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,9 +39,8 @@ import javax.xml.validation.SchemaFactory;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.openjax.ext.logging.LoggerPrintWriter;
 import org.openjax.ext.xml.datatypes_0_9_2.xL9gluGCXYYJc;
-import org.openjax.support.dbcp_1_0_4.Dbcp;
-import org.openjax.support.dbcp_1_0_4.xL4gluGCXYYJc;
-import org.openjax.support.dbcp_1_0_4.xL4gluGCXYYJc.$Dbcp;
+import org.openjax.std.dbcp_1_0_4.Dbcp;
+import org.openjax.std.dbcp_1_0_4.xL0gluGCXYYJc.$Dbcp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -356,13 +355,13 @@ public final class DataSources {
     if (_default != null && _default.getTransactionIsolation() != null) {
       if ("NONE".equals(_default.getTransactionIsolation().text()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_NONE);
-      else if (xL4gluGCXYYJc.$Dbcp.Default.TransactionIsolation.READ_5FUNCOMMITTED.text().equals(_default.getTransactionIsolation().text()))
+      else if ($Dbcp.Default.TransactionIsolation.READ_5FUNCOMMITTED.text().equals(_default.getTransactionIsolation().text()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-      else if (xL4gluGCXYYJc.$Dbcp.Default.TransactionIsolation.READ_5FCOMMITTED.text().equals(_default.getTransactionIsolation().text()))
+      else if ($Dbcp.Default.TransactionIsolation.READ_5FCOMMITTED.text().equals(_default.getTransactionIsolation().text()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-      else if (xL4gluGCXYYJc.$Dbcp.Default.TransactionIsolation.REPEATABLE_5FREAD.text().equals(_default.getTransactionIsolation().text()))
+      else if ($Dbcp.Default.TransactionIsolation.REPEATABLE_5FREAD.text().equals(_default.getTransactionIsolation().text()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
-      else if (xL4gluGCXYYJc.$Dbcp.Default.TransactionIsolation.SERIALIZABLE.text().equals(_default.getTransactionIsolation().text()))
+      else if ($Dbcp.Default.TransactionIsolation.SERIALIZABLE.text().equals(_default.getTransactionIsolation().text()))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
       else
         throw new UnsupportedOperationException("Unsupported transaction isolation: " + _default.getTransactionIsolation());
