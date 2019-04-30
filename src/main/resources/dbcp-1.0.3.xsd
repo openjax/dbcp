@@ -16,8 +16,8 @@
 -->
 <xs:schema
   elementFormDefault="qualified" 
-  targetNamespace="http://std.openjax.org/dbcp-1.0.3.xsd"
-  xmlns:dbcp="http://std.openjax.org/dbcp-1.0.3.xsd"
+  targetNamespace="http://ext.openjax.org/dbcp-1.0.3.xsd"
+  xmlns:dbcp="http://ext.openjax.org/dbcp-1.0.3.xsd"
   xmlns:dt="http://ext.openjax.org/xml/datatypes-0.9.1.xsd"
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
 

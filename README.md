@@ -1,11 +1,11 @@
-# OpenJAX Std DBCP
+# OpenJAX Extensions DBCP
 
 > Database Connection Pool
 
-[![Build Status](https://travis-ci.org/openjax/std-dbcp.png)](https://travis-ci.org/openjax/std-dbcp)
-[![Coverage Status](https://coveralls.io/repos/github/openjax/std-dbcp/badge.svg)](https://coveralls.io/github/openjax/std-dbcp)
-[![Javadocs](https://www.javadoc.io/badge/org.openjax.std/dbcp.svg)](https://www.javadoc.io/doc/org.openjax.std/dbcp)
-[![Released Version](https://img.shields.io/maven-central/v/org.openjax.std/dbcp.svg)](https://mvnrepository.com/artifact/org.openjax.std/dbcp)
+[![Build Status](https://travis-ci.org/openjax/ext-dbcp.png)](https://travis-ci.org/openjax/ext-dbcp)
+[![Coverage Status](https://coveralls.io/repos/github/openjax/ext-dbcp/badge.svg)](https://coveralls.io/github/openjax/ext-dbcp)
+[![Javadocs](https://www.javadoc.io/badge/org.openjax.ext/dbcp.svg)](https://www.javadoc.io/doc/org.openjax.ext/dbcp)
+[![Released Version](https://img.shields.io/maven-central/v/org.openjax.ext/dbcp.svg)](https://mvnrepository.com/artifact/org.openjax.ext/dbcp)
 
 ### Introduction
 
@@ -32,17 +32,7 @@ Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple
 * [Java 8][jdk8-download] - The minimum required JDK version.
 * [Maven][maven] - The dependency management system.
 
-#### Example (Quick-&-Easy)
-
-1. In your preferred development directory, create a [`dbcp-maven-archetype`][dbcp-maven-archetype] project.
-
-    ```bash
-    mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
-    -DarchetypeGroupId=org.openjax.maven.archetype -DarchetypeArtifactId=dbcp-maven-archetype \
-    -DarchetypeCatalog=http://mvn.repo.openjax.org -DinteractiveMode=false
-    ```
-
-#### Example (Hands-on)
+#### Example
 
 1. In your preferred development directory, create a [`maven-archetype-quickstart`][maven-archetype-quickstart] project.
 
@@ -71,9 +61,9 @@ Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple
 
     ```xml
     <dbcp
-      xmlns="http://std.openjax.org/dbcp-1.0.4.xsd"
+      xmlns="http://ext.openjax.org/dbcp-1.0.4.xsd"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://std.openjax.org/dbcp-1.0.4.xsd http://std.openjax.org/dbcp.xsd"
+      xsi:schemaLocation="http://ext.openjax.org/dbcp-1.0.4.xsd http://ext.openjax.org/dbcp.xsd"
       name="basis">
       <jdbc>
         <url>jdbc:postgresql://localhost/basis</url>
@@ -116,11 +106,11 @@ Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple
     </dbcp>
     ```
 
-4. Add `org.openjax.std:dbcp` dependency to the POM.
+4. Add `org.openjax.ext:dbcp` dependency to the POM.
 
     ```xml
     <dependency>
-      <groupId>org.openjax.std</groupId>
+      <groupId>org.openjax.ext</groupId>
       <artifactId>dbcp</artifactId>
       <version>1.0.4-SNAPSHOT</version>
     </dependency>
@@ -145,7 +135,6 @@ Please make sure to update tests as appropriate.
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
 
 [apache-commons-dbcp]: https://commons.apache.org/proper/commons-dbcp
-[dbcp-maven-archetype]: /../../../../openjax/dbcp-maven-archetype
 [dbcp-schema]: /src/main/resources/dbcp.xsd
 [jdk8-download]: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 [maven-archetype-quickstart]: http://maven.apache.org/archetypes/maven-archetype-quickstart/

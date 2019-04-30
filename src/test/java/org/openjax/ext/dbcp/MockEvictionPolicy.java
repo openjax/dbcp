@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.std.dbcp;
+package org.openjax.ext.dbcp;
 
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.EvictionConfig;
