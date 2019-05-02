@@ -20,20 +20,20 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.openjax.ext</groupId>
-    <artifactId>ext</artifactId>
-    <version>1.11.15-SNAPSHOT</version>
+    <groupId>org.openjax</groupId>
+    <artifactId>openjax</artifactId>
+    <version>2.5.3-SNAPSHOT</version>
   </parent>
   <artifactId>dbcp</artifactId>
   <version>1.0.4-SNAPSHOT</version>
-  <name>OpenJAX Extensions DBCP</name>
+  <name>OpenJAX DBCP</name>
   <description>
     A light wrapper around the Apache Commons DBCP library, which provides a simple API to describe and initialize a JDBC Database Connection Pool.
   </description>
   <build>
     <plugins>
       <plugin>
-        <groupId>org.openjax.ext.jaxb</groupId>
+        <groupId>org.openjax.jaxb</groupId>
         <artifactId>jaxb-maven-plugin</artifactId>
         <configuration>
           <destDir>${project.build.directory}/generated-sources/jaxb</destDir>
@@ -43,8 +43,8 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.openjax.xsb</groupId>
-        <artifactId>xsb-maven-plugin</artifactId>
+        <groupId>org.jaxsb</groupId>
+        <artifactId>jaxsb-maven-plugin</artifactId>
         <version>2.1.4-SNAPSHOT</version>
         <executions>
           <execution>
@@ -53,7 +53,7 @@
             </goals>
             <phase>generate-sources</phase>
             <configuration>
-              <destDir>${project.build.directory}/generated-sources/xsb</destDir>
+              <destDir>${project.build.directory}/generated-sources/jaxsb</destDir>
               <schemas>
                 <schema>src/main/resources/dbcp.xsd</schema>
               </schemas>
@@ -62,7 +62,7 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.openjax.ext.xml</groupId>
+        <groupId>org.openjax.xml</groupId>
         <artifactId>xml-maven-plugin</artifactId>
       </plugin>
     </plugins>
@@ -86,7 +86,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.openjax.ext</groupId>
+      <groupId>org.openjax</groupId>
       <artifactId>logging</artifactId>
       <version>0.4.1-SNAPSHOT</version>
     </dependency>
@@ -101,12 +101,12 @@
       <version>2.3.1</version>
     </dependency>
     <dependency>
-      <groupId>org.openjax.xsb</groupId>
+      <groupId>org.jaxsb</groupId>
       <artifactId>runtime</artifactId>
       <version>2.1.4-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>org.openjax.ext</groupId>
+      <groupId>org.openjax</groupId>
       <artifactId>test</artifactId>
       <version>0.6.9-SNAPSHOT</version>
       <scope>test</scope>

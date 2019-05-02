@@ -14,7 +14,7 @@
  * program. If not, see <http://opensource.org/licenses/MIT/>.
  */
 
-package org.openjax.ext.dbcp;
+package org.openjax.dbcp;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,10 +37,10 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.openjax.ext.logging.LoggerPrintWriter;
-import org.openjax.ext.xml.datatypes_0_9_2.xL9gluGCXYYJc;
-import org.openjax.ext.dbcp_1_0_4.Dbcp;
-import org.openjax.ext.dbcp_1_0_4.xL0gluGCXYYJc.$Dbcp;
+import org.openjax.dbcp_1_0_4.Dbcp;
+import org.openjax.logging.LoggerPrintWriter;
+import org.openjax.www.dbcp_1_0_4.xL0gluGCXYYJc.$Dbcp;
+import org.openjax.www.xml.datatypes_0_9_2.xL9gluGCXYYJc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
