@@ -28,7 +28,7 @@
   <version>1.0.4-SNAPSHOT</version>
   <name>OpenJAX DBCP</name>
   <description>
-    A light wrapper around the Apache Commons DBCP library, which provides a simple API to describe and initialize a JDBC Database Connection Pool.
+    Wrapper of the "Apache Commons DBCP" library that provides a simple API to describe and initialize a JDBC Database Connection Pool.
   </description>
   <build>
     <plugins>
