@@ -14,11 +14,10 @@
   You should have received a copy of The MIT License (MIT) along with this
   program. If not, see <http://opensource.org/licenses/MIT/>.
 -->
-<dbcp
+<dbcp name="test"
   xmlns="http://www.openjax.org/dbcp-1.0.4.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.openjax.org/dbcp-1.0.4.xsd ../../main/resources/dbcp.xsd"
-  name="test">
+  xsi:schemaLocation="http://www.openjax.org/dbcp-1.0.4.xsd ../../main/resources/dbcp.xsd">
   <jdbc>
     <url>jdbc:derby:memory:test;create=true</url>
     <driverClassName>org.apache.derby.jdbc.EmbeddedDriver</driverClassName>
