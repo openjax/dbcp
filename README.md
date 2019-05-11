@@ -1,112 +1,111 @@
 # OpenJAX DBCP
 
-> Database Connection Pool
+> Database Connection Pool.
 
 [![Build Status](https://travis-ci.org/openjax/dbcp.png)](https://travis-ci.org/openjax/dbcp)
 [![Coverage Status](https://coveralls.io/repos/github/openjax/dbcp/badge.svg)](https://coveralls.io/github/openjax/dbcp)
 [![Javadocs](https://www.javadoc.io/badge/org.openjax/dbcp.svg)](https://www.javadoc.io/doc/org.openjax/dbcp)
 [![Released Version](https://img.shields.io/maven-central/v/org.openjax/dbcp.svg)](https://mvnrepository.com/artifact/org.openjax/dbcp)
 
-### Introduction
+## Introduction
 
-**dbcp** is a light wrapper around the [Apache Commons DBCP][apache-commons-dbcp] library, which provides a simple API to describe and initialize a JDBC Database Connection Pool.
+OpenJAX DBCP is a light wrapper around the [Apache Commons DBCP][apache-commons-dbcp] library, which provides a simple API to describe and initialize a JDBC Database Connection Pool.
 
-### Why **dbcp**?
+OpenJAX DBCP allows a developer to configure a Connection Pool with a [standardized XML Schema][dbcp-schema], which is used by a consumer class to initiate the connection pool. **dbcp** uses the JAXB framework to significantly reduce the boilerplate code, thus providing a lean API with support for the all possible connection pool configuration variations.
 
-#### CohesionFirst
+### Validating and Fail-Fast
 
-Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple solution that separates itself from the rest with the strength of its cohesion and ease of usability. Made possible by the rigorous conformance to best practices in every line of its implementation, **dbcp** considers the needs of the developer as primary, and offers a complete solution for the command line arguments facet of an application.
+OpenJAX DBCP is based on a [XML Schema][dbcp-schema] used to specify the formal of XML documents accepted by the configuration consumer. The XML Schema is designed to use the full power of XML Validation to allow a developer to qiuckly determine errors in his draft. Once a `dbcp.xml` passes the validation checks, it is almost guaranteed to properly initialize the Connection Pool configured by the file.
 
-#### Complete Solution
+## Getting Started
 
-**dbcp** allows a developer to configure a Connection Pool with a [standardized XML Schema][dbcp-schema], which is used by a consumer class to initiate the connection pool. **dbcp** uses the JAXB framework to significantly reduce the boilerplate code, thus providing a lean API with support for the all possible connection pool configuration variations.
-
-#### Validating and Fail-Fast
-
-**dbcp** is based on a [XML Schema][dbcp-schema] used to specify the formal of XML documents accepted by the configuration consumer. The XML Schema is designed to use the full power of XML Validation to allow a developer to qiuckly determine errors in his draft. Once a `dbcp.xml` passes the validation checks, it is almost guaranteed to properly initialize the Connection Pool configured by the file.
-
-### Getting Started
-
-#### Prerequisites
+### Prerequisites
 
 * [Java 8][jdk8-download] - The minimum required JDK version.
 * [Maven][maven] - The dependency management system.
 
-#### Example
+### Example
 
 1. In your preferred development directory, create a [`maven-archetype-quickstart`][maven-archetype-quickstart] project.
 
     ```bash
-    mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+    mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
+      -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
     ```
 
-2. Add the `mvn.repo.openjax.org` Maven repositories to the POM.
+1. Create a `dbcp.xml` in `src/main/resources/`.
 
     ```xml
-    <repositories>
-      <repository>
-        <id>mvn.repo.openjax.org</id>
-        <url>http://mvn.repo.openjax.org/m2</url>
-      </repository>
-    </repositories>
-    <pluginRepositories>
-      <pluginRepository>
-        <id>mvn.repo.openjax.org</id>
-        <url>http://mvn.repo.openjax.org/m2</url>
-      </pluginRepository>
-    </pluginRepositories>
-    ```
-
-3. Create a `dbcp.xml` in `src/main/resources/`.
-
-    ```xml
-    <dbcp
+    <dbcp name="test"
       xmlns="http://www.openjax.org/dbcp-1.0.4.xsd"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.openjax.org/dbcp-1.0.4.xsd http://www.openjax.org/dbcp.xsd"
-      name="basis">
+      xsi:schemaLocation="http://www.openjax.org/dbcp-1.0.4.xsd ../../main/resources/dbcp.xsd">
       <jdbc>
-        <url>jdbc:postgresql://localhost/basis</url>
-        <driverClassName>org.postgresql.Driver</driverClassName>
-        <username>basis</username>
-        <password>basis</password>
-        <loginTimeout>5000</loginTimeout>
+        <url>jdbc:derby:memory:test;create=true</url>
+        <driverClassName>org.apache.derby.jdbc.EmbeddedDriver</driverClassName>
+        <username>test</username>
+        <password>test</password>
       </jdbc>
       <default>
+        <catalog>catalog</catalog>
         <autoCommit>true</autoCommit>
         <readOnly>false</readOnly>
+        <queryTimeout>300000</queryTimeout>
         <transactionIsolation>READ_UNCOMMITTED</transactionIsolation>
       </default>
+      <connection>
+        <properties>
+          <property name="prop1" value="value1"/>
+          <property name="prop2" value="value2"/>
+        </properties>
+        <initSqls>
+          <initSql>SELECT 1 FROM SYSIBM.SYSDUMMY1</initSql>
+          <initSql>SELECT 1 FROM SYSIBM.SYSDUMMY1</initSql>
+        </initSqls>
+      </connection>
       <size>
         <initialSize>0</initialSize>
-        <maxActive>16</maxActive>
-        <maxIdle>16</maxIdle>
+        <maxTotal>8</maxTotal>
+        <maxIdle>8</maxIdle>
         <minIdle>0</minIdle>
-        <maxWait>1000</maxWait>
+        <maxOpenPreparedStatements>INDEFINITE</maxOpenPreparedStatements>
       </size>
-      <management>
-        <timeBetweenEvictionRuns>-1</timeBetweenEvictionRuns>
-        <numTestsPerEvictionRun>3</numTestsPerEvictionRun>
-        <minEvictableIdleTime>1800000</minEvictableIdleTime>
-      </management>
-      <preparedStatements>
-        <poolPreparedStatements>false</poolPreparedStatements>
-        <maxOpenPreparedStatements>-1</maxOpenPreparedStatements>
-      </preparedStatements>
-      <removal>
-        <removeAbandoned>false</removeAbandoned>
-        <removeAbandonedTimeout>300</removeAbandonedTimeout>
-        <logAbandoned>false</logAbandoned>
-      </removal>
+      <pool>
+        <queue>lifo</queue>
+        <cacheState>false</cacheState>
+        <maxWait>INDEFINITE</maxWait>
+        <maxConnectionLifetime>INDEFINITE</maxConnectionLifetime>
+        <autoCommitOnReturn>true</autoCommitOnReturn>
+        <rollbackOnReturn>true</rollbackOnReturn>
+        <removeAbandoned on="maintenance" timeout="300"/>
+        <abandonedUsageTracking>true</abandonedUsageTracking>
+        <allowAccessToUnderlyingConnection>false</allowAccessToUnderlyingConnection>
+        <eviction>
+          <timeBetweenRuns>300000</timeBetweenRuns>
+          <numTestsPerRun>3</numTestsPerRun>
+          <minIdleTime>1800000</minIdleTime>
+          <softMinIdleTime>INDEFINITE</softMinIdleTime>
+          <policyClassName>org.openjax.dbcp.MockEvictionPolicy</policyClassName>
+        </eviction>
+      </pool>
+      <validation>
+        <query>SELECT 1 FROM SYSIBM.SYSDUMMY1</query>
+        <testOnBorrow>false</testOnBorrow>
+        <testOnReturn>false</testOnReturn>
+        <testWhileIdle>false</testWhileIdle>
+        <fastFail>
+          <disconnectionSqlCodes>42X01 42X02 42X03</disconnectionSqlCodes>
+        </fastFail>
+      </validation>
       <logging>
-        <level>ALL</level>
+        <level>INFO</level>
         <logExpiredConnections>true</logExpiredConnections>
         <logAbandoned>true</logAbandoned>
       </logging>
     </dbcp>
     ```
 
-4. Add `org.openjax:dbcp` dependency to the POM.
+1. Add `org.openjax:dbcp` dependency to the POM.
 
     ```xml
     <dependency>
@@ -116,10 +115,10 @@ Developed with the CohesionFirst approach, **dbcp** is an easy-to-use and simple
     </dependency>
     ```
 
-5. In the `main()` method in `App.java`, add the following line and let your IDE resolve the missing imports.
+1. In the `main()` method in `App.java`, add the following line and let your IDE resolve the missing imports.
 
     ```java
-    DataSource dataSource = DataSources.createDataSource(Thread.currentThread().getContextClassLoader().getResource("dbcp.xml"));
+    DataSource dataSource = DataSources.createDataSource(ClassLoader.getSystemClassLoader().getResource("dbcp.xml"));
     ```
 
     The `dataSource` object is a reference to the initialized JDBC Connection Pool configured in `dbcp.xml`.
@@ -130,7 +129,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
-### License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
 
