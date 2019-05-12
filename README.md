@@ -111,7 +111,7 @@ OpenJAX DBCP is based on a [XML Schema][dbcp-schema] used to specify the formal 
     <dependency>
       <groupId>org.openjax</groupId>
       <artifactId>dbcp</artifactId>
-      <version>1.0.4-SNAPSHOT</version>
+      <version>1.0.4</version>
     </dependency>
     ```
 
