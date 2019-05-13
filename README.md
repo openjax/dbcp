@@ -26,13 +26,6 @@ OpenJAX DBCP is based on a [XML Schema][dbcp-schema] used to specify the formal 
 
 ### Example
 
-1. In your preferred development directory, create a [`maven-archetype-quickstart`][maven-archetype-quickstart] project.
-
-    ```bash
-    mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app \
-      -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
-    ```
-
 1. Create a `dbcp.xml` in `src/main/resources/`.
 
     ```xml
@@ -125,7 +118,7 @@ OpenJAX DBCP is based on a [XML Schema][dbcp-schema] used to specify the formal 
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Pull requests are welcome. For major changes, please [open an issue](../../issues) first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
 
