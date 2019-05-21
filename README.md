@@ -1,4 +1,4 @@
-# OpenJAX DBCP
+# DBCP
 
 [![Build Status](https://travis-ci.org/openjax/dbcp.png)](https://travis-ci.org/openjax/dbcp)
 [![Coverage Status](https://coveralls.io/repos/github/openjax/dbcp/badge.svg)](https://coveralls.io/github/openjax/dbcp)
