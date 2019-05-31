@@ -1,9 +1,9 @@
 # DBCP
 
-[![Build Status](https://travis-ci.org/openjax/dbcp.png)](https://travis-ci.org/openjax/dbcp)
-[![Coverage Status](https://coveralls.io/repos/github/openjax/dbcp/badge.svg)](https://coveralls.io/github/openjax/dbcp)
-[![Javadocs](https://www.javadoc.io/badge/org.openjax/dbcp.svg)](https://www.javadoc.io/doc/org.openjax/dbcp)
-[![Released Version](https://img.shields.io/maven-central/v/org.openjax/dbcp.svg)](https://mvnrepository.com/artifact/org.openjax/dbcp)
+[![Build Status](https://travis-ci.org/openjax/dbcp.svg?1)](https://travis-ci.org/openjax/dbcp)
+[![Coverage Status](https://coveralls.io/repos/github/openjax/dbcp/badge.svg?1)](https://coveralls.io/github/openjax/dbcp)
+[![Javadocs](https://www.javadoc.io/badge/org.openjax/dbcp.svg?1)](https://www.javadoc.io/doc/org.openjax/dbcp)
+[![Released Version](https://img.shields.io/maven-central/v/org.openjax/dbcp.svg?1)](https://mvnrepository.com/artifact/org.openjax/dbcp)
 
 ## Introduction
 
