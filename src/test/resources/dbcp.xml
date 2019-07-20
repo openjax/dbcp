@@ -15,9 +15,9 @@
   program. If not, see <http://opensource.org/licenses/MIT/>.
 -->
 <dbcp name="test"
-  xmlns="http://www.openjax.org/dbcp-1.0.4.xsd"
+  xmlns="http://www.openjax.org/dbcp-1.0.5.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.openjax.org/dbcp-1.0.4.xsd ../../main/resources/dbcp.xsd">
+  xsi:schemaLocation="http://www.openjax.org/dbcp-1.0.5.xsd ../../main/resources/dbcp.xsd">
   <jdbc>
     <url>jdbc:derby:memory:test;create=true</url>
     <driverClassName>org.apache.derby.jdbc.EmbeddedDriver</driverClassName>

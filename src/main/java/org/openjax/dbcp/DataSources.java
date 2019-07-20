@@ -38,8 +38,8 @@ import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.libj.logging.LoggerPrintWriter;
-import org.openjax.dbcp_1_0_4.Dbcp;
-import org.openjax.www.dbcp_1_0_4.xL0gluGCXYYJc.$Dbcp;
+import org.openjax.dbcp_1_0_5.Dbcp;
+import org.openjax.www.dbcp_1_0_5.xL0gluGCXYYJc.$Dbcp;
 import org.openjax.www.xml.datatypes_0_9_3.xL9gluGCXYYJc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
