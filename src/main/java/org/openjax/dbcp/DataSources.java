@@ -38,9 +38,9 @@ import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.libj.logging.LoggerPrintWriter;
-import org.openjax.dbcp_1_0_5.Dbcp;
-import org.openjax.www.dbcp_1_0_5.xL0gluGCXYYJc.$Dbcp;
-import org.openjax.www.xml.datatypes_0_9_3.xL9gluGCXYYJc;
+import org.openjax.dbcp_1_0.Dbcp;
+import org.openjax.www.dbcp_1_0.xL0gluGCXAA.$Dbcp;
+import org.openjax.www.xml.datatypes_0_9.xL9gluGCXAA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
@@ -376,7 +376,7 @@ public final class DataSources {
 
       if (connection.getInitSqls() != null) {
         final List<String> initSqls = new ArrayList<>(connection.getInitSqls().getInitSql().size());
-        for (final xL9gluGCXYYJc.$StringNonEmpty initSql : connection.getInitSqls().getInitSql())
+        for (final xL9gluGCXAA.$StringNonEmpty initSql : connection.getInitSqls().getInitSql())
           initSqls.add(initSql.text());
 
         dataSource.setConnectionInitSqls(initSqls);
