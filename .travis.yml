@@ -18,7 +18,7 @@ jdk:
 - oraclejdk8
 - oraclejdk11
 install:
-- cp settings.xml $HOME/.m2/settings.xml && rm -rf ~/.m2/repository/org/openjax
+- cp settings.xml $HOME/.m2/settings.xml
 script:
 - 'if [ "$TRAVIS_JDK_VERSION" = "oraclejdk8" ] &&
       [ "$TRAVIS_BRANCH" = "master" ] &&
@@ -28,9 +28,6 @@ script:
   else
     mvn -e -U -DskipRTests clean install;
   fi'
-cache:
-  directories:
-    - ~/.m2/repository
 env:
   global:
   - secure: JGucdvDrqX71AUlrwbenRoGM1Ox/lgkFpOz9yR1CPs3qwLRsXTPtbXW9+VvGah33NzI4ny76b1UYEIR2M1UvIM1Kebba/Mve+orgaubF9QJrKkB3D1pFEWdax4s0Jz188vERw6NYxhEnoALwxFqhliivgVkhga0LSSlf+mCYRRXRXgjt1pdd66eR7xErgCf7S5729jJ6L4n1NzG7TtsqBvmWdhHds5dytlR+CpLAX+DS12T30OYd72WUk+JkKCQFAuoAEuBiRZaOUONxqumAX5ZEG4c1cgaqHbxrfobkm5PewPkTdZHq2DPNumiVWJuKzcdOMEQUUDw0T9B6dwcnORIIXRtbmZyzx/g9BG3H63hU8Hk60EYoOxaAYD+41eyyAkkkqi4GC3Hx3U534qId6+NauUSHyCVLVNW1GNo1b/9cDf4n4/4vPN2pVvwQ7/7NxrR8QT5KFnks2Y/wPiIe2CawDSfKqXVNVrEAURDqlwo5RkgDIj8BXXzfXgU6ctGgYLqiOuhyhnUjTvP+HRJPhHhY7Sqm+jQkFV6h83DGgiRKj1cPYMBLIziVU6cuwsysAZUQWVwM9ECUXgwsHHIz/xlhHZkS6CKgFzmoXZeot7q3D/TZHrEFEcvceHAs0GpRlgQIUrPgq+pDL+5WjaQdwjnyUvI0F6uqFQRbbxbefKA=
