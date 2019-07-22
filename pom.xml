@@ -22,10 +22,10 @@
   <parent>
     <groupId>org.openjax</groupId>
     <artifactId>openjax</artifactId>
-    <version>2.5.4</version>
+    <version>2.5.5-SNAPSHOT</version>
   </parent>
   <artifactId>dbcp</artifactId>
-  <version>1.0.5</version>
+  <version>1.0.6-SNAPSHOT</version>
   <name>OpenJAX DBCP</name>
   <description>
     Wrapper of the "Apache Commons DBCP" library that provides a simple API to describe and initialize a JDBC Database Connection Pool.
@@ -45,7 +45,7 @@
       <plugin>
         <groupId>org.jaxsb</groupId>
         <artifactId>jaxsb-maven-plugin</artifactId>
-        <version>2.1.5</version>
+        <version>2.1.6-SNAPSHOT</version>
         <executions>
           <execution>
             <goals>
@@ -88,7 +88,7 @@
     <dependency>
       <groupId>org.libj</groupId>
       <artifactId>logging</artifactId>
-      <version>0.4.2</version>
+      <version>0.4.5-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.sun.xml.bind</groupId>
@@ -103,12 +103,12 @@
     <dependency>
       <groupId>org.jaxsb</groupId>
       <artifactId>runtime</artifactId>
-      <version>2.1.5</version>
+      <version>2.1.6-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.libj</groupId>
       <artifactId>test</artifactId>
-      <version>0.7.0</version>
+      <version>0.7.1-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
