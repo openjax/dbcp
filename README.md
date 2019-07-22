@@ -28,9 +28,9 @@ OpenJAX DBCP is based on a [XML Schema][dbcp-schema] used to specify the formal 
 
    ```xml
    <dbcp name="example"
-     xmlns="http://www.openjax.org/dbcp-1.0.4.xsd"
+     xmlns="http://www.openjax.org/dbcp-1.0.xsd"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://www.openjax.org/dbcp-1.0.4.xsd ../../main/resources/dbcp.xsd">
+     xsi:schemaLocation="http://www.openjax.org/dbcp-1.0.xsd ../../main/resources/dbcp.xsd">
      <jdbc>
        <url>jdbc:derby:memory:example;create=true</url>
        <driverClassName>org.apache.derby.jdbc.EmbeddedDriver</driverClassName>
