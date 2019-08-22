@@ -310,7 +310,7 @@ public final class DataSources {
     final Dbcp.Logging logging = dbcp.getLogging();
     if (logging != null) {
       final Logger logger = LoggerFactory.getLogger(DataSources.class);
-      final LoggerPrintWriter loggerPrintWriter = new LoggerPrintWriter(logger, Level.valueOf(logging.getLevel().toString()));
+      final LoggerPrintWriter loggerPrintWriter = new LoggerPrintWriter(logger, Level.valueOf(logging.getLevel()));
       dataSource.setLogWriter(loggerPrintWriter);
       dataSource.setLogExpiredConnections(logging.isLogExpiredConnections());
       if (logging.isLogAbandoned()) {
