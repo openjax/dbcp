@@ -38,8 +38,8 @@ import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.libj.logging.LoggerPrintWriter;
-import org.openjax.dbcp_1_0.Dbcp;
-import org.openjax.www.dbcp_1_0.xL0gluGCXAA.$Dbcp;
+import org.openjax.dbcp_1_1.Dbcp;
+import org.openjax.www.dbcp_1_1.xL0gluGCXAA.$Dbcp;
 import org.openjax.www.xml.datatypes_0_9.xL9gluGCXAA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -206,9 +206,6 @@ public final class DataSources {
 
     dataSource.setUrl(jdbc.getUrl());
 
-    dataSource.setUsername(jdbc.getUsername());
-    dataSource.setPassword(jdbc.getPassword());
-
     final Dbcp.Default _default = dbcp.getDefault();
     if (_default != null && _default.getCatalog() != null)
       dataSource.setDefaultCatalog(_default.getCatalog());
@@ -339,9 +336,6 @@ public final class DataSources {
     dataSource.setDriverClassLoader(driverClassLoader);
 
     dataSource.setUrl(jdbc.getUrl().text());
-
-    dataSource.setUsername(jdbc.getUsername().text());
-    dataSource.setPassword(jdbc.getPassword().text());
 
     final $Dbcp.Default _default = dbcp.getDefault();
     if (_default != null && _default.getCatalog() != null)

@@ -27,7 +27,7 @@ import javax.sql.DataSource;
 
 import org.jaxsb.runtime.Bindings;
 import org.junit.Test;
-import org.openjax.www.dbcp_1_0.xL0gluGCXAA.$Dbcp;
+import org.openjax.www.dbcp_1_1.xL0gluGCXAA.$Dbcp;
 
 public class DataSourcesTest {
   @Test
