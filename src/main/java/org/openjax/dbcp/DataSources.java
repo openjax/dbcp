@@ -51,12 +51,12 @@ public final class DataSources {
   private static Schema schema;
 
   /**
-   * Create a {@code BasicDataSource} given a dbcp JAXB binding.
-   * {@code ClassLoader.getSystemClassLoader()} is used as the
+   * Create a {@link BasicDataSource} given a dbcp JAXB binding.
+   * {@link ClassLoader#getSystemClassLoader()} is used as the
    * {@code driverClassLoader} parameter.
    *
    * @param dbcpXml URL of dbcp xml resource.
-   * @return The {@code BasicDataSource} instance.
+   * @return The {@link BasicDataSource} instance.
    * @throws SAXException If a XML validation error occurs.
    * @throws SQLException If a database access error has occurred.
    * @throws IOException If an IO exception occurs.
@@ -66,11 +66,11 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@code BasicDataSource} given a dbcp JAXB binding.
+   * Create a {@link BasicDataSource} given a dbcp JAXB binding.
    *
    * @param dbcpXml URL of dbcp xml resource.
    * @param driverClassLoader Class loader to be used to load the JDBC driver.
-   * @return The {@code BasicDataSource} instance.
+   * @return The {@link BasicDataSource} instance.
    * @throws SAXException If a XML validation error occurs.
    * @throws SQLException If a database access error has occurred.
    * @throws IOException If an IO exception occurs.
@@ -93,14 +93,14 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@code BasicDataSource} given a list of dbcp JAXB bindings.
-   * {@code ClassLoader.getSystemClassLoader()} is used as the
+   * Create a {@link BasicDataSource} given a list of dbcp JAXB bindings.
+   * {@link ClassLoader#getSystemClassLoader()} is used as the
    * {@code driverClassLoader} parameter.
    *
    * @param name The name of the pool to create. (The name is declared in the
    *          array of {@code dbcps}).
-   * @param dbcps Array of {@code Dbcp} descriptor objects.
-   * @return The {@code BasicDataSource} instance.
+   * @param dbcps Array of {@link Dbcp} descriptor objects.
+   * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
    * @throws NullPointerException If {@code name}, {@code dbcps} or any member
    *           of {@code dbcps} is null.
@@ -110,14 +110,14 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@code BasicDataSource} given a list of dbcp XSB bindings.
-   * {@code ClassLoader.getSystemClassLoader()} is used as the
+   * Create a {@link BasicDataSource} given a list of dbcp XSB bindings.
+   * {@link ClassLoader#getSystemClassLoader()} is used as the
    * {@code driverClassLoader} parameter.
    *
    * @param name The name of the pool to create. (The name is declared in the
    *          array of {@code dbcps}).
    * @param dbcps Array of {@code $Dbcp} descriptor objects.
-   * @return The {@code BasicDataSource} instance.
+   * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
    * @throws NullPointerException If {@code name}, {@code dbcps} or any member
    *           of {@code dbcps} is null.
@@ -127,13 +127,13 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@code BasicDataSource} given a list of dbcp JAXB bindings.
+   * Create a {@link BasicDataSource} given a list of dbcp JAXB bindings.
    *
    * @param name The name of the pool to create. (The name is declared in the
    *          array of {@code dbcps}).
    * @param driverClassLoader Class loader to be used to load the JDBC driver.
-   * @param dbcps Array of {@code Dbcp} descriptor objects.
-   * @return The {@code BasicDataSource} instance.
+   * @param dbcps Array of {@link Dbcp} descriptor objects.
+   * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
    * @throws NullPointerException If {@code name}, {@code dbcps} or any member
    *           of {@code dbcps} is null.
@@ -147,13 +147,13 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@code BasicDataSource} given a list of dbcp XSB bindings.
+   * Create a {@link BasicDataSource} given a list of dbcp XSB bindings.
    *
    * @param name The name of the pool to create. (The name is declared in the
    *          array of {@code dbcps}).
    * @param driverClassLoader Class loader to be used to load the JDBC driver.
    * @param dbcps Array of {@code $Dbcp} descriptor objects.
-   * @return The {@code BasicDataSource} instance.
+   * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
    */
   public static BasicDataSource createDataSource(final String name, final ClassLoader driverClassLoader, final $Dbcp ... dbcps) throws SQLException {
@@ -165,10 +165,10 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@code BasicDataSource} given a dbcp JAXB binding.
+   * Create a {@link BasicDataSource} given a dbcp JAXB binding.
    *
-   * @param dbcp The {@code Dbcp} descriptor object.
-   * @return The {@code BasicDataSource} instance.
+   * @param dbcp The {@link Dbcp} descriptor object.
+   * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
    * @throws NullPointerException If {@code dbcp} is null.
    */
@@ -177,10 +177,10 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@code BasicDataSource} given a dbcp XSB binding.
+   * Create a {@link BasicDataSource} given a dbcp XSB binding.
    *
-   * @param dbcp The {@code $Dbcp} descriptor object.
-   * @return The {@code BasicDataSource} instance.
+   * @param dbcp The {@link $Dbcp} descriptor object.
+   * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
    * @throws NullPointerException If {@code dbcp} is null.
    */
@@ -189,11 +189,11 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@code BasicDataSource} given a dbcp JAXB binding.
+   * Create a {@link BasicDataSource} given a dbcp JAXB binding.
    *
-   * @param dbcp The {@code Dbcp} descriptor object.
+   * @param dbcp The {@link Dbcp} descriptor object.
    * @param driverClassLoader Class loader to be used to load the JDBC driver.
-   * @return The {@code BasicDataSource} instance.
+   * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
    * @throws NullPointerException If {@code dbcp} is null.
    */
@@ -320,11 +320,11 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@code BasicDataSource} given a dbcp XSB binding.
+   * Create a {@link BasicDataSource} given a dbcp XSB binding.
    *
-   * @param dbcp The {@code $Dbcp} descriptor object.
+   * @param dbcp The {@link $Dbcp} descriptor object.
    * @param driverClassLoader Class loader to be used to load the JDBC driver.
-   * @return The {@code BasicDataSource} instance.
+   * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
    * @throws NullPointerException If {@code dbcp} is null.
    */
