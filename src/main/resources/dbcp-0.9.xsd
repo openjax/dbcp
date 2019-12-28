@@ -494,7 +494,7 @@
               <xs:annotation>
                 <xs:documentation>
                   Flag to log stack traces for application code which abandoned a Statement or Connection.
-                  Logging of abandoned Statement(s) and Connection(s) adds overhead when openning a Connection
+                  Logging of abandoned Statement(s) and Connection(s) adds overhead when opening a Connection
                   or creating a new Statement, because a stack trace has to be generated. (Default: false).
                 </xs:documentation>
               </xs:annotation>
