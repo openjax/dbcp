@@ -19,21 +19,25 @@ package org.openjax.dbcp;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.sql.DataSource;
-
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.jaxsb.runtime.Bindings;
 import org.junit.Test;
 import org.openjax.www.dbcp_1_1.xL0gluGCXAA.$Dbcp;
+import org.xml.sax.SAXException;
 
 public class DataSourcesTest {
   @Test
-  public void testJaxb() throws Exception {
-    final DataSource dataSource = DataSources.createDataSource(ClassLoader.getSystemClassLoader().getResource("dbcp.xml"));
-    try (final Connection connection = dataSource.getConnection()) {
+  public void testJaxb() throws IOException, SAXException, SQLException {
+    try (
+      final BasicDataSource dataSource = DataSources.createDataSource(ClassLoader.getSystemClassLoader().getResource("dbcp.xml"));
+      final Connection connection = dataSource.getConnection();
+    ) {
       try (
         final Statement statement = connection.createStatement();
         final ResultSet resultSet = statement.executeQuery("SELECT 1 FROM SYSIBM.SYSDUMMY1");
@@ -48,10 +52,12 @@ public class DataSourcesTest {
   }
 
   @Test
-  public void testXsb() throws Exception {
+  public void testXsb() throws IOException, SAXException, SQLException {
     final $Dbcp dbcp = ($Dbcp)Bindings.parse(ClassLoader.getSystemClassLoader().getResource("dbcp.xml"));
-    final DataSource dataSource = DataSources.createDataSource(dbcp);
-    try (final Connection connection = dataSource.getConnection()) {
+    try (
+      final BasicDataSource dataSource = DataSources.createDataSource(dbcp);
+      final Connection connection = dataSource.getConnection();
+    ) {
       try (
         final Statement statement = connection.createStatement();
         final ResultSet resultSet = statement.executeQuery("SELECT 1 FROM SYSIBM.SYSDUMMY1");
