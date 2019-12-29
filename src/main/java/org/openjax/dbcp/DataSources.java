@@ -48,6 +48,7 @@ import org.xml.sax.SAXException;
 
 public final class DataSources {
   private static final String INDEFINITE = "INDEFINITE";
+  private static final String schemaFile = "dbcp.xsd";
   private static Schema schema;
 
   /**
@@ -81,7 +82,11 @@ public final class DataSources {
   public static BasicDataSource createDataSource(final URL dbcpXml, final ClassLoader driverClassLoader) throws IOException, SAXException, SQLException {
     try {
       final Unmarshaller unmarshaller = JAXBContext.newInstance(Dbcp.class).createUnmarshaller();
-      unmarshaller.setSchema(DataSources.schema == null ? DataSources.schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(Thread.currentThread().getContextClassLoader().getResource("dbcp.xsd")) : DataSources.schema);
+      final URL resource = Thread.currentThread().getContextClassLoader().getResource(schemaFile);
+      if (resource == null)
+        throw new IllegalStateException("Unable to find " + schemaFile + " in class loader " + Thread.currentThread().getContextClassLoader());
+
+      unmarshaller.setSchema(DataSources.schema == null ? DataSources.schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(resource) : DataSources.schema);
       try (final InputStream in = dbcpXml.openStream()) {
         final JAXBElement<Dbcp> element = unmarshaller.unmarshal(XMLInputFactory.newInstance().createXMLStreamReader(in), Dbcp.class);
         return createDataSource(element.getValue(), driverClassLoader);
@@ -270,7 +275,7 @@ public final class DataSources {
     dataSource.setCacheState(pool != null && pool.getCacheState() != null && pool.getCacheState());
     dataSource.setMaxWaitMillis(pool == null || pool.getMaxWait() != null || INDEFINITE.equals(pool.getMaxWait()) ? -1 : Long.parseLong(pool.getMaxWait()));
     dataSource.setMaxConnLifetimeMillis(pool == null || pool.getMaxConnectionLifetime() == null || INDEFINITE.equals(pool.getMaxConnectionLifetime()) ? 0 : Long.parseLong(pool.getMaxConnectionLifetime()));
-    dataSource.setAutoCommitOnReturn(_default == null || pool.getAutoCommitOnReturn() == null || pool.getAutoCommitOnReturn());
+    dataSource.setAutoCommitOnReturn(pool == null || pool.getAutoCommitOnReturn() == null || pool.getAutoCommitOnReturn());
     dataSource.setRollbackOnReturn(pool == null || pool.getRollbackOnReturn() == null || pool.getRollbackOnReturn());
     if (pool != null && pool.getRemoveAbandoned() != null) {
       if ("borrow".equals(pool.getRemoveAbandoned().getOn()))
@@ -404,9 +409,9 @@ public final class DataSources {
       throw new UnsupportedOperationException("Unsupported queue spec: " + pool.getQueue());
 
     dataSource.setCacheState(pool != null && pool.getCacheState() != null && pool.getCacheState().text());
-    dataSource.setMaxWaitMillis(pool == null || pool.getMaxWait() != null || INDEFINITE.equals(pool.getMaxWait().text()) ? -1 : Long.parseLong(pool.getMaxWait().text()));
+    dataSource.setMaxWaitMillis(pool == null || pool.getMaxWait() == null || INDEFINITE.equals(pool.getMaxWait().text()) ? -1 : Long.parseLong(pool.getMaxWait().text()));
     dataSource.setMaxConnLifetimeMillis(pool == null || pool.getMaxConnectionLifetime() == null || INDEFINITE.equals(pool.getMaxConnectionLifetime().text()) ? 0 : Long.parseLong(pool.getMaxConnectionLifetime().text()));
-    dataSource.setAutoCommitOnReturn(_default == null || pool.getAutoCommitOnReturn() == null || pool.getAutoCommitOnReturn().text());
+    dataSource.setAutoCommitOnReturn(pool == null || pool.getAutoCommitOnReturn() == null || pool.getAutoCommitOnReturn().text());
     dataSource.setRollbackOnReturn(pool == null || pool.getRollbackOnReturn() == null || pool.getRollbackOnReturn().text());
     if (pool != null && pool.getRemoveAbandoned() != null) {
       if ("borrow".equals(pool.getRemoveAbandoned().getOn$().text()))
