@@ -361,7 +361,7 @@
                   <xs:element name="minIdleTime" type="dt:nonNegativeLong" minOccurs="0">
                     <xs:annotation>
                       <xs:documentation>
-                        The minimum number of milliseconds an object may sit idle in the pool before it is eligable for eviction by the idle object evictor (if any). (Default: 1800000).
+                        The minimum number of milliseconds an object may sit idle in the pool before it is eligible for eviction by the idle object evictor (if any). (Default: 1800000).
                       </xs:documentation>
                     </xs:annotation>
                   </xs:element>
