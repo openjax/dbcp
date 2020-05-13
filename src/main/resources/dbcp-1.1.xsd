@@ -494,4 +494,16 @@
 
   <xs:element name="dbcp" type="dbcp:dbcp"/>
 
+  <xs:element name="dbcps">
+    <xs:complexType>
+      <xs:sequence maxOccurs="unbounded">
+        <xs:element ref="dbcp:dbcp"/>
+      </xs:sequence>
+    </xs:complexType>
+    <xs:unique name="uniqueName">
+      <xs:selector xpath="./dbcp:dbcp"/>
+      <xs:field xpath="@name"/>
+    </xs:unique>
+  </xs:element>
+
 </xs:schema>
