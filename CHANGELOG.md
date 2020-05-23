@@ -1,6 +1,7 @@
 # Changes by Version
 
-## [v1.0.6](https://github.com/openjax/dbcp/compare/4ebc32116c4382d0ac8d8077db3f42f617e379a2..HEAD) (2020-05-23)
+## [v1.1.0](https://github.com/openjax/dbcp/compare/4ebc32116c4382d0ac8d8077db3f42f617e379a2..HEAD) (2020-05-23)
+* Update `dbcp.xsd` spec to require username and password as part of `<url>` element.
 * Improve tests.
 * Improve javadocs and xmldocs.
 
