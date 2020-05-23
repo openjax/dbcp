@@ -28,14 +28,12 @@ OpenJAX DBCP is based on a [XML Schema][dbcp-schema] used to specify the formal 
 
    ```xml
    <dbcp name="example"
-     xmlns="http://www.openjax.org/dbcp-1.0.xsd"
+     xmlns="http://www.openjax.org/dbcp-1.1.xsd"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://www.openjax.org/dbcp-1.0.xsd ../../main/resources/dbcp.xsd">
+     xsi:schemaLocation="http://www.openjax.org/dbcp-1.1.xsd http://www.openjax.org/dbcp.xsd">
      <jdbc>
        <url>jdbc:derby:memory:example;create=true</url>
        <driverClassName>org.apache.derby.jdbc.EmbeddedDriver</driverClassName>
-       <username>example</username>
-       <password>example</password>
      </jdbc>
      <default>
        <catalog>catalog</catalog>
@@ -102,7 +100,7 @@ OpenJAX DBCP is based on a [XML Schema][dbcp-schema] used to specify the formal 
    <dependency>
      <groupId>org.openjax</groupId>
      <artifactId>dbcp</artifactId>
-     <version>1.0.4</version>
+     <version>1.1.1</version>
    </dependency>
    ```
 
