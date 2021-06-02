@@ -16,6 +16,8 @@
 
 package org.openjax.dbcp;
 
+import static org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -331,13 +333,8 @@ public final class DataSources {
     dataSource.setMaxTotal(size == null || size.getMaxTotal() == null ? 8 : INDEFINITE.equals(size.getMaxTotal()) ? -1 : Integer.parseInt(size.getMaxTotal()));
     dataSource.setMaxIdle(size == null || size.getMaxIdle() == null ? 8 : INDEFINITE.equals(size.getMaxIdle()) ? -1 : Integer.parseInt(size.getMaxIdle()));
     dataSource.setMinIdle(size == null || size.getMinIdle() == null ? 9 : size.getMinIdle());
-    if (size == null || size.getMaxOpenPreparedStatements() == null || INDEFINITE.equals(size.getMaxOpenPreparedStatements())) {
-      dataSource.setPoolPreparedStatements(false);
-    }
-    else {
-      dataSource.setPoolPreparedStatements(true);
-      dataSource.setMaxOpenPreparedStatements(Integer.parseInt(size.getMaxOpenPreparedStatements()));
-    }
+    dataSource.setPoolPreparedStatements(size != null && size.getPoolPreparedStatements() != null);
+    dataSource.setMaxOpenPreparedStatements(size == null || size.getPoolPreparedStatements() == null || size.getPoolPreparedStatements().getMaxOpen() == null || INDEFINITE.equals(size.getPoolPreparedStatements().getMaxOpen()) ? DEFAULT_MAX_TOTAL : Integer.parseInt(size.getPoolPreparedStatements().getMaxOpen()));
 
     final Dbcp.Pool pool = dbcp.getPool();
     if (pool == null || pool.getQueue() == null || "lifo".equals(pool.getQueue()))
@@ -368,25 +365,31 @@ public final class DataSources {
 
     final Dbcp.Pool.Eviction evictor = pool != null && pool.getEviction() != null ? pool.getEviction() : null;
     if (evictor != null) {
-      dataSource.setTimeBetweenEvictionRunsMillis(evictor.getTimeBetweenRuns());
+      dataSource.setTimeBetweenEvictionRunsMillis(evictor.getTimeBetweenRuns() == null || INDEFINITE.equals(evictor.getTimeBetweenRuns()) ? DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS : Long.parseLong(evictor.getTimeBetweenRuns()));
       dataSource.setNumTestsPerEvictionRun(evictor.getNumTestsPerRun());
       dataSource.setMinEvictableIdleTimeMillis(evictor.getMinIdleTime() == null ? 1800000 : evictor.getMinIdleTime());
-      dataSource.setSoftMinEvictableIdleTimeMillis(evictor.getSoftMinIdleTime() == null || INDEFINITE.equals(evictor.getSoftMinIdleTime()) ? -1 : Long.parseLong(evictor.getSoftMinIdleTime()));
+      dataSource.setSoftMinEvictableIdleTimeMillis(evictor.getSoftMinIdleTime() == null || INDEFINITE.equals(evictor.getSoftMinIdleTime()) ? DEFAULT_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS : Long.parseLong(evictor.getSoftMinIdleTime()));
       if (evictor.getPolicyClassName() != null)
         dataSource.setEvictionPolicyClassName(evictor.getPolicyClassName());
     }
 
     final Dbcp.Validation validation = dbcp.getValidation();
-    if (validation != null && validation.getQuery() != null)
-      dataSource.setValidationQuery(validation.getQuery());
+    if (validation != null) {
+      if (validation.getQuery() != null)
+        dataSource.setValidationQuery(validation.getQuery());
 
+      if (validation.getTimeout() != null)
+        dataSource.setValidationQueryTimeout(validation.getTimeout() == null || INDEFINITE.equals(validation.getTimeout()) ? -1 : Integer.parseInt(validation.getTimeout()));
+    }
+
+    dataSource.setTestOnCreate(validation != null && validation.getTestOnReturn() != null && validation.getTestOnReturn());
     dataSource.setTestOnBorrow(validation == null || validation.getTestOnBorrow() == null || validation.getTestOnBorrow());
     dataSource.setTestOnReturn(validation != null && validation.getTestOnReturn() != null && validation.getTestOnReturn());
     dataSource.setTestWhileIdle(validation != null && validation.getTestWhileIdle() != null && validation.getTestWhileIdle());
     if (validation != null && validation.getFastFail() != null) {
       dataSource.setFastFailValidation(true);
       if (validation.getFastFail().getDisconnectionSqlCodes() != null)
-        dataSource.setDisconnectionSqlCodes(Arrays.asList(validation.getFastFail().getDisconnectionSqlCodes().split(" ")));
+        dataSource.setDisconnectionSqlCodes(Arrays.asList(validation.getFastFail().getDisconnectionSqlCodes().trim().split(" ")));
     }
 
     final Dbcp.Logging logging = dbcp.getLogging();
@@ -401,6 +404,7 @@ public final class DataSources {
       }
     }
 
+    dataSource.setJmxName(dbcp.getJmxName());
     return dataSource;
   }
 
@@ -467,13 +471,8 @@ public final class DataSources {
     dataSource.setMaxTotal(size == null || size.getMaxTotal() == null ? 8 : INDEFINITE.equals(size.getMaxTotal().text()) ? -1 : Integer.parseInt(size.getMaxTotal().text()));
     dataSource.setMaxIdle(size == null || size.getMaxIdle() == null ? 8 : INDEFINITE.equals(size.getMaxIdle().text()) ? -1 : Integer.parseInt(size.getMaxIdle().text()));
     dataSource.setMinIdle(size == null || size.getMinIdle() == null ? 9 : size.getMinIdle().text());
-    if (size == null || size.getMaxOpenPreparedStatements() == null || INDEFINITE.equals(size.getMaxOpenPreparedStatements().text())) {
-      dataSource.setPoolPreparedStatements(false);
-    }
-    else {
-      dataSource.setPoolPreparedStatements(true);
-      dataSource.setMaxOpenPreparedStatements(Integer.parseInt(size.getMaxOpenPreparedStatements().text()));
-    }
+    dataSource.setPoolPreparedStatements(size != null && size.getPoolPreparedStatements() != null);
+    dataSource.setMaxOpenPreparedStatements(size == null || size.getPoolPreparedStatements() == null || size.getPoolPreparedStatements().getMaxOpen() == null || INDEFINITE.equals(size.getPoolPreparedStatements().getMaxOpen().text()) ? DEFAULT_MAX_TOTAL : Integer.parseInt(size.getPoolPreparedStatements().getMaxOpen().text()));
 
     final $Dbcp.Pool pool = dbcp.getPool();
     if (pool == null || pool.getQueue() == null || "lifo".equals(pool.getQueue().text()))
@@ -504,25 +503,31 @@ public final class DataSources {
 
     final $Dbcp.Pool.Eviction evictor = pool != null && pool.getEviction() != null ? pool.getEviction() : null;
     if (evictor != null) {
-      dataSource.setTimeBetweenEvictionRunsMillis(evictor.getTimeBetweenRuns().text());
+      dataSource.setTimeBetweenEvictionRunsMillis(evictor.getTimeBetweenRuns() == null || INDEFINITE.equals(evictor.getTimeBetweenRuns().text()) ? DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS : Long.parseLong(evictor.getTimeBetweenRuns().text()));
       dataSource.setNumTestsPerEvictionRun(evictor.getNumTestsPerRun().text());
       dataSource.setMinEvictableIdleTimeMillis(evictor.getMinIdleTime() == null ? 1800000 : evictor.getMinIdleTime().text());
-      dataSource.setSoftMinEvictableIdleTimeMillis(evictor.getSoftMinIdleTime() == null || INDEFINITE.equals(evictor.getSoftMinIdleTime().text()) ? -1 : Long.parseLong(evictor.getSoftMinIdleTime().text()));
+      dataSource.setSoftMinEvictableIdleTimeMillis(evictor.getSoftMinIdleTime() == null || INDEFINITE.equals(evictor.getSoftMinIdleTime().text()) ? DEFAULT_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS : Long.parseLong(evictor.getSoftMinIdleTime().text()));
       if (evictor.getPolicyClassName() != null)
         dataSource.setEvictionPolicyClassName(evictor.getPolicyClassName().text());
     }
 
     final $Dbcp.Validation validation = dbcp.getValidation();
-    if (validation != null && validation.getQuery() != null)
-      dataSource.setValidationQuery(validation.getQuery().text());
+    if (validation != null) {
+      if (validation.getQuery() != null)
+        dataSource.setValidationQuery(validation.getQuery().text());
 
+      if (validation.getTimeout() != null)
+        dataSource.setValidationQueryTimeout(validation.getTimeout() == null || INDEFINITE.equals(validation.getTimeout().text()) ? -1 : Integer.parseInt(validation.getTimeout().text()));
+    }
+
+    dataSource.setTestOnCreate(validation != null && validation.getTestOnReturn() != null && validation.getTestOnReturn().text());
     dataSource.setTestOnBorrow(validation == null || validation.getTestOnBorrow() == null || validation.getTestOnBorrow().text());
     dataSource.setTestOnReturn(validation != null && validation.getTestOnReturn() != null && validation.getTestOnReturn().text());
     dataSource.setTestWhileIdle(validation != null && validation.getTestWhileIdle() != null && validation.getTestWhileIdle().text());
     if (validation != null && validation.getFastFail() != null) {
       dataSource.setFastFailValidation(true);
       if (validation.getFastFail().getDisconnectionSqlCodes() != null)
-        dataSource.setDisconnectionSqlCodes(Arrays.asList(validation.getFastFail().getDisconnectionSqlCodes().text().split(" ")));
+        dataSource.setDisconnectionSqlCodes(Arrays.asList(validation.getFastFail().getDisconnectionSqlCodes().text().trim().split(" ")));
     }
 
     final $Dbcp.Logging logging = dbcp.getLogging();
@@ -537,6 +542,7 @@ public final class DataSources {
       }
     }
 
+    dataSource.setJmxName(dbcp.getJmxName() == null ? null : dbcp.getJmxName().text());
     return dataSource;
   }
 

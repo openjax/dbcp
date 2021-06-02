@@ -67,14 +67,14 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="autoCommit" type="xs:boolean" minOccurs="0">
+            <xs:element name="autoCommit" type="xs:boolean" default="true" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   The default "auto-commit" state of connections created by this pool. (Default: true).
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="readOnly" type="xs:boolean" minOccurs="0">
+            <xs:element name="readOnly" type="xs:boolean" default="false" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   The default "read-only" state of connections created by this pool. (Default: false).
@@ -176,41 +176,55 @@
       <xs:element name="size" minOccurs="0">
         <xs:complexType>
           <xs:all>
-            <xs:element name="initialSize" type="dt:nonNegativeInt" minOccurs="0">
+            <xs:element name="initialSize" type="dt:nonNegativeInt" default="0" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   The initial number of connections that are created when the pool is started. (Default: 0).
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="maxTotal" type="dbcp:indefinitePositiveInt" minOccurs="0">
-              <xs:annotation>
-                <xs:documentation>
-                  The maximum number of idle and borrowed connections that can be active in this pool at the same time; or INDEFINITE for no limit. (Default: 8).
-                </xs:documentation>
-              </xs:annotation>
-            </xs:element>
-            <xs:element name="maxIdle" type="dbcp:indefinitePositiveInt" minOccurs="0">
-              <xs:annotation>
-                <xs:documentation>
-                  The maximum number of connections that can remain idle in the pool, without extra ones being released; or INDEFINITE for no limit. (Default: 8).
-                </xs:documentation>
-              </xs:annotation>
-            </xs:element>
-            <xs:element name="minIdle" type="dt:nonNegativeInt" minOccurs="0">
+            <xs:element name="minIdle" type="dt:nonNegativeInt" default="8" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   The minimum number of connections that can remain idle in the pool, without extra ones being created; or zero to create none. (Default: 9).
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="maxOpenPreparedStatements" type="dbcp:indefinitePositiveInt" minOccurs="0">
+            <xs:element name="maxIdle" type="dbcp:indefinitePositiveInt" default="8" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
-                  The maximum number of open statements that can be allocated from the statement pool at the same time.
-                  The value of INDEFINITE disables pooling of prepared statements. (Default: INDEFINITE).
+                  The maximum number of connections that can remain idle in the pool, without extra ones being released; or INDEFINITE for no limit. (Default: 8).
                 </xs:documentation>
               </xs:annotation>
+            </xs:element>
+            <xs:element name="maxTotal" type="dbcp:indefinitePositiveInt" default="8" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>
+                  The maximum number of idle and borrowed connections that can be active in this pool at the same time; or INDEFINITE for no limit. (Default: 8).
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="poolPreparedStatements" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>
+                  Enable prepared statement pooling for this pool. (Default: false)
+                </xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:all>
+                  <xs:element name="maxOpen" type="dbcp:indefinitePositiveInt" default="INDEFINITE" minOccurs="0">
+                    <xs:annotation>
+                      <xs:documentation>
+                        The maximum number of open statements that can be allocated from the statement pool at the same time. The value of INDEFINITE disables pooling of prepared statements.
+                        NOTE: Make sure your connection has some resources left for the other statements. Pooling PreparedStatements may keep their cursors open in the database, causing a
+                        connection to run out of cursors, especially if maxOpenPreparedStatements is left at the default (unlimited) and an application opens a large number of different
+                        PreparedStatements per connection. To avoid this problem, maxOpenPreparedStatements should be set to a value less than the maximum number of cursors that can be open
+                        on a Connection. (Default: INDEFINITE).
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                </xs:all>
+              </xs:complexType>
             </xs:element>
           </xs:all>
         </xs:complexType>
@@ -218,7 +232,7 @@
       <xs:element name="pool" minOccurs="0">
         <xs:complexType>
           <xs:all>
-            <xs:element name="queue" minOccurs="0">
+            <xs:element name="queue" default="lifo" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   A "lifo" queue will dequeue the most recently used connection in the idle instance pool ("last in"), if there are idle connections available.
@@ -232,28 +246,28 @@
                 </xs:restriction>
               </xs:simpleType>
             </xs:element>
-            <xs:element name="cacheState" type="xs:boolean" minOccurs="0">
+            <xs:element name="cacheState" type="xs:boolean" default="true" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
-                  Controls whether pooled connections cache some state to improve performance, rather than always query the database for current state. (Default: false).
+                  Controls whether pooled connections cache some state to improve performance, rather than always query the database for current state. (Default: true).
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="maxWait" type="dbcp:indefinitePositiveLong" minOccurs="0">
+            <xs:element name="maxWait" type="dbcp:indefinitePositiveLong" default="INDEFINITE" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   The maximum number of milliseconds that the pool will wait (when there are no connections available) for a connection to be returned before throwing an exception. (Default: INDEFINITE).
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="maxConnectionLifetime" type="dbcp:indefinitePositiveLong" minOccurs="0">
+            <xs:element name="maxConnectionLifetime" type="dbcp:indefinitePositiveLong" default="INDEFINITE" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   The maximum number of milliseconds permitted for the lifetime of a connection. (Default: INDEFINITE).
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="autoCommitOnReturn" type="xs:boolean" minOccurs="0">
+            <xs:element name="autoCommitOnReturn" type="xs:boolean" default="true" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   Sets the value of the flag that controls whether or not connections being returned to the pool will be checked
@@ -262,7 +276,7 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="rollbackOnReturn" type="xs:boolean" minOccurs="0">
+            <xs:element name="rollbackOnReturn" type="xs:boolean" default="true" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   Specifies whether a connection will be rolled back when it is returned to the pool if auto
@@ -304,7 +318,7 @@
                 </xs:attribute>
               </xs:complexType>
             </xs:element>
-            <xs:element name="abandonedUsageTracking" type="xs:boolean" minOccurs="0">
+            <xs:element name="abandonedUsageTracking" type="xs:boolean" default="false" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   If the connection pool implements org.apache.commons.pool2.UsageTracking, configure
@@ -314,7 +328,7 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="allowAccessToUnderlyingConnection" type="xs:boolean" minOccurs="0">
+            <xs:element name="allowAccessToUnderlyingConnection" type="xs:boolean" default="false" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   Specifies if the PoolGuard allows access to the underlying connection. (Default: false).
@@ -330,28 +344,28 @@
               </xs:annotation>
               <xs:complexType>
                 <xs:all>
-                  <xs:element name="timeBetweenRuns" type="dt:positiveLong">
+                  <xs:element name="timeBetweenRuns" type="dbcp:indefinitePositiveLong" default="INDEFINITE">
                     <xs:annotation>
                       <xs:documentation>
-                        The number of milliseconds to sleep between runs of the idle object evictor thread.
+                        The number of milliseconds to sleep between runs of the idle object evictor thread. (Default: INDEFINITE)
                       </xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="numTestsPerRun" type="dt:nonNegativeInt">
+                  <xs:element name="numTestsPerRun" type="dt:nonNegativeInt" default="3" minOccurs="0">
                     <xs:annotation>
                       <xs:documentation>
-                        The number of objects to examine during each run of the idle object evictor thread (if any).
+                        The number of objects to examine during each run of the idle object evictor thread (if any). (Default: 3)
                       </xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="minIdleTime" type="dt:nonNegativeLong" minOccurs="0">
+                  <xs:element name="minIdleTime" type="dt:nonNegativeLong" default="1800000" minOccurs="0">
                     <xs:annotation>
                       <xs:documentation>
                         The minimum number of milliseconds an object may sit idle in the pool before it is eligible for eviction by the idle object evictor (if any). (Default: 1800000).
                       </xs:documentation>
                     </xs:annotation>
                   </xs:element>
-                  <xs:element name="softMinIdleTime" type="dbcp:indefinitePositiveLong" minOccurs="0">
+                  <xs:element name="softMinIdleTime" type="dbcp:indefinitePositiveLong" default="INDEFINITE" minOccurs="0">
                     <xs:annotation>
                       <xs:documentation>
                         The minimum number of milliseconds a connection may sit idle in the pool before it is eligible for eviction
@@ -380,7 +394,8 @@
               <xs:annotation>
                 <xs:documentation>
                   The SQL query that will be used to validate connections from this pool before returning them to the caller.
-                  If specified, this query must be an SQL SELECT statement that returns at least one row. (Default: vendor specific).
+                  If specified, this query must be an SQL SELECT statement that returns at least one row.
+                  If not specified, Connection.isValid(int) will be used to validate connections.
                 </xs:documentation>
               </xs:annotation>
               <xs:simpleType>
@@ -389,7 +404,23 @@
                 </xs:restriction>
               </xs:simpleType>
             </xs:element>
-            <xs:element name="testOnBorrow" type="xs:boolean" minOccurs="0">
+            <xs:element name="timeout" type="dbcp:indefinitePositiveInt" default="INDEFINITE" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>
+                  The timeout in seconds before connection validation queries fail. If set to a positive value, this value is
+                  passed to the driver via the setQueryTimeout method of the Statement used to execute the validation query. (Default: INDEFINITE)
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="testOnCreate" type="xs:boolean" default="false" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>
+                  The indication of whether objects will be validated after creation. If the object fails to validate,
+                  the borrow attempt that triggered the object creation will fail. (Default: false).
+                </xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="testOnBorrow" type="xs:boolean" default="true" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   The indication of whether objects will be validated before being borrowed from the pool.
@@ -398,7 +429,7 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="testOnReturn" type="xs:boolean" minOccurs="0">
+            <xs:element name="testOnReturn" type="xs:boolean" default="false" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   The indication of whether objects will be validated before being returned to the pool.
@@ -406,7 +437,7 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="testWhileIdle" type="xs:boolean" minOccurs="0">
+            <xs:element name="testWhileIdle" type="xs:boolean" default="false" minOccurs="0">
               <xs:annotation>
                 <xs:documentation>
                   The indication of whether objects will be validated by the idle object evictor (if any).
@@ -419,12 +450,12 @@
               <xs:annotation>
                 <xs:documentation>
                   The indication of whether validation must "fail immediately" for connections that have previously thrown SQLExceptions
-                  with SQL_STATE indicating fatal disconnection errors. Omit this element to disable "fail immediately".
+                  with SQL_STATE indicating fatal disconnection errors. Omit this element to disable "fail immediately". (Default: false)
                 </xs:documentation>
               </xs:annotation>
               <xs:complexType>
                 <xs:all>
-                  <xs:element name="disconnectionSqlCodes" type="dt:stringNonEmpty" minOccurs="0">
+                  <xs:element name="disconnectionSqlCodes" type="dt:stringNonEmpty" default="57P01 57P02 57P03 01002 JZ0C0 JZ0C1" minOccurs="0">
                     <xs:annotation>
                       <xs:documentation>
                         A space-delimited list of SQL_STATE codes considered to signal fatal conditions.
@@ -432,7 +463,15 @@
                         (plus anything starting with org.apache.commons.dbcp2.Utils.DISCONNECTION_SQL_CODE_PREFIX).
                         Whenever connections created by this datasource generate exceptions with SQL_STATE
                         codes in this list, they will be marked as "fatally disconnected" and subsequent
-                        validations will fail fast (no attempt at isValid or validation query).
+                        validations will fail fast (no attempt at isValid or validation query). The SQL_STATE codes
+                        considered to signal fatal errors are by default the following:
+                        57P01 (ADMIN SHUTDOWN)
+                        57P02 (CRASH SHUTDOWN)
+                        57P03 (CANNOT CONNECT NOW)
+                        01002 (SQL92 disconnect error)
+                        JZ0C0 (Sybase disconnect error)
+                        JZ0C1 (Sybase disconnect error)
+                        Any SQL_STATE code that starts with "08"
                       </xs:documentation>
                     </xs:annotation>
                   </xs:element>
@@ -467,7 +506,7 @@
                 </xs:restriction>
               </xs:simpleType>
             </xs:element>
-            <xs:element name="logExpiredConnections" type="xs:boolean">
+            <xs:element name="logExpiredConnections" default="false" type="xs:boolean">
               <xs:annotation>
                 <xs:documentation>
                   When &lt;maxConnectionLifetime&gt; is set to limit connection lifetime, this property determines whether
@@ -476,7 +515,7 @@
                 </xs:documentation>
               </xs:annotation>
             </xs:element>
-            <xs:element name="logAbandoned" type="xs:boolean">
+            <xs:element name="logAbandoned" default="false" type="xs:boolean">
               <xs:annotation>
                 <xs:documentation>
                   Flag to log stack traces for application code which abandoned a Statement or Connection.
@@ -487,6 +526,13 @@
             </xs:element>
           </xs:all>
         </xs:complexType>
+      </xs:element>
+      <xs:element name="jmxName" type="dt:stringNonEmpty" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>
+            Registers the DataSource as JMX MBean under specified name. The name has to conform to the JMX Object Name Syntax. (Default: null)
+          </xs:documentation>
+        </xs:annotation>
       </xs:element>
     </xs:all>
     <xs:attribute name="name" type="xs:NCName" use="required"/>

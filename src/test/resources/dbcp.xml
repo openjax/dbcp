@@ -41,10 +41,12 @@
   </connection>
   <size>
     <initialSize>0</initialSize>
-    <maxTotal>8</maxTotal>
-    <maxIdle>8</maxIdle>
     <minIdle>0</minIdle>
-    <maxOpenPreparedStatements>INDEFINITE</maxOpenPreparedStatements>
+    <maxIdle>8</maxIdle>
+    <maxTotal>8</maxTotal>
+    <poolPreparedStatements>
+      <maxOpen>INDEFINITE</maxOpen>
+    </poolPreparedStatements>
   </size>
   <pool>
     <queue>lifo</queue>
@@ -66,9 +68,11 @@
   </pool>
   <validation>
     <query>SELECT 1 FROM SYSIBM.SYSDUMMY1</query>
+    <testOnCreate>false</testOnCreate>
     <testOnBorrow>false</testOnBorrow>
     <testOnReturn>false</testOnReturn>
     <testWhileIdle>false</testWhileIdle>
+    <timeout>INDEFINITE</timeout>
     <fastFail>
       <disconnectionSqlCodes>42X01 42X02 42X03</disconnectionSqlCodes>
     </fastFail>
@@ -78,4 +82,5 @@
     <logExpiredConnections>true</logExpiredConnections>
     <logAbandoned>true</logAbandoned>
   </logging>
+  <jmxName>jmxName</jmxName>
 </dbcp>
