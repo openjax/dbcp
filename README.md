@@ -1,6 +1,6 @@
 # DBCP
 
-[![Build Status](https://github.com/openjax/dbcp/workflows/build.yml/badge.svg)](https://github.com/openjax/dbcp/actions/workflows/build.yml)
+[![Build Status](https://github.com/openjax/dbcp/actions/workflows/build.yml/badge.svg)](https://github.com/openjax/dbcp/actions/workflows/build.yml)
 [![Coverage Status](https://coveralls.io/repos/github/openjax/dbcp/badge.svg)](https://coveralls.io/github/openjax/dbcp)
 [![Javadocs](https://www.javadoc.io/badge/org.openjax/dbcp.svg)](https://www.javadoc.io/doc/org.openjax/dbcp)
 [![Released Version](https://img.shields.io/maven-central/v/org.openjax/dbcp.svg)](https://mvnrepository.com/artifact/org.openjax/dbcp)
