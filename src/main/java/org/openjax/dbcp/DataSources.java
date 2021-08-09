@@ -39,6 +39,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.libj.lang.Assertions;
 import org.libj.logging.LoggerPrintWriter;
 import org.openjax.dbcp_1_1.Dbcp;
 import org.openjax.www.dbcp_1_1.xL0gluGCXAA.$Dbcp;
@@ -64,7 +65,7 @@ public final class DataSources {
    * @throws SAXException If an XML validation error has occurred.
    * @throws SQLException If a database access error has occurred.
    * @throws IOException If an I/O error has occurred.
-   * @throws NullPointerException If the given {@link URL url} is null.
+   * @throws IllegalArgumentException If the given {@link URL url} is null.
    */
   public static BasicDataSource createDataSource(final URL dbcpXml) throws IOException, SAXException, SQLException {
     return createDataSource(dbcpXml, ClassLoader.getSystemClassLoader());
@@ -80,7 +81,7 @@ public final class DataSources {
    * @throws SAXException If an XML validation error has occurred.
    * @throws SQLException If a database access error has occurred.
    * @throws IOException If an I/O error has occurred.
-   * @throws NullPointerException If the given {@link URL url} is null.
+   * @throws IllegalArgumentException If the given {@link URL url} is null.
    */
   public static BasicDataSource createDataSource(final URL dbcpXml, final ClassLoader driverClassLoader) throws IOException, SAXException, SQLException {
     try {
@@ -90,7 +91,7 @@ public final class DataSources {
         throw new IllegalStateException("Unable to find " + schemaFile + " in class loader " + Thread.currentThread().getContextClassLoader());
 
       unmarshaller.setSchema(DataSources.schema == null ? DataSources.schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(resource) : DataSources.schema);
-      try (final InputStream in = dbcpXml.openStream()) {
+      try (final InputStream in = Assertions.assertNotNull(dbcpXml).openStream()) {
         final JAXBElement<Dbcp> element = unmarshaller.unmarshal(XMLInputFactory.newInstance().createXMLStreamReader(in), Dbcp.class);
         return createDataSource(element.getValue(), driverClassLoader);
       }
@@ -113,7 +114,7 @@ public final class DataSources {
    * @param dbcps Array of {@link Dbcp} descriptor objects.
    * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
-   * @throws NullPointerException If {@code name}, {@code dbcps} or any member
+   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
    *           of {@code dbcps} is null.
    */
   public static BasicDataSource createDataSource(final String name, final Dbcp ... dbcps) throws SQLException {
@@ -130,7 +131,7 @@ public final class DataSources {
    * @param dbcps The {@link Dbcps} descriptor object.
    * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
-   * @throws NullPointerException If {@code name}, {@code dbcps} or any member
+   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
    *           of {@code dbcps} is null.
    */
   public static BasicDataSource createDataSource(final String name, final org.openjax.dbcp_1_1.Dbcps dbcps) throws SQLException {
@@ -147,7 +148,7 @@ public final class DataSources {
    * @param dbcps Array of {@code $Dbcp} descriptor objects.
    * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
-   * @throws NullPointerException If {@code name}, {@code dbcps} or any member
+   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
    *           of {@code dbcps} is null.
    */
   public static BasicDataSource createDataSource(final String name, final $Dbcp ... dbcps) throws SQLException {
@@ -164,7 +165,7 @@ public final class DataSources {
    * @param dbcps Array of {@code $Dbcp} descriptor objects.
    * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
-   * @throws NullPointerException If {@code name}, {@code dbcps} or any member
+   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
    *           of {@code dbcps} is null.
    */
   public static BasicDataSource createDataSource(final String name, final Dbcps dbcps) throws SQLException {
@@ -181,12 +182,14 @@ public final class DataSources {
    * @param dbcps Array of {@link Dbcp} descriptor objects.
    * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
-   * @throws NullPointerException If {@code name}, {@code dbcps} or any member
+   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
    *           of {@code dbcps} is null.
    */
   public static BasicDataSource createDataSource(final String name, final ClassLoader driverClassLoader, final Dbcp ... dbcps) throws SQLException {
+    Assertions.assertNotNull(name);
+    Assertions.assertNotNull(dbcps);
     for (final Dbcp dbcp : dbcps)
-      if (name.equals(dbcp.getName()))
+      if (name.equals(Assertions.assertNotNull(dbcp).getName()))
         return createDataSource(dbcp, driverClassLoader);
 
     return null;
@@ -202,12 +205,15 @@ public final class DataSources {
    * @param dbcps Array of {@link Dbcp} descriptor objects.
    * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
-   * @throws NullPointerException If {@code name}, {@code dbcps} or any member
+   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
    *           of {@code dbcps} is null.
    */
   public static BasicDataSource createDataSource(final String name, final ClassLoader driverClassLoader, final org.openjax.dbcp_1_1.Dbcps dbcps) throws SQLException {
+    Assertions.assertNotNull(name);
+    Assertions.assertNotNull(dbcps);
+    Assertions.assertNotNull(dbcps.getDbcp());
     for (final Dbcp dbcp : dbcps.getDbcp())
-      if (name.equals(dbcp.getName()))
+      if (name.equals(Assertions.assertNotNull(dbcp).getName()))
         return createDataSource(dbcp, driverClassLoader);
 
     return null;
@@ -223,10 +229,14 @@ public final class DataSources {
    * @param dbcps Array of {@code $Dbcp} descriptor objects.
    * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
+   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
+   *           of {@code dbcps} is null.
    */
   public static BasicDataSource createDataSource(final String name, final ClassLoader driverClassLoader, final $Dbcp ... dbcps) throws SQLException {
+    Assertions.assertNotNull(name);
+    Assertions.assertNotNull(dbcps);
     for (final $Dbcp dbcp : dbcps)
-      if (name.equals(dbcp.getName$().text()))
+      if (name.equals(Assertions.assertNotNull(Assertions.assertNotNull(dbcp).getName$()).text()))
         return createDataSource(dbcp, driverClassLoader);
 
     return null;
@@ -242,10 +252,16 @@ public final class DataSources {
    * @param dbcps Array of {@code $Dbcp} descriptor objects.
    * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
+   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
+   *           of {@code dbcps} is null.
    */
   public static BasicDataSource createDataSource(final String name, final ClassLoader driverClassLoader, final Dbcps dbcps) throws SQLException {
+    Assertions.assertNotNull(name);
+    Assertions.assertNotNull(dbcps);
+    Assertions.assertNotNull(dbcps.getDbcpDbcp());
+    // FIXME: Assertions.assertNotNull(Assertions.assertNotNull(???
     for (final $Dbcp dbcp : dbcps.getDbcpDbcp())
-      if (name.equals(dbcp.getName$().text()))
+      if (name.equals(Assertions.assertNotNull(Assertions.assertNotNull(dbcp).getName$()).text()))
         return createDataSource(dbcp, driverClassLoader);
 
     return null;
@@ -257,7 +273,7 @@ public final class DataSources {
    * @param dbcp The {@link Dbcp} descriptor object.
    * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
-   * @throws NullPointerException If {@code dbcp} is null.
+   * @throws IllegalArgumentException If {@code dbcp} is null.
    */
   public static BasicDataSource createDataSource(final Dbcp dbcp) throws SQLException {
     return createDataSource(dbcp, ClassLoader.getSystemClassLoader());
@@ -269,7 +285,7 @@ public final class DataSources {
    * @param dbcp The {@link $Dbcp} descriptor object.
    * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
-   * @throws NullPointerException If {@code dbcp} is null.
+   * @throws IllegalArgumentException If {@code dbcp} is null.
    */
   public static BasicDataSource createDataSource(final $Dbcp dbcp) throws SQLException {
     return createDataSource(dbcp, ClassLoader.getSystemClassLoader());
@@ -282,12 +298,12 @@ public final class DataSources {
    * @param driverClassLoader Class loader to be used to load the JDBC driver.
    * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
-   * @throws NullPointerException If {@code dbcp} is null.
+   * @throws IllegalArgumentException If {@code dbcp} is null.
    */
   public static BasicDataSource createDataSource(final Dbcp dbcp, final ClassLoader driverClassLoader) throws SQLException {
-    final BasicDataSource dataSource = new BasicDataSource();
+    final Dbcp.Jdbc jdbc = Assertions.assertNotNull(dbcp).getJdbc();
 
-    final Dbcp.Jdbc jdbc = dbcp.getJdbc();
+    final BasicDataSource dataSource = new BasicDataSource();
     dataSource.setDriverClassName(jdbc.getDriverClassName());
     dataSource.setDriverClassLoader(driverClassLoader);
 
@@ -382,7 +398,7 @@ public final class DataSources {
         dataSource.setValidationQueryTimeout(validation.getTimeout() == null || INDEFINITE.equals(validation.getTimeout()) ? -1 : Integer.parseInt(validation.getTimeout()));
     }
 
-    dataSource.setTestOnCreate(validation != null && validation.getTestOnReturn() != null && validation.getTestOnReturn());
+    dataSource.setTestOnCreate(validation != null && validation.getTestOnCreate() != null && validation.getTestOnCreate());
     dataSource.setTestOnBorrow(validation == null || validation.getTestOnBorrow() == null || validation.getTestOnBorrow());
     dataSource.setTestOnReturn(validation != null && validation.getTestOnReturn() != null && validation.getTestOnReturn());
     dataSource.setTestWhileIdle(validation != null && validation.getTestWhileIdle() != null && validation.getTestWhileIdle());
@@ -415,12 +431,12 @@ public final class DataSources {
    * @param driverClassLoader Class loader to be used to load the JDBC driver.
    * @return The {@link BasicDataSource} instance.
    * @throws SQLException If a database access error has occurred.
-   * @throws NullPointerException If {@code dbcp} is null.
+   * @throws IllegalArgumentException If {@code dbcp} is null.
    */
   public static BasicDataSource createDataSource(final $Dbcp dbcp, final ClassLoader driverClassLoader) throws SQLException {
-    final BasicDataSource dataSource = new BasicDataSource();
+    final $Dbcp.Jdbc jdbc = Assertions.assertNotNull(dbcp).getJdbc();
 
-    final $Dbcp.Jdbc jdbc = dbcp.getJdbc();
+    final BasicDataSource dataSource = new BasicDataSource();
     dataSource.setDriverClassName(jdbc.getDriverClassName().text());
     dataSource.setDriverClassLoader(driverClassLoader);
 
@@ -520,7 +536,7 @@ public final class DataSources {
         dataSource.setValidationQueryTimeout(validation.getTimeout() == null || INDEFINITE.equals(validation.getTimeout().text()) ? -1 : Integer.parseInt(validation.getTimeout().text()));
     }
 
-    dataSource.setTestOnCreate(validation != null && validation.getTestOnReturn() != null && validation.getTestOnReturn().text());
+    dataSource.setTestOnCreate(validation != null && validation.getTestOnCreate() != null && validation.getTestOnCreate().text());
     dataSource.setTestOnBorrow(validation == null || validation.getTestOnBorrow() == null || validation.getTestOnBorrow().text());
     dataSource.setTestOnReturn(validation != null && validation.getTestOnReturn() != null && validation.getTestOnReturn().text());
     dataSource.setTestWhileIdle(validation != null && validation.getTestWhileIdle() != null && validation.getTestWhileIdle().text());
