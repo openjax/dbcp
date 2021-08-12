@@ -25,6 +25,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.XMLConstants;
@@ -38,52 +39,58 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.libj.lang.Assertions;
 import org.libj.logging.LoggerPrintWriter;
-import org.openjax.dbcp_1_1.Dbcp;
-import org.openjax.www.dbcp_1_1.xL0gluGCXAA.$Dbcp;
-import org.openjax.www.dbcp_1_1.xL0gluGCXAA.Dbcps;
-import org.openjax.www.xml.datatypes_0_9.xL9gluGCXAA;
+import org.openjax.dbcp_1_2.Dbcp;
+import org.openjax.www.dbcp_1_2.xL0gluGCXAA.$Dbcp;
+import org.openjax.www.dbcp_1_2.xL0gluGCXAA.Dbcps;
+import org.openjax.www.xml.datatypes_0_9.xL9gluGCXAA.$StringNonEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 import org.xml.sax.SAXException;
 
 public final class DataSources {
+  private static final List<String> defaultDisconnectionQueryCodes = Arrays.asList("57P01", "57P02", "57P03", "01002", "JZ0C0", "JZ0C1");
   private static final String INDEFINITE = "INDEFINITE";
   private static final String schemaFile = "dbcp.xsd";
   private static Schema schema;
 
   /**
-   * Create a {@link BasicDataSource} given an {@link URL url} specifying a dbcp
-   * xml resource. {@link ClassLoader#getSystemClassLoader()} is used as the
-   * {@code driverClassLoader} parameter.
+   * Create a {@link BasicDataSource} from the configuration supplied by the
+   * {@link URL url} specifying an xml document with root element
+   * {@code dbcp:dbcp}. {@link ClassLoader#getSystemClassLoader()} will be used
+   * by the {@link BasicDataSource} when it loads the JDBC driver.
    *
-   * @param dbcpXml An {@link URL} specifying a dbcp xml resource.
+   * @param url An {@link URL} specifying a dbcp xml resource.
    * @return The {@link BasicDataSource} instance.
-   * @throws SAXException If an XML validation error has occurred.
-   * @throws SQLException If a database access error has occurred.
-   * @throws IOException If an I/O error has occurred.
-   * @throws IllegalArgumentException If the given {@link URL url} is null.
+   * @throws IOException If an I/O error has occurred
+   * @throws SAXException If the xml document does not have a {@code dbcp:dbcp}
+   *           root element, or if an XML validation error has occurred.
+   * @throws IllegalArgumentException If {@code url} is null, or if the
+   *           {@code /dbcp:dbcp/dbcp:jdbc} element is missing.
    */
-  public static BasicDataSource createDataSource(final URL dbcpXml) throws IOException, SAXException, SQLException {
-    return createDataSource(dbcpXml, ClassLoader.getSystemClassLoader());
+  public static BasicDataSource createDataSource(final URL url) throws IOException, SAXException {
+    return createDataSource(url, ClassLoader.getSystemClassLoader());
   }
 
   /**
-   * Create a {@link BasicDataSource} given an {@link URL url} specifying a dbcp
-   * xml resource.
+   * Create a {@link BasicDataSource} from the configuration supplied by the
+   * {@link URL url} specifying an xml document with root element
+   * {@code dbcp:dbcp}. {@link ClassLoader#getSystemClassLoader()} will be used
+   * by the {@link BasicDataSource} when it loads the JDBC driver.
    *
-   * @param dbcpXml URL of dbcp xml resource.
-   * @param driverClassLoader Class loader to be used to load the JDBC driver.
+   * @param url An {@link URL} specifying a dbcp xml resource.
+   * @param driverClassLoader Class loader to be used by the
+   *          {@link BasicDataSource} when it loads the JDBC driver.
    * @return The {@link BasicDataSource} instance.
-   * @throws SAXException If an XML validation error has occurred.
-   * @throws SQLException If a database access error has occurred.
-   * @throws IOException If an I/O error has occurred.
-   * @throws IllegalArgumentException If the given {@link URL url} is null.
+   * @throws IOException If an I/O error has occurred
+   * @throws SAXException If the xml document does not have a {@code dbcp:dbcp}
+   *           root element, or if an XML validation error has occurred.
+   * @throws IllegalArgumentException If {@code url} is null, or if the
+   *           {@code /dbcp:dbcp/dbcp:jdbc} element is missing.
    */
-  public static BasicDataSource createDataSource(final URL dbcpXml, final ClassLoader driverClassLoader) throws IOException, SAXException, SQLException {
+  public static BasicDataSource createDataSource(final URL url, final ClassLoader driverClassLoader) throws IOException, SAXException {
     try {
       final Unmarshaller unmarshaller = JAXBContext.newInstance(Dbcp.class).createUnmarshaller();
       final URL resource = Thread.currentThread().getContextClassLoader().getResource(schemaFile);
@@ -91,9 +98,9 @@ public final class DataSources {
         throw new IllegalStateException("Unable to find " + schemaFile + " in class loader " + Thread.currentThread().getContextClassLoader());
 
       unmarshaller.setSchema(DataSources.schema == null ? DataSources.schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(resource) : DataSources.schema);
-      try (final InputStream in = Assertions.assertNotNull(dbcpXml).openStream()) {
+      try (final InputStream in = Assertions.assertNotNull(url).openStream()) {
         final JAXBElement<Dbcp> element = unmarshaller.unmarshal(XMLInputFactory.newInstance().createXMLStreamReader(in), Dbcp.class);
-        return createDataSource(element.getValue(), driverClassLoader);
+        return createDataSource(driverClassLoader, element.getValue());
       }
     }
     catch (final FactoryConfigurationError e) {
@@ -105,463 +112,740 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@link BasicDataSource} given an array of {@link Dbcp dbcp} JAX-B
-   * bindings. {@link ClassLoader#getSystemClassLoader()} is used as the
-   * {@code driverClassLoader} parameter.
+   * Create a {@link BasicDataSource} from the configuration supplied by the
+   * array of {@link Dbcp dbcp} JAX-B bindings that match the specified
+   * {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the
+   * {@link BasicDataSource} when it loads the JDBC driver.
    *
-   * @param name The name of the pool to create. (The name is declared in the
-   *          array of {@code dbcps}).
-   * @param dbcps Array of {@link Dbcp} descriptor objects.
+   * @param id The id of the {@link Dbcp dbcp} bindings to match, or
+   *          {@code null} to match all bindings.
+   * @param dbcps Array of {@link Dbcp} JAX-B bindings.
    * @return The {@link BasicDataSource} instance.
-   * @throws SQLException If a database access error has occurred.
-   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
-   *           of {@code dbcps} is null.
+   * @throws IllegalArgumentException If {@code dbcps} is null, any member of
+   *           {@code dbcps} is null, or if the {@code /dbcp:jdbc} element is
+   *           missing from all members in {@code dbcps}.
    */
-  public static BasicDataSource createDataSource(final String name, final Dbcp ... dbcps) throws SQLException {
-    return createDataSource(name, ClassLoader.getSystemClassLoader(), dbcps);
+  public static BasicDataSource createDataSource(final String id, final Dbcp ... dbcps) {
+    return createDataSource(id, ClassLoader.getSystemClassLoader(), dbcps);
   }
 
   /**
-   * Create a {@link BasicDataSource} given a {@link Dbcps dbcps} JAX-B binding.
-   * {@link ClassLoader#getSystemClassLoader()} is used as the
-   * {@code driverClassLoader} parameter.
+   * Create a {@link BasicDataSource} from the configuration supplied by the
+   * array of {@link $Dbcp dbcp} JAX-SB bindings that match the specified
+   * {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the
+   * {@link BasicDataSource} when it loads the JDBC driver.
    *
-   * @param name The name of the pool to create. (The name is declared in the
-   *          array of {@code dbcps}).
-   * @param dbcps The {@link Dbcps} descriptor object.
+   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided
+   *          {@link $Dbcp} to match, or {@code null} to match all child
+   *          elements.
+   * @param dbcps Array of {@link $Dbcp} JAX-SB bindings.
    * @return The {@link BasicDataSource} instance.
-   * @throws SQLException If a database access error has occurred.
-   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
-   *           of {@code dbcps} is null.
+   * @throws IllegalArgumentException If {@code dbcps} is null, any member of
+   *           {@code dbcps} is null, or if the {@code /dbcp:jdbc} element is
+   *           missing from all members in {@code dbcps}.
    */
-  public static BasicDataSource createDataSource(final String name, final org.openjax.dbcp_1_1.Dbcps dbcps) throws SQLException {
-    return createDataSource(name, ClassLoader.getSystemClassLoader(), dbcps);
+  public static BasicDataSource createDataSource(final String id, final $Dbcp ... dbcps) {
+    return createDataSource(id, ClassLoader.getSystemClassLoader(), dbcps);
   }
 
   /**
-   * Create a {@link BasicDataSource} given an array of {@link $Dbcp dbcp}
-   * JAX-SB bindings. {@link ClassLoader#getSystemClassLoader()} is used as the
-   * {@code driverClassLoader} parameter.
+   * Create a {@link BasicDataSource} from the configuration supplied by the
+   * {@code /dbcp:dbcp} child elements of the provided
+   * {@link org.openjax.dbcp_1_2.Dbcps} JAX-B binding that match the specified
+   * {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the
+   * {@link BasicDataSource} when it loads the JDBC driver.
    *
-   * @param name The name of the pool to create. (The name is declared in the
-   *          array of {@code dbcps}).
-   * @param dbcps Array of {@code $Dbcp} descriptor objects.
+   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided
+   *          {@link org.openjax.dbcp_1_2.Dbcps} to match, or {@code null} to
+   *          match all child elements.
+   * @param dbcps The {@link org.openjax.dbcp_1_2.Dbcps} JAX-B binding.
    * @return The {@link BasicDataSource} instance.
-   * @throws SQLException If a database access error has occurred.
-   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
-   *           of {@code dbcps} is null.
+   * @throws IllegalArgumentException If {@code dbcps} is null, does not contain
+   *           any {@code /dbcp:dbcp} child elements, contains null child
+   *           elements, or if the {@code /dbcp:jdbc} element is missing from
+   *           all {@code /dbcp:dbcp} child elements in {@code dbcps}.
    */
-  public static BasicDataSource createDataSource(final String name, final $Dbcp ... dbcps) throws SQLException {
-    return createDataSource(name, ClassLoader.getSystemClassLoader(), dbcps);
+  public static BasicDataSource createDataSource(final String id, final org.openjax.dbcp_1_2.Dbcps dbcps) {
+    return createDataSource(id, ClassLoader.getSystemClassLoader(), dbcps);
   }
 
   /**
-   * Create a {@link BasicDataSource} given a {@link Dbcps dbcps} JAX-SB
-   * binding. {@link ClassLoader#getSystemClassLoader()} is used as the
-   * {@code driverClassLoader} parameter.
+   * Create a {@link BasicDataSource} from the configuration supplied by the
+   * {@code /dbcp:dbcp} child elements of the provided {@link Dbcps} JAX-SB
+   * binding that match the specified {@code id}.
+   * {@link ClassLoader#getSystemClassLoader()} will be used by the
+   * {@link BasicDataSource} when it loads the JDBC driver.
    *
-   * @param name The name of the pool to create. (The name is declared in the
-   *          array of {@code dbcps}).
-   * @param dbcps Array of {@code $Dbcp} descriptor objects.
+   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided
+   *          {@link Dbcps} to match, or {@code null} to match all child
+   *          elements.
+   * @param dbcps The {@link Dbcps} JAX-SB binding.
    * @return The {@link BasicDataSource} instance.
-   * @throws SQLException If a database access error has occurred.
-   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
-   *           of {@code dbcps} is null.
+   * @throws IllegalArgumentException If {@code dbcps} is null, does not contain
+   *           any {@code /dbcp:dbcp} child elements, contains null child
+   *           elements, or if the {@code /dbcp:jdbc} element is missing from
+   *           all {@code /dbcp:dbcp} child elements in {@code dbcps}.
    */
-  public static BasicDataSource createDataSource(final String name, final Dbcps dbcps) throws SQLException {
-    return createDataSource(name, ClassLoader.getSystemClassLoader(), dbcps);
+  public static BasicDataSource createDataSource(final String id, final Dbcps dbcps) {
+    return createDataSource(id, ClassLoader.getSystemClassLoader(), dbcps);
   }
 
   /**
-   * Create a {@link BasicDataSource} given an array of {@link Dbcp dbcp} JAX-B
-   * bindings.
+   * Create a {@link BasicDataSource} from the configuration supplied by the
+   * {@code /dbcp:dbcp} child elements of the provided {@link Dbcps} JAX-B
+   * binding that match any {@code id}.
    *
-   * @param name The name of the pool to create. (The name is declared in the
-   *          array of {@code dbcps}).
-   * @param driverClassLoader Class loader to be used to load the JDBC driver.
-   * @param dbcps Array of {@link Dbcp} descriptor objects.
+   * @param driverClassLoader Class loader to be used by the
+   *          {@link BasicDataSource} when it loads the JDBC driver.
+   * @param dbcps Array of {@link Dbcp} JAX-B bindings.
    * @return The {@link BasicDataSource} instance.
-   * @throws SQLException If a database access error has occurred.
-   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
-   *           of {@code dbcps} is null.
+   * @throws IllegalArgumentException If {@code dbcps} is null, any member of
+   *           {@code dbcps} is null, or if the {@code /dbcp:jdbc} element is
+   *           missing from all members in {@code dbcps}.
    */
-  public static BasicDataSource createDataSource(final String name, final ClassLoader driverClassLoader, final Dbcp ... dbcps) throws SQLException {
-    Assertions.assertNotNull(name);
-    Assertions.assertNotNull(dbcps);
-    for (final Dbcp dbcp : dbcps)
-      if (name.equals(Assertions.assertNotNull(dbcp).getName()))
-        return createDataSource(dbcp, driverClassLoader);
-
-    return null;
+  public static BasicDataSource createDataSource(final ClassLoader driverClassLoader, final Dbcp ... dbcps) {
+    return createDataSource(null, driverClassLoader, Assertions.assertNotNull(dbcps));
   }
 
   /**
-   * Create a {@link BasicDataSource} given given a {@link Dbcps dbcps} JAX-B
-   * binding.
+   * Create a {@link BasicDataSource} from the configuration supplied by the
+   * array of {@link $Dbcp dbcp} JAX-SB bindings that match the specified
+   * {@code id}.
    *
-   * @param name The name of the pool to create. (The name is declared in the
-   *          array of {@code dbcps}).
-   * @param driverClassLoader Class loader to be used to load the JDBC driver.
-   * @param dbcps Array of {@link Dbcp} descriptor objects.
+   * @param driverClassLoader Class loader to be used by the
+   *          {@link BasicDataSource} when it loads the JDBC driver.
+   * @param dbcps Array of {@link $Dbcp} JAX-SB bindings.
    * @return The {@link BasicDataSource} instance.
-   * @throws SQLException If a database access error has occurred.
-   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
-   *           of {@code dbcps} is null.
+   * @throws IllegalArgumentException If {@code dbcps} is null, any member of
+   *           {@code dbcps} is null, or if the {@code /dbcp:jdbc} element is
+   *           missing from all members in {@code dbcps}.
    */
-  public static BasicDataSource createDataSource(final String name, final ClassLoader driverClassLoader, final org.openjax.dbcp_1_1.Dbcps dbcps) throws SQLException {
-    Assertions.assertNotNull(name);
+  public static BasicDataSource createDataSource(final ClassLoader driverClassLoader, final $Dbcp ... dbcps) {
+    return createDataSource(null, driverClassLoader, Assertions.assertNotNull(dbcps));
+  }
+
+  /**
+   * Create a {@link BasicDataSource} from the configuration supplied by the
+   * {@code /dbcp:dbcp} child elements of the provided
+   * {@link org.openjax.dbcp_1_2.Dbcps} JAX-B binding that match the specified
+   * {@code id}.
+   *
+   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided
+   *          {@link org.openjax.dbcp_1_2.Dbcps} to match, or {@code null} to
+   *          match all child elements.
+   * @param driverClassLoader Class loader to be used by the
+   *          {@link BasicDataSource} when it loads the JDBC driver.
+   * @param dbcps The {@link org.openjax.dbcp_1_2.Dbcps} JAX-B binding.
+   * @return The {@link BasicDataSource} instance.
+   * @throws IllegalArgumentException If {@code dbcps} is null, does not contain
+   *           any {@code /dbcp:dbcp} child elements, contains null child
+   *           elements, or if the {@code /dbcp:jdbc} element is missing from
+   *           all {@code /dbcp:dbcp} child elements in {@code dbcps}.
+   */
+  public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final org.openjax.dbcp_1_2.Dbcps dbcps) {
     Assertions.assertNotNull(dbcps);
     Assertions.assertNotNull(dbcps.getDbcp());
-    for (final Dbcp dbcp : dbcps.getDbcp())
-      if (name.equals(Assertions.assertNotNull(dbcp).getName()))
-        return createDataSource(dbcp, driverClassLoader);
-
-    return null;
+    return createDataSource(id, driverClassLoader, dbcps.getDbcp().toArray(new $Dbcp[dbcps.getDbcp().size()]));
   }
 
   /**
-   * Create a {@link BasicDataSource} given an array of {@link $Dbcp dbcp}
-   * JAX-SB bindings.
+   * Create a {@link BasicDataSource} from the configuration supplied by the
+   * {@code /dbcp:dbcp} child elements of the provided {@link Dbcps} JAX-SB
+   * binding that match the specified {@code id}.
    *
-   * @param name The name of the pool to create. (The name is declared in the
-   *          array of {@code dbcps}).
-   * @param driverClassLoader Class loader to be used to load the JDBC driver.
-   * @param dbcps Array of {@code $Dbcp} descriptor objects.
+   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided
+   *          {@link Dbcps} to match, or {@code null} to match all child
+   *          elements.
+   * @param driverClassLoader Class loader to be used by the
+   *          {@link BasicDataSource} when it loads the JDBC driver.
+   * @param dbcps The {@link Dbcps} JAX-SB binding.
    * @return The {@link BasicDataSource} instance.
-   * @throws SQLException If a database access error has occurred.
-   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
-   *           of {@code dbcps} is null.
+   * @throws IllegalArgumentException If {@code dbcps} is null, does not contain
+   *           any {@code /dbcp:dbcp} child elements, contains null child
+   *           elements, or if the {@code /dbcp:jdbc} element is missing from
+   *           all {@code /dbcp:dbcp} child elements in {@code dbcps}.
    */
-  public static BasicDataSource createDataSource(final String name, final ClassLoader driverClassLoader, final $Dbcp ... dbcps) throws SQLException {
-    Assertions.assertNotNull(name);
-    Assertions.assertNotNull(dbcps);
-    for (final $Dbcp dbcp : dbcps)
-      if (name.equals(Assertions.assertNotNull(Assertions.assertNotNull(dbcp).getName$()).text()))
-        return createDataSource(dbcp, driverClassLoader);
-
-    return null;
-  }
-
-  /**
-   * Create a {@link BasicDataSource} given a {@link Dbcps dbcps} JAX-SB
-   * binding.
-   *
-   * @param name The name of the pool to create. (The name is declared in the
-   *          array of {@code dbcps}).
-   * @param driverClassLoader Class loader to be used to load the JDBC driver.
-   * @param dbcps Array of {@code $Dbcp} descriptor objects.
-   * @return The {@link BasicDataSource} instance.
-   * @throws SQLException If a database access error has occurred.
-   * @throws IllegalArgumentException If {@code name}, {@code dbcps} or any member
-   *           of {@code dbcps} is null.
-   */
-  public static BasicDataSource createDataSource(final String name, final ClassLoader driverClassLoader, final Dbcps dbcps) throws SQLException {
-    Assertions.assertNotNull(name);
+  public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final Dbcps dbcps) {
     Assertions.assertNotNull(dbcps);
     Assertions.assertNotNull(dbcps.getDbcpDbcp());
-    // FIXME: Assertions.assertNotNull(Assertions.assertNotNull(???
-    for (final $Dbcp dbcp : dbcps.getDbcpDbcp())
-      if (name.equals(Assertions.assertNotNull(Assertions.assertNotNull(dbcp).getName$()).text()))
-        return createDataSource(dbcp, driverClassLoader);
-
-    return null;
+    return createDataSource(id, driverClassLoader, dbcps.getDbcpDbcp().toArray(new $Dbcp[dbcps.getDbcpDbcp().size()]));
   }
 
   /**
-   * Create a {@link BasicDataSource} given a {@link Dbcp dbcp} JAX-B binding.
+   * Create a {@link BasicDataSource} from the configuration supplied by the
+   * array of {@link Dbcp dbcp} JAX-B bindings that match the specified
+   * {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the
+   * {@link BasicDataSource} when it loads the JDBC driver.
    *
-   * @param dbcp The {@link Dbcp} descriptor object.
+   * @param dbcp The {@link Dbcp} JAX-B bindings providing the configuration.
    * @return The {@link BasicDataSource} instance.
-   * @throws SQLException If a database access error has occurred.
-   * @throws IllegalArgumentException If {@code dbcp} is null.
+   * @throws IllegalArgumentException If {@code dbcp} is null or if the
+   *           {@code /dbcp:jdbc} element is missing.
    */
-  public static BasicDataSource createDataSource(final Dbcp dbcp) throws SQLException {
-    return createDataSource(dbcp, ClassLoader.getSystemClassLoader());
+  public static BasicDataSource createDataSource(final Dbcp dbcp) {
+    return createDataSource(null, ClassLoader.getSystemClassLoader(), dbcp);
   }
 
   /**
-   * Create a {@link BasicDataSource} given a {@link $Dbcp dbcp} JAX-SB binding.
+   * Create a {@link BasicDataSource} from the configuration supplied by the
+   * array of {@link $Dbcp dbcp} JAX-SB bindings that match the specified
+   * {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the
+   * {@link BasicDataSource} when it loads the JDBC driver.
    *
-   * @param dbcp The {@link $Dbcp} descriptor object.
+   * @param dbcp The {@link $Dbcp} JAX-SB bindings providing the configuration.
    * @return The {@link BasicDataSource} instance.
-   * @throws SQLException If a database access error has occurred.
-   * @throws IllegalArgumentException If {@code dbcp} is null.
+   * @throws IllegalArgumentException If {@code dbcp} is null or if the
+   *           {@code /dbcp:jdbc} element is missing.
    */
-  public static BasicDataSource createDataSource(final $Dbcp dbcp) throws SQLException {
-    return createDataSource(dbcp, ClassLoader.getSystemClassLoader());
+  public static BasicDataSource createDataSource(final $Dbcp dbcp) {
+    return createDataSource(null, ClassLoader.getSystemClassLoader(), dbcp);
+  }
+
+  private final ClassLoader driverClassLoader;
+  private BasicDataSource dataSource = null;
+  private String driverClassName = null;
+  private String url = null;
+
+  private boolean autoCommit = true;
+  private boolean readOnly = false;
+
+  private Integer queryTimeout = null;
+  private String transactionIsolation = null;
+
+  private int initialSize = 0;
+  private int minIdle = 0;
+  private String maxIdle = INDEFINITE;
+  private String maxTotal = INDEFINITE;
+  private boolean poolPreparedStatements = false;
+  private String maxOpen = INDEFINITE;
+
+  private boolean lifo = true;
+
+  private boolean cacheState = true;
+  private String maxWait = INDEFINITE;
+  private String maxConnLifetime = INDEFINITE;
+  private boolean autoCommitOnReturn = true;
+  private boolean rollbackOnReturn = true;
+  private String removeAbandonedOn = null;
+  private int removeAbandonedTimeout = 0;
+  private boolean abandonedUsageTracking = false;
+  private boolean accessToUnderlyingConnectionAllowed = false;
+  private boolean hasEviction = false;
+  private String timeBetweenEvictionRunsMillis = INDEFINITE;
+  private int numTestsPerRun = 3;
+  private long minEvictableIdleTimeMillis = 1800000;
+  private String softMinEvictableIdleTimeMillis = INDEFINITE;
+  private String policyClassName = null;
+
+  private boolean hasValidation = false;
+  private String validationQuery = null;
+  private String validationQueryTimeout = INDEFINITE;
+  private boolean testOnCreate = false;
+  private boolean testOnBorrow = true;
+  private boolean testOnReturn = false;
+  private boolean testWhileIdle = false;
+  private List<String> disconnectionQueryCodes = null;
+
+  private String loggingLevel = null;
+  private boolean logExpiredConnections = false;
+  private boolean logAbandoned = false;
+
+  /**
+   * Create a {@link BasicDataSource} from the configuration supplied by the
+   * array of {@link Dbcp dbcp} JAX-B bindings that match the specified
+   * {@code id}.
+   *
+   * @param id The id of the {@link Dbcp dbcp} bindings to match, or
+   *          {@code null} to match all bindings.
+   * @param driverClassLoader Class loader to be used by the
+   *          {@link BasicDataSource} when it loads the JDBC driver.
+   * @param dbcps Array of {@link Dbcp} JAX-B bindings.
+   * @return The {@link BasicDataSource} instance.
+   * @throws IllegalArgumentException If {@code dbcps} is null, any member of
+   *           {@code dbcps} is null, or if the {@code /dbcp:jdbc} element is
+   *           missing from all members in {@code dbcps}.
+   */
+  public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final Dbcp ... dbcps) {
+    Assertions.assertNotNull(dbcps);
+    return new DataSources(id, driverClassLoader, dbcps).build();
   }
 
   /**
-   * Create a {@link BasicDataSource} given a {@link Dbcp dbcp} JAX-B binding.
+   * Create a {@link BasicDataSource} from the configuration supplied by the
+   * array of {@link $Dbcp dbcp} JAX-SB bindings that match the specified
+   * {@code id}.
    *
-   * @param dbcp The {@link Dbcp} descriptor object.
-   * @param driverClassLoader Class loader to be used to load the JDBC driver.
+   * @param id The id of the {@link Dbcp dbcp} bindings to match, or
+   *          {@code null} to match all bindings.
+   * @param driverClassLoader Class loader to be used by the
+   *          {@link BasicDataSource} when it loads the JDBC driver.
+   * @param dbcps Array of {@link $Dbcp} JAX-SB bindings.
    * @return The {@link BasicDataSource} instance.
-   * @throws SQLException If a database access error has occurred.
-   * @throws IllegalArgumentException If {@code dbcp} is null.
+   * @throws IllegalArgumentException If {@code dbcps} is null, any member of
+   *           {@code dbcps} is null, or if the {@code /dbcp:jdbc} element is
+   *           missing from all members in {@code dbcps}.
    */
-  public static BasicDataSource createDataSource(final Dbcp dbcp, final ClassLoader driverClassLoader) throws SQLException {
-    final Dbcp.Jdbc jdbc = Assertions.assertNotNull(dbcp).getJdbc();
+  public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final $Dbcp ... dbcps) {
+    Assertions.assertNotNull(dbcps);
+    return new DataSources(id, driverClassLoader, dbcps).build();
+  }
 
-    final BasicDataSource dataSource = new BasicDataSource();
-    dataSource.setDriverClassName(jdbc.getDriverClassName());
+  private DataSources(final String id, final ClassLoader driverClassLoader, final Dbcp ... dbcps) {
+    this.driverClassLoader = driverClassLoader;
+    for (final Dbcp dbcp : dbcps) {
+      Assertions.assertNotNull(dbcp);
+      if (id != null && !id.equals(dbcp.getId()))
+        continue;
+
+      if (dataSource == null)
+        dataSource = new BasicDataSource();
+
+      if (dbcp.getJdbc() != null) {
+        if (dbcp.getJdbc().getDriverClassName() != null)
+          driverClassName = dbcp.getJdbc().getDriverClassName();
+
+        if (dbcp.getJdbc().getUrl() != null)
+          url = dbcp.getJdbc().getUrl();
+      }
+
+      final Dbcp.Default _default = dbcp.getDefault();
+      if (_default != null) {
+        if (_default.getCatalog() != null)
+          dataSource.setDefaultCatalog(_default.getCatalog());
+
+        if (_default.getAutoCommit() != null)
+          autoCommit = _default.getAutoCommit();
+
+        if (_default.getReadOnly() != null)
+          readOnly = _default.getReadOnly();
+
+        if (_default.getQueryTimeout() != null)
+          queryTimeout = _default.getQueryTimeout();
+
+        if (_default.getTransactionIsolation() != null)
+          transactionIsolation = _default.getTransactionIsolation();
+      }
+
+      final Dbcp.Connection connection = dbcp.getConnection();
+      if (connection != null) {
+        if (connection.getProperties() != null)
+          for (final Dbcp.Connection.Properties.Property property : connection.getProperties().getProperty())
+            if (property.getName() != null && property.getValue() != null)
+              dataSource.addConnectionProperty(property.getName(), property.getValue());
+
+        if (connection.getInitSqls() != null) {
+          if (dataSource.getConnectionInitSqls().size() > 0)
+            dataSource.getConnectionInitSqls().addAll(connection.getInitSqls().getInitSql());
+          else
+            dataSource.setConnectionInitSqls(connection.getInitSqls().getInitSql());
+        }
+      }
+
+      final Dbcp.Size size = dbcp.getSize();
+      if (size != null) {
+        if (size.getInitialSize() != null)
+          initialSize = size.getInitialSize();
+
+        if (size.getMinIdle() != null)
+          minIdle = size.getMinIdle();
+
+        if (size.getMaxIdle() != null)
+          maxIdle = size.getMaxIdle();
+
+        if (size.getMaxTotal() != null)
+          maxTotal = size.getMaxTotal();
+
+        if (size.getPoolPreparedStatements() != null) {
+          poolPreparedStatements = true;
+          if (size.getPoolPreparedStatements().getMaxOpen() != null)
+            maxOpen = size.getPoolPreparedStatements().getMaxOpen();
+        }
+      }
+
+      final Dbcp.Pool pool = dbcp.getPool();
+      if (pool != null) {
+        if (pool.getQueue() != null) {
+          if ("lifo".equals(pool.getQueue()))
+            lifo = true;
+          else if ("fifo".equals(pool.getQueue()))
+            lifo = false;
+          else
+            throw new UnsupportedOperationException("Unsupported queue spec: " + pool.getQueue());
+        }
+
+        if (pool.getCacheState() != null)
+          cacheState = pool.getCacheState();
+
+        if (pool.getMaxWait() != null)
+          maxWait = pool.getMaxWait();
+
+        if (pool.getMaxConnectionLifetime() != null)
+          maxConnLifetime = pool.getMaxConnectionLifetime();
+
+        if (pool.getAutoCommitOnReturn() != null)
+          autoCommitOnReturn = pool.getAutoCommitOnReturn();
+
+        if (pool.getRollbackOnReturn() != null)
+          rollbackOnReturn = pool.getRollbackOnReturn();
+
+        if (pool.getRemoveAbandoned() != null) {
+          removeAbandonedOn = pool.getRemoveAbandoned().getOn();
+          removeAbandonedTimeout = pool.getRemoveAbandoned().getTimeout();
+        }
+
+        if (pool.getAbandonedUsageTracking() != null)
+          abandonedUsageTracking = pool.getAbandonedUsageTracking();
+
+        if (pool.getAllowAccessToUnderlyingConnection() != null)
+          accessToUnderlyingConnectionAllowed = pool.getAllowAccessToUnderlyingConnection();
+
+
+        final Dbcp.Pool.Eviction eviction = pool.getEviction();
+        if (eviction != null) {
+          hasEviction = true;
+          if (eviction.getTimeBetweenRuns() != null)
+            timeBetweenEvictionRunsMillis = eviction.getTimeBetweenRuns();
+
+          if (eviction.getNumTestsPerRun() != null)
+            numTestsPerRun = eviction.getNumTestsPerRun();
+
+          if (eviction.getMinIdleTime() != null)
+            minEvictableIdleTimeMillis = eviction.getMinIdleTime();
+
+          if (eviction.getSoftMinIdleTime() != null)
+            softMinEvictableIdleTimeMillis = eviction.getSoftMinIdleTime();
+
+          if (eviction.getPolicyClassName() != null)
+            policyClassName = eviction.getPolicyClassName();
+        }
+      }
+
+      final Dbcp.Validation validation = dbcp.getValidation();
+      if (validation != null) {
+        hasValidation = true;
+        if (validation.getQuery() != null)
+          validationQuery = validation.getQuery();
+
+        if (validation.getTimeout() != null)
+          validationQueryTimeout = validation.getTimeout();
+
+        if (validation.getTestOnCreate() != null)
+          testOnCreate = validation.getTestOnCreate();
+
+        if (validation.getTestOnBorrow() != null)
+          testOnBorrow = validation.getTestOnBorrow();
+
+        if (validation.getTestOnReturn() != null)
+          testOnReturn = validation.getTestOnReturn();
+
+        if (validation.getTestWhileIdle() != null)
+          testWhileIdle = validation.getTestWhileIdle();
+
+        final Dbcp.Validation.FastFail failFast = validation.getFastFail();
+        if (failFast != null) {
+          dataSource.setFastFailValidation(true);
+          if (failFast.getDisconnectionSqlCodes() != null && failFast.getDisconnectionSqlCodes().length() > 0) {
+            if (disconnectionQueryCodes == null)
+              disconnectionQueryCodes = new ArrayList<>();
+
+            Collections.addAll(disconnectionQueryCodes, failFast.getDisconnectionSqlCodes().trim().split(" "));
+          }
+        }
+      }
+
+      final Dbcp.Logging logging = dbcp.getLogging();
+      if (logging != null) {
+        loggingLevel = logging.getLevel();
+        if (logging.getLogExpiredConnections() != null)
+          logExpiredConnections = logging.getLogExpiredConnections();
+
+        if (logging.getLogAbandoned() != null)
+          logAbandoned = logging.getLogAbandoned();
+      }
+
+      dataSource.setJmxName(dbcp.getJmxName());
+    }
+  }
+
+  private DataSources(final String id, final ClassLoader driverClassLoader, final $Dbcp ... dbcps) {
+    this.driverClassLoader = driverClassLoader;
+    for (final $Dbcp dbcp : dbcps) {
+      Assertions.assertNotNull(dbcp);
+      if (id != null && !id.equals(dbcp.getId$().text()))
+        continue;
+
+      if (dataSource == null)
+        dataSource = new BasicDataSource();
+
+      if (dbcp.getJdbc() != null) {
+        if (dbcp.getJdbc().getDriverClassName() != null)
+          driverClassName = dbcp.getJdbc().getDriverClassName().text();
+
+        if (dbcp.getJdbc().getUrl() != null)
+          url = dbcp.getJdbc().getUrl().text();
+      }
+
+      final $Dbcp.Default _default = dbcp.getDefault();
+      if (_default != null) {
+        if (_default.getCatalog() != null)
+          dataSource.setDefaultCatalog(_default.getCatalog().text());
+
+        if (_default.getAutoCommit() != null)
+          autoCommit = _default.getAutoCommit().text();
+
+        if (_default.getReadOnly() != null)
+          readOnly = _default.getReadOnly().text();
+
+        if (_default.getQueryTimeout() != null)
+          queryTimeout = _default.getQueryTimeout().text();
+
+        if (_default.getTransactionIsolation() != null)
+          transactionIsolation = _default.getTransactionIsolation().text();
+      }
+
+      final $Dbcp.Connection connection = dbcp.getConnection();
+      if (connection != null) {
+        if (connection.getProperties() != null)
+          for (final $Dbcp.Connection.Properties.Property property : connection.getProperties().getProperty())
+            if (property.getName$() != null && property.getValue$() != null)
+              dataSource.addConnectionProperty(property.getName$().text(), property.getValue$().text());
+
+        if (connection.getInitSqls() != null) {
+          final List<$StringNonEmpty> initSqls = connection.getInitSqls().getInitSql();
+          final String[] initSql = new String[initSqls.size()];
+          for (int i = 0; i < initSqls.size(); ++i)
+            initSql[i] = initSqls.get(i).text();
+
+          if (dataSource.getConnectionInitSqls().size() > 0)
+            Collections.addAll(dataSource.getConnectionInitSqls(), initSql);
+          else
+            dataSource.setConnectionInitSqls(Arrays.asList(initSql));
+        }
+      }
+
+      final $Dbcp.Size size = dbcp.getSize();
+      if (size != null) {
+        if (size.getInitialSize() != null)
+          initialSize = size.getInitialSize().text();
+
+        if (size.getMinIdle() != null)
+          minIdle = size.getMinIdle().text();
+
+        if (size.getMaxIdle() != null)
+          maxIdle = size.getMaxIdle().text();
+
+        if (size.getMaxTotal() != null)
+          maxTotal = size.getMaxTotal().text();
+
+        if (size.getPoolPreparedStatements() != null) {
+          poolPreparedStatements = true;
+          if (size.getPoolPreparedStatements().getMaxOpen() != null)
+            maxOpen = size.getPoolPreparedStatements().getMaxOpen().text();
+        }
+      }
+
+      final $Dbcp.Pool pool = dbcp.getPool();
+      if (pool != null) {
+        if (pool.getQueue() != null) {
+          if ("lifo".equals(pool.getQueue().text()))
+            lifo = true;
+          else if ("fifo".equals(pool.getQueue().text()))
+            lifo = false;
+          else
+            throw new UnsupportedOperationException("Unsupported queue spec: " + pool.getQueue());
+        }
+
+        if (pool.getCacheState() != null)
+          cacheState = pool.getCacheState().text();
+
+        if (pool.getMaxWait() != null)
+          maxWait = pool.getMaxWait().text();
+
+        if (pool.getMaxConnectionLifetime() != null)
+          maxConnLifetime = pool.getMaxConnectionLifetime().text();
+
+        if (pool.getAutoCommitOnReturn() != null)
+          autoCommitOnReturn = pool.getAutoCommitOnReturn().text();
+
+        if (pool.getRollbackOnReturn() != null)
+          rollbackOnReturn = pool.getRollbackOnReturn().text();
+
+        if (pool.getRemoveAbandoned() != null) {
+          removeAbandonedOn = pool.getRemoveAbandoned().getOn$().text();
+          removeAbandonedTimeout = pool.getRemoveAbandoned().getTimeout$().text();
+        }
+
+        if (pool.getAbandonedUsageTracking() != null)
+          abandonedUsageTracking = pool.getAbandonedUsageTracking().text();
+
+        if (pool.getAllowAccessToUnderlyingConnection() != null)
+          accessToUnderlyingConnectionAllowed = pool.getAllowAccessToUnderlyingConnection().text();
+
+
+        final $Dbcp.Pool.Eviction eviction = pool.getEviction();
+        if (eviction != null) {
+          hasEviction = true;
+          if (eviction.getTimeBetweenRuns() != null)
+            timeBetweenEvictionRunsMillis = eviction.getTimeBetweenRuns().text();
+
+          if (eviction.getNumTestsPerRun() != null)
+            numTestsPerRun = eviction.getNumTestsPerRun().text();
+
+          if (eviction.getMinIdleTime() != null)
+            minEvictableIdleTimeMillis = eviction.getMinIdleTime().text();
+
+          if (eviction.getSoftMinIdleTime() != null)
+            softMinEvictableIdleTimeMillis = eviction.getSoftMinIdleTime().text();
+
+          if (eviction.getPolicyClassName() != null)
+            policyClassName = eviction.getPolicyClassName().text();
+        }
+      }
+
+      final $Dbcp.Validation validation = dbcp.getValidation();
+      if (validation != null) {
+        hasValidation = true;
+        if (validation.getQuery() != null)
+          validationQuery = validation.getQuery().text();
+
+        if (validation.getTimeout() != null)
+          validationQueryTimeout = validation.getTimeout().text();
+
+        if (validation.getTestOnCreate() != null)
+          testOnCreate = validation.getTestOnCreate().text();
+
+        if (validation.getTestOnBorrow() != null)
+          testOnBorrow = validation.getTestOnBorrow().text();
+
+        if (validation.getTestOnReturn() != null)
+          testOnReturn = validation.getTestOnReturn().text();
+
+        if (validation.getTestWhileIdle() != null)
+          testWhileIdle = validation.getTestWhileIdle().text();
+
+        final $Dbcp.Validation.FastFail failFast = validation.getFastFail();
+        if (failFast != null) {
+          dataSource.setFastFailValidation(true);
+          if (failFast.getDisconnectionSqlCodes() != null && failFast.getDisconnectionSqlCodes().text().length() > 0) {
+            if (disconnectionQueryCodes == null)
+              disconnectionQueryCodes = new ArrayList<>();
+
+            Collections.addAll(disconnectionQueryCodes, failFast.getDisconnectionSqlCodes().text().trim().split(" "));
+          }
+        }
+      }
+
+      final $Dbcp.Logging logging = dbcp.getLogging();
+      if (logging != null) {
+        loggingLevel = logging.getLevel().text();
+        if (logging.getLogExpiredConnections() != null)
+          logExpiredConnections = logging.getLogExpiredConnections().text();
+
+        if (logging.getLogAbandoned() != null)
+          logAbandoned = logging.getLogAbandoned().text();
+      }
+
+      dataSource.setJmxName(dbcp.getJmxName().text());
+    }
+  }
+
+  private BasicDataSource build() {
+    if (dataSource == null)
+      return null;
+
+    if (driverClassName == null)
+      throw new IllegalArgumentException("/dbcp:jdbc is missing");
+
+    dataSource.setDriverClassName(driverClassName);
     dataSource.setDriverClassLoader(driverClassLoader);
+    dataSource.setUrl(url);
 
-    dataSource.setUrl(jdbc.getUrl());
+    dataSource.setDefaultAutoCommit(autoCommit);
+    dataSource.setDefaultReadOnly(readOnly);
+    dataSource.setDefaultQueryTimeout(queryTimeout);
 
-    final Dbcp.Default _default = dbcp.getDefault();
-    if (_default != null && _default.getCatalog() != null)
-      dataSource.setDefaultCatalog(_default.getCatalog());
-
-    dataSource.setDefaultAutoCommit(_default == null || _default.getAutoCommit() == null || _default.getAutoCommit());
-    dataSource.setDefaultReadOnly(_default != null && _default.getReadOnly() != null && _default.getReadOnly());
-    if (_default != null && _default.getQueryTimeout() != null)
-      dataSource.setDefaultQueryTimeout(_default.getQueryTimeout());
-
-    if (_default != null && _default.getTransactionIsolation() != null) {
-      if ("NONE".equals(_default.getTransactionIsolation()))
+    if (transactionIsolation != null) {
+      if ("NONE".equals(transactionIsolation))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_NONE);
-      else if ("READ_UNCOMMITTED".equals(_default.getTransactionIsolation()))
+      else if ("READ_UNCOMMITTED".equals(transactionIsolation))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-      else if ("READ_COMMITTED".equals(_default.getTransactionIsolation()))
+      else if ("READ_COMMITTED".equals(transactionIsolation))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-      else if ("REPEATABLE_READ".equals(_default.getTransactionIsolation()))
+      else if ("REPEATABLE_READ".equals(transactionIsolation))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
-      else if ("SERIALIZABLE".equals(_default.getTransactionIsolation()))
+      else if ("SERIALIZABLE".equals(transactionIsolation))
         dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
       else
-        throw new UnsupportedOperationException("Unsupported transaction isolation: " + _default.getTransactionIsolation());
+        throw new UnsupportedOperationException("Unsupported transaction isolation: " + transactionIsolation);
     }
 
-    final Dbcp.Connection connection = dbcp.getConnection();
-    if (connection != null) {
-      if (connection.getProperties() != null)
-        for (final Dbcp.Connection.Properties.Property property : connection.getProperties().getProperty())
-          if (property.getName() != null && property.getValue() != null)
-            dataSource.addConnectionProperty(property.getName(), property.getValue());
+    dataSource.setInitialSize(initialSize);
+    dataSource.setMinIdle(minIdle);
+    dataSource.setMaxIdle(INDEFINITE.equals(maxIdle) ? DEFAULT_MAX_TOTAL : Integer.parseInt(maxIdle));
+    dataSource.setMaxTotal(INDEFINITE.equals(maxTotal) ? DEFAULT_MAX_TOTAL : Integer.parseInt(maxTotal));
+    dataSource.setPoolPreparedStatements(poolPreparedStatements);
+    dataSource.setMaxOpenPreparedStatements(INDEFINITE.equals(maxOpen) ? DEFAULT_MAX_TOTAL : Integer.parseInt(maxOpen));
 
-      if (connection.getInitSqls() != null)
-        dataSource.setConnectionInitSqls(connection.getInitSqls().getInitSql());
-    }
+    dataSource.setLifo(lifo);
 
-    final Dbcp.Size size = dbcp.getSize();
-    dataSource.setInitialSize(size == null || size.getInitialSize() == null ? 0 : size.getInitialSize());
-    dataSource.setMaxTotal(size == null || size.getMaxTotal() == null ? 8 : INDEFINITE.equals(size.getMaxTotal()) ? -1 : Integer.parseInt(size.getMaxTotal()));
-    dataSource.setMaxIdle(size == null || size.getMaxIdle() == null ? 8 : INDEFINITE.equals(size.getMaxIdle()) ? -1 : Integer.parseInt(size.getMaxIdle()));
-    dataSource.setMinIdle(size == null || size.getMinIdle() == null ? 9 : size.getMinIdle());
-    dataSource.setPoolPreparedStatements(size != null && size.getPoolPreparedStatements() != null);
-    dataSource.setMaxOpenPreparedStatements(size == null || size.getPoolPreparedStatements() == null || size.getPoolPreparedStatements().getMaxOpen() == null || INDEFINITE.equals(size.getPoolPreparedStatements().getMaxOpen()) ? DEFAULT_MAX_TOTAL : Integer.parseInt(size.getPoolPreparedStatements().getMaxOpen()));
-
-    final Dbcp.Pool pool = dbcp.getPool();
-    if (pool == null || pool.getQueue() == null || "lifo".equals(pool.getQueue()))
-      dataSource.setLifo(true);
-    else if ("fifo".equals(pool.getQueue()))
-      dataSource.setLifo(false);
-    else
-      throw new UnsupportedOperationException("Unsupported queue spec: " + pool.getQueue());
-
-    dataSource.setCacheState(pool != null && pool.getCacheState() != null && pool.getCacheState());
-    dataSource.setMaxWaitMillis(pool == null || pool.getMaxWait() != null || INDEFINITE.equals(pool.getMaxWait()) ? -1 : Long.parseLong(pool.getMaxWait()));
-    dataSource.setMaxConnLifetimeMillis(pool == null || pool.getMaxConnectionLifetime() == null || INDEFINITE.equals(pool.getMaxConnectionLifetime()) ? 0 : Long.parseLong(pool.getMaxConnectionLifetime()));
-    dataSource.setAutoCommitOnReturn(pool == null || pool.getAutoCommitOnReturn() == null || pool.getAutoCommitOnReturn());
-    dataSource.setRollbackOnReturn(pool == null || pool.getRollbackOnReturn() == null || pool.getRollbackOnReturn());
-    if (pool != null && pool.getRemoveAbandoned() != null) {
-      if ("borrow".equals(pool.getRemoveAbandoned().getOn()))
+    dataSource.setCacheState(cacheState);
+    dataSource.setMaxWaitMillis(INDEFINITE.equals(maxWait) ? DEFAULT_MAX_WAIT_MILLIS : Long.parseLong(maxWait));
+    dataSource.setMaxConnLifetimeMillis(INDEFINITE.equals(maxConnLifetime) ? -1 : Long.parseLong(maxConnLifetime));
+    dataSource.setAutoCommitOnReturn(autoCommitOnReturn);
+    dataSource.setRollbackOnReturn(rollbackOnReturn);
+    if (removeAbandonedOn != null) {
+      if ("borrow".equals(removeAbandonedOn))
         dataSource.setRemoveAbandonedOnBorrow(true);
-      else if ("maintenance".equals(pool.getRemoveAbandoned().getOn()))
+      else if ("maintenance".equals(removeAbandonedOn))
         dataSource.setRemoveAbandonedOnMaintenance(true);
       else
-        throw new UnsupportedOperationException("Unsupported remove abandoned spec: " + pool.getRemoveAbandoned().getOn());
+        throw new UnsupportedOperationException("Unsupported remove abandoned spec: " + removeAbandonedOn);
 
-      dataSource.setRemoveAbandonedTimeout(pool.getRemoveAbandoned().getTimeout());
+      dataSource.setRemoveAbandonedTimeout(removeAbandonedTimeout);
+    }
+    dataSource.setAbandonedUsageTracking(abandonedUsageTracking);
+    dataSource.setAccessToUnderlyingConnectionAllowed(accessToUnderlyingConnectionAllowed);
+
+    if (hasEviction) {
+      dataSource.setTimeBetweenEvictionRunsMillis(INDEFINITE.equals(timeBetweenEvictionRunsMillis) ? DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS : Long.parseLong(timeBetweenEvictionRunsMillis));
+      dataSource.setNumTestsPerEvictionRun(numTestsPerRun);
+      dataSource.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
+      dataSource.setSoftMinEvictableIdleTimeMillis(INDEFINITE.equals(softMinEvictableIdleTimeMillis) ? DEFAULT_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS : Long.parseLong(softMinEvictableIdleTimeMillis));
+      if (policyClassName != null)
+        dataSource.setEvictionPolicyClassName(policyClassName);
     }
 
-    dataSource.setAbandonedUsageTracking(pool != null && pool.getAbandonedUsageTracking() != null && pool.getAbandonedUsageTracking());
-    dataSource.setAccessToUnderlyingConnectionAllowed(pool != null && pool.getAllowAccessToUnderlyingConnection() != null && pool.getAllowAccessToUnderlyingConnection());
+    if (hasValidation) {
+      if (validationQuery != null)
+        dataSource.setValidationQuery(validationQuery);
 
-    final Dbcp.Pool.Eviction evictor = pool != null && pool.getEviction() != null ? pool.getEviction() : null;
-    if (evictor != null) {
-      dataSource.setTimeBetweenEvictionRunsMillis(evictor.getTimeBetweenRuns() == null || INDEFINITE.equals(evictor.getTimeBetweenRuns()) ? DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS : Long.parseLong(evictor.getTimeBetweenRuns()));
-      dataSource.setNumTestsPerEvictionRun(evictor.getNumTestsPerRun());
-      dataSource.setMinEvictableIdleTimeMillis(evictor.getMinIdleTime() == null ? 1800000 : evictor.getMinIdleTime());
-      dataSource.setSoftMinEvictableIdleTimeMillis(evictor.getSoftMinIdleTime() == null || INDEFINITE.equals(evictor.getSoftMinIdleTime()) ? DEFAULT_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS : Long.parseLong(evictor.getSoftMinIdleTime()));
-      if (evictor.getPolicyClassName() != null)
-        dataSource.setEvictionPolicyClassName(evictor.getPolicyClassName());
+      dataSource.setValidationQueryTimeout(INDEFINITE.equals(validationQueryTimeout) ? -1 : Integer.parseInt(validationQueryTimeout));
+      dataSource.setTestOnCreate(testOnCreate);
+      dataSource.setTestOnBorrow(testOnBorrow);
+      dataSource.setTestOnReturn(testOnReturn);
+      dataSource.setTestWhileIdle(testWhileIdle);
+
+      if (dataSource.getFastFailValidation())
+        dataSource.setDisconnectionSqlCodes(disconnectionQueryCodes != null ? disconnectionQueryCodes : defaultDisconnectionQueryCodes);
     }
 
-    final Dbcp.Validation validation = dbcp.getValidation();
-    if (validation != null) {
-      if (validation.getQuery() != null)
-        dataSource.setValidationQuery(validation.getQuery());
-
-      if (validation.getTimeout() != null)
-        dataSource.setValidationQueryTimeout(validation.getTimeout() == null || INDEFINITE.equals(validation.getTimeout()) ? -1 : Integer.parseInt(validation.getTimeout()));
-    }
-
-    dataSource.setTestOnCreate(validation != null && validation.getTestOnCreate() != null && validation.getTestOnCreate());
-    dataSource.setTestOnBorrow(validation == null || validation.getTestOnBorrow() == null || validation.getTestOnBorrow());
-    dataSource.setTestOnReturn(validation != null && validation.getTestOnReturn() != null && validation.getTestOnReturn());
-    dataSource.setTestWhileIdle(validation != null && validation.getTestWhileIdle() != null && validation.getTestWhileIdle());
-    if (validation != null && validation.getFastFail() != null) {
-      dataSource.setFastFailValidation(true);
-      if (validation.getFastFail().getDisconnectionSqlCodes() != null)
-        dataSource.setDisconnectionSqlCodes(Arrays.asList(validation.getFastFail().getDisconnectionSqlCodes().trim().split(" ")));
-    }
-
-    final Dbcp.Logging logging = dbcp.getLogging();
-    if (logging != null) {
+    if (loggingLevel != null) {
       final Logger logger = LoggerFactory.getLogger(DataSources.class);
-      final LoggerPrintWriter loggerPrintWriter = new LoggerPrintWriter(logger, Level.valueOf(logging.getLevel()));
-      dataSource.setLogWriter(loggerPrintWriter);
-      dataSource.setLogExpiredConnections(logging.isLogExpiredConnections());
-      if (logging.isLogAbandoned()) {
+      final LoggerPrintWriter loggerPrintWriter = new LoggerPrintWriter(logger, Level.valueOf(loggingLevel));
+      try {
+        dataSource.setLogWriter(loggerPrintWriter);
+      }
+      catch (final SQLException e) {
+        throw new RuntimeException(e); // Will not occur, because this behavior has been overridden.
+      }
+
+      dataSource.setLogExpiredConnections(logExpiredConnections);
+      if (logAbandoned) {
         dataSource.setAbandonedLogWriter(loggerPrintWriter);
         dataSource.setLogAbandoned(true);
       }
     }
 
-    dataSource.setJmxName(dbcp.getJmxName());
     return dataSource;
-  }
-
-  /**
-   * Create a {@link BasicDataSource} given a {@link $Dbcp dbcp} JAX-SB binding.
-   *
-   * @param dbcp The {@link $Dbcp} descriptor object.
-   * @param driverClassLoader Class loader to be used to load the JDBC driver.
-   * @return The {@link BasicDataSource} instance.
-   * @throws SQLException If a database access error has occurred.
-   * @throws IllegalArgumentException If {@code dbcp} is null.
-   */
-  public static BasicDataSource createDataSource(final $Dbcp dbcp, final ClassLoader driverClassLoader) throws SQLException {
-    final $Dbcp.Jdbc jdbc = Assertions.assertNotNull(dbcp).getJdbc();
-
-    final BasicDataSource dataSource = new BasicDataSource();
-    dataSource.setDriverClassName(jdbc.getDriverClassName().text());
-    dataSource.setDriverClassLoader(driverClassLoader);
-
-    dataSource.setUrl(jdbc.getUrl().text());
-
-    final $Dbcp.Default _default = dbcp.getDefault();
-    if (_default != null && _default.getCatalog() != null)
-      dataSource.setDefaultCatalog(_default.getCatalog().text());
-
-    dataSource.setDefaultAutoCommit(_default == null || _default.getAutoCommit() == null || _default.getAutoCommit().text());
-    dataSource.setDefaultReadOnly(_default != null && _default.getReadOnly() != null && _default.getReadOnly().text());
-    if (_default != null && _default.getQueryTimeout() != null)
-      dataSource.setDefaultQueryTimeout(_default.getQueryTimeout().text());
-
-    if (_default != null && _default.getTransactionIsolation() != null) {
-      if ("NONE".equals(_default.getTransactionIsolation().text()))
-        dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_NONE);
-      else if ($Dbcp.Default.TransactionIsolation.READ_5FUNCOMMITTED.text().equals(_default.getTransactionIsolation().text()))
-        dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-      else if ($Dbcp.Default.TransactionIsolation.READ_5FCOMMITTED.text().equals(_default.getTransactionIsolation().text()))
-        dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-      else if ($Dbcp.Default.TransactionIsolation.REPEATABLE_5FREAD.text().equals(_default.getTransactionIsolation().text()))
-        dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
-      else if ($Dbcp.Default.TransactionIsolation.SERIALIZABLE.text().equals(_default.getTransactionIsolation().text()))
-        dataSource.setDefaultTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-      else
-        throw new UnsupportedOperationException("Unsupported transaction isolation: " + _default.getTransactionIsolation());
-    }
-
-    final $Dbcp.Connection connection = dbcp.getConnection();
-    if (connection != null) {
-      if (connection.getProperties() != null)
-        for (final $Dbcp.Connection.Properties.Property property : connection.getProperties().getProperty())
-          if (property.getName$() != null && property.getValue$() != null)
-            dataSource.addConnectionProperty(property.getName$().text(), property.getValue$().text());
-
-      if (connection.getInitSqls() != null) {
-        final List<String> initSqls = new ArrayList<>(connection.getInitSqls().getInitSql().size());
-        for (final xL9gluGCXAA.$StringNonEmpty initSql : connection.getInitSqls().getInitSql())
-          initSqls.add(initSql.text());
-
-        dataSource.setConnectionInitSqls(initSqls);
-      }
-    }
-
-    final $Dbcp.Size size = dbcp.getSize();
-    dataSource.setInitialSize(size == null || size.getInitialSize() == null ? 0 : size.getInitialSize().text());
-    dataSource.setMaxTotal(size == null || size.getMaxTotal() == null ? 8 : INDEFINITE.equals(size.getMaxTotal().text()) ? -1 : Integer.parseInt(size.getMaxTotal().text()));
-    dataSource.setMaxIdle(size == null || size.getMaxIdle() == null ? 8 : INDEFINITE.equals(size.getMaxIdle().text()) ? -1 : Integer.parseInt(size.getMaxIdle().text()));
-    dataSource.setMinIdle(size == null || size.getMinIdle() == null ? 9 : size.getMinIdle().text());
-    dataSource.setPoolPreparedStatements(size != null && size.getPoolPreparedStatements() != null);
-    dataSource.setMaxOpenPreparedStatements(size == null || size.getPoolPreparedStatements() == null || size.getPoolPreparedStatements().getMaxOpen() == null || INDEFINITE.equals(size.getPoolPreparedStatements().getMaxOpen().text()) ? DEFAULT_MAX_TOTAL : Integer.parseInt(size.getPoolPreparedStatements().getMaxOpen().text()));
-
-    final $Dbcp.Pool pool = dbcp.getPool();
-    if (pool == null || pool.getQueue() == null || "lifo".equals(pool.getQueue().text()))
-      dataSource.setLifo(true);
-    else if ("fifo".equals(pool.getQueue().text()))
-      dataSource.setLifo(false);
-    else
-      throw new UnsupportedOperationException("Unsupported queue spec: " + pool.getQueue());
-
-    dataSource.setCacheState(pool != null && pool.getCacheState() != null && pool.getCacheState().text());
-    dataSource.setMaxWaitMillis(pool == null || pool.getMaxWait() == null || INDEFINITE.equals(pool.getMaxWait().text()) ? -1 : Long.parseLong(pool.getMaxWait().text()));
-    dataSource.setMaxConnLifetimeMillis(pool == null || pool.getMaxConnectionLifetime() == null || INDEFINITE.equals(pool.getMaxConnectionLifetime().text()) ? 0 : Long.parseLong(pool.getMaxConnectionLifetime().text()));
-    dataSource.setAutoCommitOnReturn(pool == null || pool.getAutoCommitOnReturn() == null || pool.getAutoCommitOnReturn().text());
-    dataSource.setRollbackOnReturn(pool == null || pool.getRollbackOnReturn() == null || pool.getRollbackOnReturn().text());
-    if (pool != null && pool.getRemoveAbandoned() != null) {
-      if ("borrow".equals(pool.getRemoveAbandoned().getOn$().text()))
-        dataSource.setRemoveAbandonedOnBorrow(true);
-      else if ("maintenance".equals(pool.getRemoveAbandoned().getOn$().text()))
-        dataSource.setRemoveAbandonedOnMaintenance(true);
-      else
-        throw new UnsupportedOperationException("Unsupported remove abandoned spec: " + pool.getRemoveAbandoned().getOn$().text());
-
-      dataSource.setRemoveAbandonedTimeout(pool.getRemoveAbandoned().getTimeout$().text());
-    }
-
-    dataSource.setAbandonedUsageTracking(pool != null && pool.getAbandonedUsageTracking() != null && pool.getAbandonedUsageTracking().text());
-    dataSource.setAccessToUnderlyingConnectionAllowed(pool != null && pool.getAllowAccessToUnderlyingConnection() != null && pool.getAllowAccessToUnderlyingConnection().text());
-
-    final $Dbcp.Pool.Eviction evictor = pool != null && pool.getEviction() != null ? pool.getEviction() : null;
-    if (evictor != null) {
-      dataSource.setTimeBetweenEvictionRunsMillis(evictor.getTimeBetweenRuns() == null || INDEFINITE.equals(evictor.getTimeBetweenRuns().text()) ? DEFAULT_TIME_BETWEEN_EVICTION_RUNS_MILLIS : Long.parseLong(evictor.getTimeBetweenRuns().text()));
-      dataSource.setNumTestsPerEvictionRun(evictor.getNumTestsPerRun().text());
-      dataSource.setMinEvictableIdleTimeMillis(evictor.getMinIdleTime() == null ? 1800000 : evictor.getMinIdleTime().text());
-      dataSource.setSoftMinEvictableIdleTimeMillis(evictor.getSoftMinIdleTime() == null || INDEFINITE.equals(evictor.getSoftMinIdleTime().text()) ? DEFAULT_SOFT_MIN_EVICTABLE_IDLE_TIME_MILLIS : Long.parseLong(evictor.getSoftMinIdleTime().text()));
-      if (evictor.getPolicyClassName() != null)
-        dataSource.setEvictionPolicyClassName(evictor.getPolicyClassName().text());
-    }
-
-    final $Dbcp.Validation validation = dbcp.getValidation();
-    if (validation != null) {
-      if (validation.getQuery() != null)
-        dataSource.setValidationQuery(validation.getQuery().text());
-
-      if (validation.getTimeout() != null)
-        dataSource.setValidationQueryTimeout(validation.getTimeout() == null || INDEFINITE.equals(validation.getTimeout().text()) ? -1 : Integer.parseInt(validation.getTimeout().text()));
-    }
-
-    dataSource.setTestOnCreate(validation != null && validation.getTestOnCreate() != null && validation.getTestOnCreate().text());
-    dataSource.setTestOnBorrow(validation == null || validation.getTestOnBorrow() == null || validation.getTestOnBorrow().text());
-    dataSource.setTestOnReturn(validation != null && validation.getTestOnReturn() != null && validation.getTestOnReturn().text());
-    dataSource.setTestWhileIdle(validation != null && validation.getTestWhileIdle() != null && validation.getTestWhileIdle().text());
-    if (validation != null && validation.getFastFail() != null) {
-      dataSource.setFastFailValidation(true);
-      if (validation.getFastFail().getDisconnectionSqlCodes() != null)
-        dataSource.setDisconnectionSqlCodes(Arrays.asList(validation.getFastFail().getDisconnectionSqlCodes().text().trim().split(" ")));
-    }
-
-    final $Dbcp.Logging logging = dbcp.getLogging();
-    if (logging != null) {
-      final Logger logger = LoggerFactory.getLogger(DataSources.class);
-      final LoggerPrintWriter loggerPrintWriter = new LoggerPrintWriter(logger, Level.valueOf(logging.getLevel().text()));
-      dataSource.setLogWriter(loggerPrintWriter);
-      dataSource.setLogExpiredConnections(logging.getLogExpiredConnections().text());
-      if (logging.getLogAbandoned().text()) {
-        dataSource.setAbandonedLogWriter(loggerPrintWriter);
-        dataSource.setLogAbandoned(true);
-      }
-    }
-
-    dataSource.setJmxName(dbcp.getJmxName() == null ? null : dbcp.getJmxName().text());
-    return dataSource;
-  }
-
-  private DataSources() {
   }
 }
