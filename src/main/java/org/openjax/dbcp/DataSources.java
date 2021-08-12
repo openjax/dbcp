@@ -571,7 +571,7 @@ public final class DataSources {
     this.driverClassLoader = driverClassLoader;
     for (final $Dbcp dbcp : dbcps) {
       Assertions.assertNotNull(dbcp);
-      if (id != null && !id.equals(dbcp.getId$().text()))
+      if (id != null && (dbcp.getId$() == null || !id.equals(dbcp.getId$().text())))
         continue;
 
       if (dataSource == null)
@@ -646,13 +646,14 @@ public final class DataSources {
 
       final $Dbcp.Pool pool = dbcp.getPool();
       if (pool != null) {
-        if (pool.getQueue() != null) {
-          if ("lifo".equals(pool.getQueue().text()))
+        final $Dbcp.Pool.Queue queue = pool.getQueue();
+        if (queue != null) {
+          if ("lifo".equals(queue.text()))
             lifo = true;
-          else if ("fifo".equals(pool.getQueue().text()))
+          else if ("fifo".equals(queue.text()))
             lifo = false;
           else
-            throw new UnsupportedOperationException("Unsupported queue spec: " + pool.getQueue());
+            throw new UnsupportedOperationException("Unsupported queue spec: " + queue);
         }
 
         if (pool.getCacheState() != null)
@@ -745,7 +746,8 @@ public final class DataSources {
           logAbandoned = logging.getLogAbandoned().text();
       }
 
-      dataSource.setJmxName(dbcp.getJmxName().text());
+      if (dbcp.getJmxName() != null)
+        dataSource.setJmxName(dbcp.getJmxName().text());
     }
   }
 
