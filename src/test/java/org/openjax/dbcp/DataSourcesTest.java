@@ -129,7 +129,7 @@ public class DataSourcesTest {
   }
 
   @Test
-  public void testXsb() throws IOException, SAXException, SQLException {
+  public void testJaxSB() throws IOException, SAXException, SQLException {
     final $Dbcp dbcp = ($Dbcp)Bindings.parse(ClassLoader.getSystemClassLoader().getResource("dbcp.xml"));
     try (
       final BasicDataSource dataSource = validate(DataSources.createDataSource(dbcp));
