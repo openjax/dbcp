@@ -582,7 +582,7 @@ public final class DataSources {
           driverClassName = dbcp.getJdbc().getDriverClassName().text();
 
         if (dbcp.getJdbc().getUrl() != null)
-          url = dbcp.getJdbc().getUrl().text();
+          url = dbcp.getJdbc().getUrl().text().toString();
       }
 
       final $Dbcp.Default _default = dbcp.getDefault();
