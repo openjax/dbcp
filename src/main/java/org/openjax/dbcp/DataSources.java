@@ -17,6 +17,7 @@
 package org.openjax.dbcp;
 
 import static org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig.*;
+import static org.libj.lang.Assertions.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +40,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import org.libj.lang.Assertions;
 import org.libj.logging.LoggerPrintWriter;
 import org.openjax.dbcp_1_2.Dbcp;
 import org.openjax.www.dbcp_1_2.xL0gluGCXAA.$Dbcp;
@@ -98,7 +98,7 @@ public final class DataSources {
         throw new IllegalStateException("Unable to find " + schemaFile + " in class loader " + Thread.currentThread().getContextClassLoader());
 
       unmarshaller.setSchema(DataSources.schema == null ? DataSources.schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(resource) : DataSources.schema);
-      try (final InputStream in = Assertions.assertNotNull(url).openStream()) {
+      try (final InputStream in = assertNotNull(url).openStream()) {
         final JAXBElement<Dbcp> element = unmarshaller.unmarshal(XMLInputFactory.newInstance().createXMLStreamReader(in), Dbcp.class);
         return createDataSource(driverClassLoader, element.getValue());
       }
@@ -204,7 +204,7 @@ public final class DataSources {
    *           missing from all members in {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final ClassLoader driverClassLoader, final Dbcp ... dbcps) {
-    return createDataSource(null, driverClassLoader, Assertions.assertNotNull(dbcps));
+    return createDataSource(null, driverClassLoader, assertNotNull(dbcps));
   }
 
   /**
@@ -221,7 +221,7 @@ public final class DataSources {
    *           missing from all members in {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final ClassLoader driverClassLoader, final $Dbcp ... dbcps) {
-    return createDataSource(null, driverClassLoader, Assertions.assertNotNull(dbcps));
+    return createDataSource(null, driverClassLoader, assertNotNull(dbcps));
   }
 
   /**
@@ -243,8 +243,8 @@ public final class DataSources {
    *           all {@code /dbcp:dbcp} child elements in {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final org.openjax.dbcp_1_2.Dbcps dbcps) {
-    Assertions.assertNotNull(dbcps);
-    Assertions.assertNotNull(dbcps.getDbcp());
+    assertNotNull(dbcps);
+    assertNotNull(dbcps.getDbcp());
     return createDataSource(id, driverClassLoader, dbcps.getDbcp().toArray(new $Dbcp[dbcps.getDbcp().size()]));
   }
 
@@ -266,8 +266,8 @@ public final class DataSources {
    *           all {@code /dbcp:dbcp} child elements in {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final Dbcps dbcps) {
-    Assertions.assertNotNull(dbcps);
-    Assertions.assertNotNull(dbcps.getDbcpDbcp());
+    assertNotNull(dbcps);
+    assertNotNull(dbcps.getDbcpDbcp());
     return createDataSource(id, driverClassLoader, dbcps.getDbcpDbcp().toArray(new $Dbcp[dbcps.getDbcpDbcp().size()]));
   }
 
@@ -390,8 +390,8 @@ public final class DataSources {
 
   private DataSources(final String id, final ClassLoader driverClassLoader, final Dbcp ... dbcps) {
     this.driverClassLoader = driverClassLoader;
-    for (final Dbcp dbcp : Assertions.assertNotNull(dbcps)) {
-      Assertions.assertNotNull(dbcp);
+    for (final Dbcp dbcp : assertNotNull(dbcps)) {
+      assertNotNull(dbcp);
       if (id != null && !id.equals(dbcp.getId()))
         continue;
 
@@ -566,8 +566,8 @@ public final class DataSources {
 
   private DataSources(final String id, final ClassLoader driverClassLoader, final $Dbcp ... dbcps) {
     this.driverClassLoader = driverClassLoader;
-    for (final $Dbcp dbcp : Assertions.assertNotNull(dbcps)) {
-      Assertions.assertNotNull(dbcp);
+    for (final $Dbcp dbcp : assertNotNull(dbcps)) {
+      assertNotNull(dbcp);
       if (id != null && (dbcp.getId$() == null || !id.equals(dbcp.getId$().text())))
         continue;
 
