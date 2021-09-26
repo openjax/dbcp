@@ -114,15 +114,12 @@ public class DataSourcesTest {
     try (
       final BasicDataSource dataSource = validate(DataSources.createDataSource(ClassLoader.getSystemClassLoader().getResource("dbcp.xml")));
       final Connection connection = dataSource.getConnection();
+      final Statement statement = connection.createStatement();
+      final ResultSet resultSet = statement.executeQuery("SELECT 1 FROM SYSIBM.SYSDUMMY1");
     ) {
-      try (
-        final Statement statement = connection.createStatement();
-        final ResultSet resultSet = statement.executeQuery("SELECT 1 FROM SYSIBM.SYSDUMMY1");
-      ) {
-        assertTrue(resultSet.next());
-        assertEquals(1, resultSet.getInt(1));
-        assertFalse(resultSet.next());
-      }
+      assertTrue(resultSet.next());
+      assertEquals(1, resultSet.getInt(1));
+      assertFalse(resultSet.next());
     }
 
     new File("derby.log").delete();
@@ -134,15 +131,12 @@ public class DataSourcesTest {
     try (
       final BasicDataSource dataSource = validate(DataSources.createDataSource(dbcp));
       final Connection connection = dataSource.getConnection();
+      final Statement statement = connection.createStatement();
+      final ResultSet resultSet = statement.executeQuery("SELECT 1 FROM SYSIBM.SYSDUMMY1");
     ) {
-      try (
-        final Statement statement = connection.createStatement();
-        final ResultSet resultSet = statement.executeQuery("SELECT 1 FROM SYSIBM.SYSDUMMY1");
-      ) {
-        assertTrue(resultSet.next());
-        assertEquals(1, resultSet.getInt(1));
-        assertFalse(resultSet.next());
-      }
+      assertTrue(resultSet.next());
+      assertEquals(1, resultSet.getInt(1));
+      assertFalse(resultSet.next());
     }
 
     new File("derby.log").delete();

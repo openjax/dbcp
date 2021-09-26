@@ -366,7 +366,6 @@ public final class DataSources {
    *           missing from all members in {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final Dbcp ... dbcps) {
-    Assertions.assertNotNull(dbcps);
     return new DataSources(id, driverClassLoader, dbcps).build();
   }
 
@@ -386,13 +385,12 @@ public final class DataSources {
    *           missing from all members in {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final $Dbcp ... dbcps) {
-    Assertions.assertNotNull(dbcps);
     return new DataSources(id, driverClassLoader, dbcps).build();
   }
 
   private DataSources(final String id, final ClassLoader driverClassLoader, final Dbcp ... dbcps) {
     this.driverClassLoader = driverClassLoader;
-    for (final Dbcp dbcp : dbcps) {
+    for (final Dbcp dbcp : Assertions.assertNotNull(dbcps)) {
       Assertions.assertNotNull(dbcp);
       if (id != null && !id.equals(dbcp.getId()))
         continue;
@@ -499,7 +497,6 @@ public final class DataSources {
         if (pool.getAllowAccessToUnderlyingConnection() != null)
           accessToUnderlyingConnectionAllowed = pool.getAllowAccessToUnderlyingConnection();
 
-
         final Dbcp.Pool.Eviction eviction = pool.getEviction();
         if (eviction != null) {
           hasEviction = true;
@@ -569,7 +566,7 @@ public final class DataSources {
 
   private DataSources(final String id, final ClassLoader driverClassLoader, final $Dbcp ... dbcps) {
     this.driverClassLoader = driverClassLoader;
-    for (final $Dbcp dbcp : dbcps) {
+    for (final $Dbcp dbcp : Assertions.assertNotNull(dbcps)) {
       Assertions.assertNotNull(dbcp);
       if (id != null && (dbcp.getId$() == null || !id.equals(dbcp.getId$().text())))
         continue;
@@ -681,7 +678,6 @@ public final class DataSources {
 
         if (pool.getAllowAccessToUnderlyingConnection() != null)
           accessToUnderlyingConnectionAllowed = pool.getAllowAccessToUnderlyingConnection().text();
-
 
         final $Dbcp.Pool.Eviction eviction = pool.getEviction();
         if (eviction != null) {
