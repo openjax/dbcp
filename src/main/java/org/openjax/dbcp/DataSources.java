@@ -43,6 +43,7 @@ import javax.xml.validation.SchemaFactory;
 import org.libj.logging.LoggerPrintWriter;
 import org.openjax.dbcp_1_2.Dbcp;
 import org.openjax.www.dbcp_1_2.xL0gluGCXAA.$Dbcp;
+import org.openjax.www.dbcp_1_2.xL0gluGCXAA.$Dbcps;
 import org.openjax.www.dbcp_1_2.xL0gluGCXAA.Dbcps;
 import org.openjax.www.xml.datatypes_0_9.xL9gluGCXAA.$StringNonEmpty;
 import org.slf4j.Logger;
@@ -186,7 +187,7 @@ public final class DataSources {
    *           elements, or if the {@code /dbcp:jdbc} element is missing from
    *           all {@code /dbcp:dbcp} child elements in {@code dbcps}.
    */
-  public static BasicDataSource createDataSource(final String id, final Dbcps dbcps) {
+  public static BasicDataSource createDataSource(final String id, final $Dbcps dbcps) {
     return createDataSource(id, ClassLoader.getSystemClassLoader(), dbcps);
   }
 
@@ -265,7 +266,7 @@ public final class DataSources {
    *           elements, or if the {@code /dbcp:jdbc} element is missing from
    *           all {@code /dbcp:dbcp} child elements in {@code dbcps}.
    */
-  public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final Dbcps dbcps) {
+  public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final $Dbcps dbcps) {
     assertNotNull(dbcps);
     assertNotNull(dbcps.getDbcpDbcp());
     return createDataSource(id, driverClassLoader, dbcps.getDbcpDbcp().toArray(new $Dbcp[dbcps.getDbcpDbcp().size()]));
