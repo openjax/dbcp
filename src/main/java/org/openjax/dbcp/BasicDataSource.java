@@ -20,6 +20,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLNonTransientConnectionException;
+import java.sql.SQLTransientConnectionException;
 
 import org.libj.lang.Throwables;
 
@@ -46,6 +47,10 @@ class BasicDataSource extends org.apache.commons.dbcp2.BasicDataSource {
     catch (final SQLException e) {
       if (e.getMessage() == null || !e.getMessage().startsWith("Cannot get a connection"))
         throw e;
+
+      final Throwable cause = e.getCause();
+      if (cause.getMessage() != null && cause.getMessage().startsWith("Timeout waiting"))
+        throw Throwables.copy(e, new SQLTransientConnectionException(e.getMessage(), e.getSQLState(), e.getErrorCode()));
 
       throw Throwables.copy(e, new SQLNonTransientConnectionException(e.getMessage(), e.getSQLState(), e.getErrorCode()));
     }
