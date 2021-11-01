@@ -19,6 +19,9 @@ package org.openjax.dbcp;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLNonTransientConnectionException;
+
+import org.libj.lang.Throwables;
 
 /**
  * An extension of {@link org.apache.commons.dbcp2.BasicDataSource} that does
@@ -31,13 +34,21 @@ class BasicDataSource extends org.apache.commons.dbcp2.BasicDataSource {
 
   @Override
   public Connection getConnection() throws SQLException {
-    if (!initialized) {
-      this.initialized = true;
-      if (logWriter != null)
-        super.setLogWriter(logWriter);
-    }
+    try {
+      if (!initialized) {
+        this.initialized = true;
+        if (logWriter != null)
+          super.setLogWriter(logWriter);
+      }
 
-    return super.getConnection();
+      return super.getConnection();
+    }
+    catch (final SQLException e) {
+      if (e.getMessage() == null || !e.getMessage().startsWith("Cannot get a connection"))
+        throw e;
+
+      throw Throwables.copy(e, new SQLNonTransientConnectionException(e.getMessage(), e.getSQLState(), e.getErrorCode()));
+    }
   }
 
   @Override
