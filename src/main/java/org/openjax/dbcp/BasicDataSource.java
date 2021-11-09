@@ -21,8 +21,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLNonTransientConnectionException;
 import java.sql.SQLTransientConnectionException;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.sql.DataSource;
 
 import org.libj.lang.Throwables;
+import org.libj.sql.exception.SQLExceptions;
 
 /**
  * An extension of {@link org.apache.commons.dbcp2.BasicDataSource} that does
@@ -30,23 +34,28 @@ import org.libj.lang.Throwables;
  * {@link #setLogWriter(PrintWriter)} or {@link #getLogWriter()}.
  */
 class BasicDataSource extends org.apache.commons.dbcp2.BasicDataSource {
+  private final AtomicBoolean initialized = new AtomicBoolean(false);
+  private final AtomicBoolean settingLogWriter = new AtomicBoolean(false);
   private PrintWriter logWriter;
-  private boolean initialized;
 
   @Override
   public Connection getConnection() throws SQLException {
     try {
-      if (!initialized) {
-        this.initialized = true;
-        if (logWriter != null)
-          super.setLogWriter(logWriter);
+      if (!initialized.get()) {
+        synchronized (this) {
+          if (!initialized.get()) {
+            this.initialized.set(true);
+            if (logWriter != null)
+              setLogWriter(logWriter);
+          }
+        }
       }
 
       return super.getConnection();
     }
     catch (final SQLException e) {
       if (e.getMessage() == null || !e.getMessage().startsWith("Cannot get a connection"))
-        throw e;
+        throw SQLExceptions.toStrongType(e);
 
       final Throwable cause = e.getCause();
       if (cause.getMessage() != null && cause.getMessage().startsWith("Timeout waiting"))
@@ -58,14 +67,37 @@ class BasicDataSource extends org.apache.commons.dbcp2.BasicDataSource {
 
   @Override
   public PrintWriter getLogWriter() throws SQLException {
-    return initialized ? super.getLogWriter() : logWriter;
+    return initialized.get() ? super.getLogWriter() : logWriter;
+  }
+
+  @Override
+  protected DataSource createDataSource() throws SQLException {
+    if (settingLogWriter.get()) {
+      synchronized (this) {
+        if (settingLogWriter.get()) {
+          return this;
+        }
+      }
+    }
+
+    return super.createDataSource();
   }
 
   @Override
   public void setLogWriter(final PrintWriter logWriter) throws SQLException {
-    if (initialized)
-      super.setLogWriter(logWriter);
-    else
+    if (settingLogWriter.get())
+      return;
+
+    if (initialized.get()) {
+      synchronized (this) {
+        settingLogWriter.set(true);
+        super.setLogWriter(logWriter);
+        settingLogWriter.set(false);
+        super.createDataSource();
+      }
+    }
+    else {
       this.logWriter = logWriter;
+    }
   }
 }
