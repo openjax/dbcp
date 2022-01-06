@@ -28,21 +28,17 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 /**
- * A {@link DelegateDataSource} contains some other {@link DataSource}, possibly
- * transforming the method parameters along the way or providing additional
- * functionality. The class {@link DelegateDataSource} itself simply overrides
- * all methods of {@link DataSource} with versions that delegate all calls to
- * the source {@link DataSource}. Subclasses of {@link DelegateDataSource} may
- * further override some of these methods and may also provide additional
- * methods and fields.
+ * A {@link DelegateDataSource} contains some other {@link DataSource}, possibly transforming the method parameters along the way or
+ * providing additional functionality. The class {@link DelegateDataSource} itself simply overrides all methods of
+ * {@link DataSource} with versions that delegate all calls to the source {@link DataSource}. Subclasses of
+ * {@link DelegateDataSource} may further override some of these methods and may also provide additional methods and fields.
  */
 public class DelegateDataSource implements DataSource {
   /** The target {@link DataSource}. */
   protected DataSource target;
 
   /**
-   * Creates a new {@link DelegateDataSource} with the specified target
-   * {@link DataSource}.
+   * Creates a new {@link DelegateDataSource} with the specified target {@link DataSource}.
    *
    * @param target The target {@link DataSource}.
    * @throws IllegalArgumentException If {@code target} is null.
@@ -83,7 +79,7 @@ public class DelegateDataSource implements DataSource {
   }
 
   @Override
-  public <T> T unwrap(final Class<T> iface) throws SQLException {
+  public <T>T unwrap(final Class<T> iface) throws SQLException {
     return target.unwrap(iface);
   }
 

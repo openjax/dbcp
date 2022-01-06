@@ -29,9 +29,8 @@ import org.libj.lang.Throwables;
 import org.libj.sql.exception.SQLExceptions;
 
 /**
- * An extension of {@link org.apache.commons.dbcp2.BasicDataSource} that does
- * not initialize the data source upon first invocation of
- * {@link #setLogWriter(PrintWriter)} or {@link #getLogWriter()}.
+ * An extension of {@link org.apache.commons.dbcp2.BasicDataSource} that does not initialize the data source upon first invocation
+ * of {@link #setLogWriter(PrintWriter)} or {@link #getLogWriter()}.
  */
 class BasicDataSource extends org.apache.commons.dbcp2.BasicDataSource {
   private final AtomicBoolean initialized = new AtomicBoolean(false);

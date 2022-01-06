@@ -58,38 +58,33 @@ public final class DataSources {
   private static Schema schema;
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the
-   * {@link URL url} specifying an xml document with root element
-   * {@code dbcp:dbcp}. {@link ClassLoader#getSystemClassLoader()} will be used
-   * by the {@link BasicDataSource} when it loads the JDBC driver.
+   * Create a {@link BasicDataSource} from the configuration supplied by the {@link URL url} specifying an xml document with root
+   * element {@code dbcp:dbcp}. {@link ClassLoader#getSystemClassLoader()} will be used by the {@link BasicDataSource} when it loads
+   * the JDBC driver.
    *
    * @param url An {@link URL} specifying a dbcp xml resource.
    * @return The {@link BasicDataSource} instance.
    * @throws IOException If an I/O error has occurred
-   * @throws SAXException If the xml document does not have a {@code dbcp:dbcp}
-   *           root element, or if an XML validation error has occurred.
-   * @throws IllegalArgumentException If {@code url} is null, or if the
-   *           {@code /dbcp:dbcp/dbcp:jdbc} element is missing.
+   * @throws SAXException If the xml document does not have a {@code dbcp:dbcp} root element, or if an XML validation error has
+   *           occurred.
+   * @throws IllegalArgumentException If {@code url} is null, or if the {@code /dbcp:dbcp/dbcp:jdbc} element is missing.
    */
   public static BasicDataSource createDataSource(final URL url) throws IOException, SAXException {
     return createDataSource(url, ClassLoader.getSystemClassLoader());
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the
-   * {@link URL url} specifying an xml document with root element
-   * {@code dbcp:dbcp}. {@link ClassLoader#getSystemClassLoader()} will be used
-   * by the {@link BasicDataSource} when it loads the JDBC driver.
+   * Create a {@link BasicDataSource} from the configuration supplied by the {@link URL url} specifying an xml document with root
+   * element {@code dbcp:dbcp}. {@link ClassLoader#getSystemClassLoader()} will be used by the {@link BasicDataSource} when it loads
+   * the JDBC driver.
    *
    * @param url An {@link URL} specifying a dbcp xml resource.
-   * @param driverClassLoader Class loader to be used by the
-   *          {@link BasicDataSource} when it loads the JDBC driver.
+   * @param driverClassLoader Class loader to be used by the {@link BasicDataSource} when it loads the JDBC driver.
    * @return The {@link BasicDataSource} instance.
    * @throws IOException If an I/O error has occurred
-   * @throws SAXException If the xml document does not have a {@code dbcp:dbcp}
-   *           root element, or if an XML validation error has occurred.
-   * @throws IllegalArgumentException If {@code url} is null, or if the
-   *           {@code /dbcp:dbcp/dbcp:jdbc} element is missing.
+   * @throws SAXException If the xml document does not have a {@code dbcp:dbcp} root element, or if an XML validation error has
+   *           occurred.
+   * @throws IllegalArgumentException If {@code url} is null, or if the {@code /dbcp:dbcp/dbcp:jdbc} element is missing.
    */
   public static BasicDataSource createDataSource(final URL url, final ClassLoader driverClassLoader) throws IOException, SAXException {
     try {
@@ -113,135 +108,110 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the
-   * array of {@link Dbcp dbcp} JAX-B bindings that match the specified
-   * {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the
-   * {@link BasicDataSource} when it loads the JDBC driver.
+   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link Dbcp dbcp} JAX-B bindings that match
+   * the specified {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the {@link BasicDataSource} when it loads
+   * the JDBC driver.
    *
-   * @param id The id of the {@link Dbcp dbcp} bindings to match, or
-   *          {@code null} to match all bindings.
+   * @param id The id of the {@link Dbcp dbcp} bindings to match, or {@code null} to match all bindings.
    * @param dbcps Array of {@link Dbcp} JAX-B bindings.
    * @return The {@link BasicDataSource} instance.
-   * @throws IllegalArgumentException If {@code dbcps} is null, any member of
-   *           {@code dbcps} is null, or if the {@code /dbcp:jdbc} element is
-   *           missing from all members in {@code dbcps}.
+   * @throws IllegalArgumentException If {@code dbcps} is null, any member of {@code dbcps} is null, or if the {@code /dbcp:jdbc}
+   *           element is missing from all members in {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final String id, final Dbcp ... dbcps) {
     return createDataSource(id, ClassLoader.getSystemClassLoader(), dbcps);
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the
-   * array of {@link $Dbcp dbcp} JAX-SB bindings that match the specified
-   * {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the
-   * {@link BasicDataSource} when it loads the JDBC driver.
+   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link $Dbcp dbcp} JAX-SB bindings that match
+   * the specified {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the {@link BasicDataSource} when it loads
+   * the JDBC driver.
    *
-   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided
-   *          {@link $Dbcp} to match, or {@code null} to match all child
-   *          elements.
+   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided {@link $Dbcp} to match, or {@code null} to match all
+   *          child elements.
    * @param dbcps Array of {@link $Dbcp} JAX-SB bindings.
    * @return The {@link BasicDataSource} instance.
-   * @throws IllegalArgumentException If {@code dbcps} is null, any member of
-   *           {@code dbcps} is null, or if the {@code /dbcp:jdbc} element is
-   *           missing from all members in {@code dbcps}.
+   * @throws IllegalArgumentException If {@code dbcps} is null, any member of {@code dbcps} is null, or if the {@code /dbcp:jdbc}
+   *           element is missing from all members in {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final String id, final $Dbcp ... dbcps) {
     return createDataSource(id, ClassLoader.getSystemClassLoader(), dbcps);
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the
-   * {@code /dbcp:dbcp} child elements of the provided
-   * {@link org.openjax.dbcp_1_2.Dbcps} JAX-B binding that match the specified
-   * {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the
-   * {@link BasicDataSource} when it loads the JDBC driver.
+   * Create a {@link BasicDataSource} from the configuration supplied by the {@code /dbcp:dbcp} child elements of the provided
+   * {@link org.openjax.dbcp_1_2.Dbcps} JAX-B binding that match the specified {@code id}.
+   * {@link ClassLoader#getSystemClassLoader()} will be used by the {@link BasicDataSource} when it loads the JDBC driver.
    *
-   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided
-   *          {@link org.openjax.dbcp_1_2.Dbcps} to match, or {@code null} to
-   *          match all child elements.
+   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided {@link org.openjax.dbcp_1_2.Dbcps} to match, or
+   *          {@code null} to match all child elements.
    * @param dbcps The {@link org.openjax.dbcp_1_2.Dbcps} JAX-B binding.
    * @return The {@link BasicDataSource} instance.
-   * @throws IllegalArgumentException If {@code dbcps} is null, does not contain
-   *           any {@code /dbcp:dbcp} child elements, contains null child
-   *           elements, or if the {@code /dbcp:jdbc} element is missing from
-   *           all {@code /dbcp:dbcp} child elements in {@code dbcps}.
+   * @throws IllegalArgumentException If {@code dbcps} is null, does not contain any {@code /dbcp:dbcp} child elements, contains
+   *           null child elements, or if the {@code /dbcp:jdbc} element is missing from all {@code /dbcp:dbcp} child elements in
+   *           {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final String id, final org.openjax.dbcp_1_2.Dbcps dbcps) {
     return createDataSource(id, ClassLoader.getSystemClassLoader(), dbcps);
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the
-   * {@code /dbcp:dbcp} child elements of the provided {@link Dbcps} JAX-SB
-   * binding that match the specified {@code id}.
-   * {@link ClassLoader#getSystemClassLoader()} will be used by the
-   * {@link BasicDataSource} when it loads the JDBC driver.
+   * Create a {@link BasicDataSource} from the configuration supplied by the {@code /dbcp:dbcp} child elements of the provided
+   * {@link Dbcps} JAX-SB binding that match the specified {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by
+   * the {@link BasicDataSource} when it loads the JDBC driver.
    *
-   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided
-   *          {@link Dbcps} to match, or {@code null} to match all child
-   *          elements.
+   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided {@link Dbcps} to match, or {@code null} to match all
+   *          child elements.
    * @param dbcps The {@link Dbcps} JAX-SB binding.
    * @return The {@link BasicDataSource} instance.
-   * @throws IllegalArgumentException If {@code dbcps} is null, does not contain
-   *           any {@code /dbcp:dbcp} child elements, contains null child
-   *           elements, or if the {@code /dbcp:jdbc} element is missing from
-   *           all {@code /dbcp:dbcp} child elements in {@code dbcps}.
+   * @throws IllegalArgumentException If {@code dbcps} is null, does not contain any {@code /dbcp:dbcp} child elements, contains
+   *           null child elements, or if the {@code /dbcp:jdbc} element is missing from all {@code /dbcp:dbcp} child elements in
+   *           {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final String id, final $Dbcps dbcps) {
     return createDataSource(id, ClassLoader.getSystemClassLoader(), dbcps);
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the
-   * {@code /dbcp:dbcp} child elements of the provided {@link Dbcps} JAX-B
-   * binding that match any {@code id}.
+   * Create a {@link BasicDataSource} from the configuration supplied by the {@code /dbcp:dbcp} child elements of the provided
+   * {@link Dbcps} JAX-B binding that match any {@code id}.
    *
-   * @param driverClassLoader Class loader to be used by the
-   *          {@link BasicDataSource} when it loads the JDBC driver.
+   * @param driverClassLoader Class loader to be used by the {@link BasicDataSource} when it loads the JDBC driver.
    * @param dbcps Array of {@link Dbcp} JAX-B bindings.
    * @return The {@link BasicDataSource} instance.
-   * @throws IllegalArgumentException If {@code dbcps} is null, any member of
-   *           {@code dbcps} is null, or if the {@code /dbcp:jdbc} element is
-   *           missing from all members in {@code dbcps}.
+   * @throws IllegalArgumentException If {@code dbcps} is null, any member of {@code dbcps} is null, or if the {@code /dbcp:jdbc}
+   *           element is missing from all members in {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final ClassLoader driverClassLoader, final Dbcp ... dbcps) {
     return createDataSource(null, driverClassLoader, assertNotNull(dbcps));
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the
-   * array of {@link $Dbcp dbcp} JAX-SB bindings that match the specified
-   * {@code id}.
+   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link $Dbcp dbcp} JAX-SB bindings that match
+   * the specified {@code id}.
    *
-   * @param driverClassLoader Class loader to be used by the
-   *          {@link BasicDataSource} when it loads the JDBC driver.
+   * @param driverClassLoader Class loader to be used by the {@link BasicDataSource} when it loads the JDBC driver.
    * @param dbcps Array of {@link $Dbcp} JAX-SB bindings.
    * @return The {@link BasicDataSource} instance.
-   * @throws IllegalArgumentException If {@code dbcps} is null, any member of
-   *           {@code dbcps} is null, or if the {@code /dbcp:jdbc} element is
-   *           missing from all members in {@code dbcps}.
+   * @throws IllegalArgumentException If {@code dbcps} is null, any member of {@code dbcps} is null, or if the {@code /dbcp:jdbc}
+   *           element is missing from all members in {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final ClassLoader driverClassLoader, final $Dbcp ... dbcps) {
     return createDataSource(null, driverClassLoader, assertNotNull(dbcps));
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the
-   * {@code /dbcp:dbcp} child elements of the provided
-   * {@link org.openjax.dbcp_1_2.Dbcps} JAX-B binding that match the specified
-   * {@code id}.
+   * Create a {@link BasicDataSource} from the configuration supplied by the {@code /dbcp:dbcp} child elements of the provided
+   * {@link org.openjax.dbcp_1_2.Dbcps} JAX-B binding that match the specified {@code id}.
    *
-   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided
-   *          {@link org.openjax.dbcp_1_2.Dbcps} to match, or {@code null} to
-   *          match all child elements.
-   * @param driverClassLoader Class loader to be used by the
-   *          {@link BasicDataSource} when it loads the JDBC driver.
+   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided {@link org.openjax.dbcp_1_2.Dbcps} to match, or
+   *          {@code null} to match all child elements.
+   * @param driverClassLoader Class loader to be used by the {@link BasicDataSource} when it loads the JDBC driver.
    * @param dbcps The {@link org.openjax.dbcp_1_2.Dbcps} JAX-B binding.
    * @return The {@link BasicDataSource} instance.
-   * @throws IllegalArgumentException If {@code dbcps} is null, does not contain
-   *           any {@code /dbcp:dbcp} child elements, contains null child
-   *           elements, or if the {@code /dbcp:jdbc} element is missing from
-   *           all {@code /dbcp:dbcp} child elements in {@code dbcps}.
+   * @throws IllegalArgumentException If {@code dbcps} is null, does not contain any {@code /dbcp:dbcp} child elements, contains
+   *           null child elements, or if the {@code /dbcp:jdbc} element is missing from all {@code /dbcp:dbcp} child elements in
+   *           {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final org.openjax.dbcp_1_2.Dbcps dbcps) {
     assertNotNull(dbcps);
@@ -250,21 +220,17 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the
-   * {@code /dbcp:dbcp} child elements of the provided {@link Dbcps} JAX-SB
-   * binding that match the specified {@code id}.
+   * Create a {@link BasicDataSource} from the configuration supplied by the {@code /dbcp:dbcp} child elements of the provided
+   * {@link Dbcps} JAX-SB binding that match the specified {@code id}.
    *
-   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided
-   *          {@link Dbcps} to match, or {@code null} to match all child
-   *          elements.
-   * @param driverClassLoader Class loader to be used by the
-   *          {@link BasicDataSource} when it loads the JDBC driver.
+   * @param id The id of the {@code /dbcp:dbcp} child elements of the provided {@link Dbcps} to match, or {@code null} to match all
+   *          child elements.
+   * @param driverClassLoader Class loader to be used by the {@link BasicDataSource} when it loads the JDBC driver.
    * @param dbcps The {@link Dbcps} JAX-SB binding.
    * @return The {@link BasicDataSource} instance.
-   * @throws IllegalArgumentException If {@code dbcps} is null, does not contain
-   *           any {@code /dbcp:dbcp} child elements, contains null child
-   *           elements, or if the {@code /dbcp:jdbc} element is missing from
-   *           all {@code /dbcp:dbcp} child elements in {@code dbcps}.
+   * @throws IllegalArgumentException If {@code dbcps} is null, does not contain any {@code /dbcp:dbcp} child elements, contains
+   *           null child elements, or if the {@code /dbcp:jdbc} element is missing from all {@code /dbcp:dbcp} child elements in
+   *           {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final $Dbcps dbcps) {
     assertNotNull(dbcps);
@@ -273,30 +239,26 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the
-   * array of {@link Dbcp dbcp} JAX-B bindings that match the specified
-   * {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the
-   * {@link BasicDataSource} when it loads the JDBC driver.
+   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link Dbcp dbcp} JAX-B bindings that match
+   * the specified {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the {@link BasicDataSource} when it loads
+   * the JDBC driver.
    *
    * @param dbcp The {@link Dbcp} JAX-B bindings providing the configuration.
    * @return The {@link BasicDataSource} instance.
-   * @throws IllegalArgumentException If {@code dbcp} is null or if the
-   *           {@code /dbcp:jdbc} element is missing.
+   * @throws IllegalArgumentException If {@code dbcp} is null or if the {@code /dbcp:jdbc} element is missing.
    */
   public static BasicDataSource createDataSource(final Dbcp dbcp) {
     return createDataSource(null, ClassLoader.getSystemClassLoader(), dbcp);
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the
-   * array of {@link $Dbcp dbcp} JAX-SB bindings that match the specified
-   * {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the
-   * {@link BasicDataSource} when it loads the JDBC driver.
+   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link $Dbcp dbcp} JAX-SB bindings that match
+   * the specified {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the {@link BasicDataSource} when it loads
+   * the JDBC driver.
    *
    * @param dbcp The {@link $Dbcp} JAX-SB bindings providing the configuration.
    * @return The {@link BasicDataSource} instance.
-   * @throws IllegalArgumentException If {@code dbcp} is null or if the
-   *           {@code /dbcp:jdbc} element is missing.
+   * @throws IllegalArgumentException If {@code dbcp} is null or if the {@code /dbcp:jdbc} element is missing.
    */
   public static BasicDataSource createDataSource(final $Dbcp dbcp) {
     return createDataSource(null, ClassLoader.getSystemClassLoader(), dbcp);
@@ -352,38 +314,30 @@ public final class DataSources {
   private boolean logAbandoned = false;
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the
-   * array of {@link Dbcp dbcp} JAX-B bindings that match the specified
-   * {@code id}.
+   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link Dbcp dbcp} JAX-B bindings that match
+   * the specified {@code id}.
    *
-   * @param id The id of the {@link Dbcp dbcp} bindings to match, or
-   *          {@code null} to match all bindings.
-   * @param driverClassLoader Class loader to be used by the
-   *          {@link BasicDataSource} when it loads the JDBC driver.
+   * @param id The id of the {@link Dbcp dbcp} bindings to match, or {@code null} to match all bindings.
+   * @param driverClassLoader Class loader to be used by the {@link BasicDataSource} when it loads the JDBC driver.
    * @param dbcps Array of {@link Dbcp} JAX-B bindings.
    * @return The {@link BasicDataSource} instance.
-   * @throws IllegalArgumentException If {@code dbcps} is null, any member of
-   *           {@code dbcps} is null, or if the {@code /dbcp:jdbc} element is
-   *           missing from all members in {@code dbcps}.
+   * @throws IllegalArgumentException If {@code dbcps} is null, any member of {@code dbcps} is null, or if the {@code /dbcp:jdbc}
+   *           element is missing from all members in {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final Dbcp ... dbcps) {
     return new DataSources(id, driverClassLoader, dbcps).build();
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the
-   * array of {@link $Dbcp dbcp} JAX-SB bindings that match the specified
-   * {@code id}.
+   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link $Dbcp dbcp} JAX-SB bindings that match
+   * the specified {@code id}.
    *
-   * @param id The id of the {@link Dbcp dbcp} bindings to match, or
-   *          {@code null} to match all bindings.
-   * @param driverClassLoader Class loader to be used by the
-   *          {@link BasicDataSource} when it loads the JDBC driver.
+   * @param id The id of the {@link Dbcp dbcp} bindings to match, or {@code null} to match all bindings.
+   * @param driverClassLoader Class loader to be used by the {@link BasicDataSource} when it loads the JDBC driver.
    * @param dbcps Array of {@link $Dbcp} JAX-SB bindings.
    * @return The {@link BasicDataSource} instance.
-   * @throws IllegalArgumentException If {@code dbcps} is null, any member of
-   *           {@code dbcps} is null, or if the {@code /dbcp:jdbc} element is
-   *           missing from all members in {@code dbcps}.
+   * @throws IllegalArgumentException If {@code dbcps} is null, any member of {@code dbcps} is null, or if the {@code /dbcp:jdbc}
+   *           element is missing from all members in {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final $Dbcp ... dbcps) {
     return new DataSources(id, driverClassLoader, dbcps).build();
