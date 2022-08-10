@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.XMLConstants;
@@ -41,6 +42,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.libj.logging.LoggerPrintWriter;
+import org.libj.util.CollectionUtil;
 import org.openjax.dbcp_1_2.Dbcp;
 import org.openjax.www.dbcp_1_2.xL0gluGCXAA.$Dbcp;
 import org.openjax.www.dbcp_1_2.xL0gluGCXAA.$Dbcps;
@@ -345,7 +347,7 @@ public final class DataSources {
 
   private DataSources(final String id, final ClassLoader driverClassLoader, final Dbcp ... dbcps) {
     this.driverClassLoader = driverClassLoader;
-    for (final Dbcp dbcp : assertNotNull(dbcps)) {
+    for (final Dbcp dbcp : assertNotNull(dbcps)) { // [A]
       assertNotNull(dbcp);
       if (id != null && !id.equals(dbcp.getId()))
         continue;
@@ -381,10 +383,22 @@ public final class DataSources {
 
       final Dbcp.Connection connection = dbcp.getConnection();
       if (connection != null) {
-        if (connection.getProperties() != null)
-          for (final Dbcp.Connection.Properties.Property property : connection.getProperties().getProperty())
-            if (property.getName() != null && property.getValue() != null)
-              dataSource.addConnectionProperty(property.getName(), property.getValue());
+        if (connection.getProperties() != null) {
+          final List<Dbcp.Connection.Properties.Property> properties = connection.getProperties().getProperty();
+          if (CollectionUtil.isRandomAccess(properties)) {
+            for (int i = 0, i$ = properties.size(); i < i$; ++i) { // [RA]
+              final Dbcp.Connection.Properties.Property property = properties.get(i);
+              if (property.getName() != null && property.getValue() != null)
+                dataSource.addConnectionProperty(property.getName(), property.getValue());
+            }
+          }
+          else {
+            for (final Dbcp.Connection.Properties.Property property : properties) { // [I]
+              if (property.getName() != null && property.getValue() != null)
+                dataSource.addConnectionProperty(property.getName(), property.getValue());
+            }
+          }
+        }
 
         if (connection.getInitSqls() != null) {
           if (dataSource.getConnectionInitSqls().size() > 0)
@@ -521,7 +535,7 @@ public final class DataSources {
 
   private DataSources(final String id, final ClassLoader driverClassLoader, final $Dbcp ... dbcps) {
     this.driverClassLoader = driverClassLoader;
-    for (final $Dbcp dbcp : assertNotNull(dbcps)) {
+    for (final $Dbcp dbcp : assertNotNull(dbcps)) { // [A]
       assertNotNull(dbcp);
       if (id != null && (dbcp.getId$() == null || !id.equals(dbcp.getId$().text())))
         continue;
@@ -557,16 +571,35 @@ public final class DataSources {
 
       final $Dbcp.Connection connection = dbcp.getConnection();
       if (connection != null) {
-        if (connection.getProperties() != null)
-          for (final $Dbcp.Connection.Properties.Property property : connection.getProperties().getProperty())
-            if (property.getName$() != null && property.getValue$() != null)
-              dataSource.addConnectionProperty(property.getName$().text(), property.getValue$().text());
+        if (connection.getProperties() != null) {
+          final List<$Dbcp.Connection.Properties.Property> properties = connection.getProperties().getProperty();
+          if (CollectionUtil.isRandomAccess(properties)) {
+            for (int i = 0, i$ = properties.size(); i < i$; ++i) { // [RA]
+              final $Dbcp.Connection.Properties.Property property = properties.get(i);
+              if (property.getName$() != null && property.getValue$() != null)
+                dataSource.addConnectionProperty(property.getName$().text(), property.getValue$().text());
+            }
+          }
+          else {
+            for (final $Dbcp.Connection.Properties.Property property : properties) { // [I]
+              if (property.getName$() != null && property.getValue$() != null)
+                dataSource.addConnectionProperty(property.getName$().text(), property.getValue$().text());
+            }
+          }
+        }
 
         if (connection.getInitSqls() != null) {
           final List<$StringNonEmpty> initSqls = connection.getInitSqls().getInitSql();
           final String[] initSql = new String[initSqls.size()];
-          for (int i = 0; i < initSqls.size(); ++i)
-            initSql[i] = initSqls.get(i).text();
+          if (CollectionUtil.isRandomAccess(initSqls)) {
+            for (int i = 0; i < initSql.length; ++i) // [RA]
+              initSql[i] = initSqls.get(i).text();
+          }
+          else {
+            final Iterator<$StringNonEmpty> iterator = initSqls.iterator();
+            for (int i = 0; i < initSql.length; ++i) // [I]
+              initSql[i] = iterator.next().text();
+          }
 
           if (dataSource.getConnectionInitSqls().size() > 0)
             Collections.addAll(dataSource.getConnectionInitSqls(), initSql);
