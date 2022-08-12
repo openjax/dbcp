@@ -592,12 +592,12 @@ public final class DataSources {
           final List<$StringNonEmpty> initSqls = connection.getInitSqls().getInitSql();
           final String[] initSql = new String[initSqls.size()];
           if (CollectionUtil.isRandomAccess(initSqls)) {
-            for (int i = 0; i < initSql.length; ++i) // [RA]
+            for (int i = 0, i$ = initSql.length; i < i$; ++i) // [RA]
               initSql[i] = initSqls.get(i).text();
           }
           else {
             final Iterator<$StringNonEmpty> iterator = initSqls.iterator();
-            for (int i = 0; i < initSql.length; ++i) // [I]
+            for (int i = 0, i$ = initSql.length; i < i$; ++i) // [I]
               initSql[i] = iterator.next().text();
           }
 
