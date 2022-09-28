@@ -41,6 +41,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.libj.lang.Strings;
 import org.libj.logging.LoggerPrintWriter;
 import org.libj.util.CollectionUtil;
 import org.openjax.dbcp_1_2.Dbcp;
@@ -514,7 +515,7 @@ public final class DataSources {
             if (disconnectionQueryCodes == null)
               disconnectionQueryCodes = new ArrayList<>();
 
-            Collections.addAll(disconnectionQueryCodes, failFast.getDisconnectionSqlCodes().trim().split(" "));
+            Collections.addAll(disconnectionQueryCodes, Strings.split(failFast.getDisconnectionSqlCodes().trim(), ' '));
           }
         }
       }
@@ -715,7 +716,7 @@ public final class DataSources {
             if (disconnectionQueryCodes == null)
               disconnectionQueryCodes = new ArrayList<>();
 
-            Collections.addAll(disconnectionQueryCodes, failFast.getDisconnectionSqlCodes().text().trim().split(" "));
+            Collections.addAll(disconnectionQueryCodes, Strings.split(failFast.getDisconnectionSqlCodes().text().trim(), ' '));
           }
         }
       }

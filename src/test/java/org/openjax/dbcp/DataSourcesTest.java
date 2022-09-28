@@ -31,6 +31,7 @@ import java.util.Properties;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.jaxsb.runtime.Bindings;
 import org.junit.Test;
+import org.libj.lang.Strings;
 import org.libj.util.CollectionUtil;
 import org.openjax.www.dbcp_1_2.xL0gluGCXAA.$Dbcp;
 import org.xml.sax.SAXException;
@@ -73,7 +74,7 @@ public class DataSourcesTest {
     assertEquals(properties.get("readOnly"), "" + dataSource.getDefaultReadOnly());
     assertEquals(properties.get("queryTimeout"), "" + dataSource.getDefaultQueryTimeout());
     assertEquals(getTransactionIsolation(properties.get("transactionIsolation").toString()), dataSource.getDefaultTransactionIsolation());
-    assertArrayEquals(properties.get("initSql").toString().split(","), dataSource.getConnectionInitSqlsAsArray());
+    assertArrayEquals(Strings.split(properties.get("initSql").toString(), ','), dataSource.getConnectionInitSqlsAsArray());
     assertEquals(properties.get("initialSize"), "" + dataSource.getInitialSize());
     assertEquals(properties.get("minIdle"), "" + dataSource.getMinIdle());
     assertEquals(properties.get("maxIdle"), "" + dataSource.getMaxIdle());
@@ -102,7 +103,7 @@ public class DataSourcesTest {
     assertEquals(properties.get("testOnReturn"), "" + dataSource.getTestOnReturn());
     assertEquals(properties.get("testWhileIdle"), "" + dataSource.getTestWhileIdle());
     assertEquals(properties.get("timeout").equals("INDEFINITE"), dataSource.getValidationQueryTimeout() == -1);
-    assertEquals(CollectionUtil.asCollection(new HashSet<>(), properties.get("disconnectionSqlCodes").toString().split(" ")), dataSource.getDisconnectionSqlCodes());
+    assertEquals(CollectionUtil.asCollection(new HashSet<>(), Strings.split(properties.get("disconnectionSqlCodes").toString(), ' ')), dataSource.getDisconnectionSqlCodes());
     assertEquals(properties.get("logExpiredConnections"), "" + dataSource.getLogExpiredConnections());
     assertEquals(properties.get("logAbandoned"), "" + dataSource.getLogAbandoned());
     assertEquals(properties.get("jmxName"), dataSource.getJmxName());
