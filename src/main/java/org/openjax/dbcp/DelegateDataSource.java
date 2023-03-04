@@ -16,8 +16,6 @@
 
 package org.openjax.dbcp;
 
-import static org.libj.lang.Assertions.*;
-
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -41,10 +39,10 @@ public class DelegateDataSource implements DataSource {
    * Creates a new {@link DelegateDataSource} with the specified target {@link DataSource}.
    *
    * @param target The target {@link DataSource}.
-   * @throws IllegalArgumentException If {@code target} is null.
+   * @throws NullPointerException If {@code target} is null.
    */
   public DelegateDataSource(final DataSource target) {
-    this.target = assertNotNull(target);
+    this.target = Objects.requireNonNull(target);
   }
 
   /**
