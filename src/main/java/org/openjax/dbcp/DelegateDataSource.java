@@ -110,15 +110,11 @@ public class DelegateDataSource implements DataSource {
 
   @Override
   public int hashCode() {
-    int hashCode = 1;
-    if (target != null)
-      hashCode = 31 * hashCode + target.hashCode();
-
-    return hashCode;
+    return target.hashCode();
   }
 
   @Override
   public String toString() {
-    return String.valueOf(target);
+    return target.toString();
   }
 }
