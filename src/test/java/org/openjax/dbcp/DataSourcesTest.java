@@ -122,8 +122,9 @@ public class DataSourcesTest {
       assertEquals(1, resultSet.getInt(1));
       assertFalse(resultSet.next());
     }
-
-    new File("derby.log").delete();
+    finally {
+      new File("derby.log").delete();
+    }
   }
 
   @Test
@@ -139,7 +140,8 @@ public class DataSourcesTest {
       assertEquals(1, resultSet.getInt(1));
       assertFalse(resultSet.next());
     }
-
-    new File("derby.log").delete();
+    finally {
+      new File("derby.log").delete();
+    }
   }
 }
