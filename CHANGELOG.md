@@ -2,7 +2,7 @@
 
 ## [v1.3.0-SNAPSHOT](https://github.com/libj/util/compare/78c6ffabb880ecea652255e8ee67efeed26be3ff..HEAD)
 
-## [v1.1.1](https://github.com/openjax/dbcp/compare/ac501f1b8dfa61a3b3f87c345fa3e716b29623da..78c6ffabb880ecea652255e8ee67efeed26be3ff) (2023-09-20)
+## [v1.2.0](https://github.com/openjax/dbcp/compare/ac501f1b8dfa61a3b3f87c345fa3e716b29623da..78c6ffabb880ecea652255e8ee67efeed26be3ff) (2023-09-20)
 * #6 Throw SQL[Non]TransientConnectionException from getConnection()
 * #5 Support aggregate configuration via multiple bindings
 * #4 Support {poolPreparedStatements, testOnCreate, validationTimeout, jmxName}
