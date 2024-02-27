@@ -28,71 +28,71 @@ OpenJAX DBCP is based on a [XML Schema][dbcp-schema] used to specify the formal 
 1. Create a `dbcp.xml` in `src/main/resources/`.
 
    ```xml
-   <dbcp name="example"
-     xmlns="http://www.openjax.org/dbcp-1.1.xsd"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://www.openjax.org/dbcp-1.1.xsd http://www.openjax.org/dbcp.xsd">
-     <jdbc>
-       <url>jdbc:derby:memory:example;create=true</url>
-       <driverClassName>org.apache.derby.jdbc.EmbeddedDriver</driverClassName>
-     </jdbc>
-     <default>
-       <catalog>catalog</catalog>
-       <autoCommit>true</autoCommit>
-       <readOnly>false</readOnly>
-       <queryTimeout>300000</queryTimeout>
-       <transactionIsolation>READ_UNCOMMITTED</transactionIsolation>
-     </default>
-     <connection>
-       <properties>
-         <property name="prop1" value="value1"/>
-         <property name="prop2" value="value2"/>
-       </properties>
-       <initSqls>
-         <initSql>SELECT 1 FROM SYSIBM.SYSDUMMY1</initSql>
-         <initSql>SELECT 1 FROM SYSIBM.SYSDUMMY1</initSql>
-       </initSqls>
-     </connection>
-     <size>
-       <initialSize>0</initialSize>
-       <maxTotal>8</maxTotal>
-       <maxIdle>8</maxIdle>
-       <minIdle>0</minIdle>
-       <maxOpenPreparedStatements>INDEFINITE</maxOpenPreparedStatements>
-     </size>
-     <pool>
-       <queue>lifo</queue>
-       <cacheState>false</cacheState>
-       <maxWait>INDEFINITE</maxWait>
-       <maxConnectionLifetime>INDEFINITE</maxConnectionLifetime>
-       <autoCommitOnReturn>true</autoCommitOnReturn>
-       <rollbackOnReturn>true</rollbackOnReturn>
-       <removeAbandoned on="maintenance" timeout="300"/>
-       <abandonedUsageTracking>true</abandonedUsageTracking>
-       <allowAccessToUnderlyingConnection>false</allowAccessToUnderlyingConnection>
-       <eviction>
-         <timeBetweenRuns>300000</timeBetweenRuns>
-         <numTestsPerRun>3</numTestsPerRun>
-         <minIdleTime>1800000</minIdleTime>
-         <softMinIdleTime>INDEFINITE</softMinIdleTime>
-         <policyClassName>org.openjax.dbcp.MockEvictionPolicy</policyClassName>
-       </eviction>
-     </pool>
-     <validation>
-       <query>SELECT 1 FROM SYSIBM.SYSDUMMY1</query>
-       <testOnBorrow>false</testOnBorrow>
-       <testOnReturn>false</testOnReturn>
-       <testWhileIdle>false</testWhileIdle>
-       <fastFail>
-         <disconnectionSqlCodes>42X01 42X02 42X03</disconnectionSqlCodes>
-       </fastFail>
-     </validation>
-     <logging>
-       <level>INFO</level>
-       <logExpiredConnections>true</logExpiredConnections>
-       <logAbandoned>true</logAbandoned>
-     </logging>
-   </dbcp>
+   <dbcp id="example"
+    xmlns="http://www.openjax.org/dbcp-1.2.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.openjax.org/dbcp-1.2.xsd http://www.openjax.org/dbcp.xsd">
+    <jdbc>
+      <url>jdbc:derby:memory:example;create=true</url>
+      <driverClassName>org.apache.derby.jdbc.EmbeddedDriver</driverClassName>
+    </jdbc>
+    <default>
+      <catalog>catalog</catalog>
+      <autoCommit>true</autoCommit>
+      <readOnly>false</readOnly>
+      <queryTimeout>300000</queryTimeout>
+      <transactionIsolation>READ_UNCOMMITTED</transactionIsolation>
+    </default>
+    <connection>
+      <properties>
+        <property name="prop1" value="value1"/>
+        <property name="prop2" value="value2"/>
+      </properties>
+      <initSqls>
+        <initSql>SELECT 1 FROM SYSIBM.SYSDUMMY1</initSql>
+        <initSql>SELECT 1 FROM SYSIBM.SYSDUMMY1</initSql>
+      </initSqls>
+    </connection>
+    <size>
+      <initialSize>0</initialSize>
+      <maxTotal>8</maxTotal>
+      <maxIdle>8</maxIdle>
+      <minIdle>0</minIdle>
+      <poolPreparedStatements/>
+    </size>
+    <pool>
+      <queue>lifo</queue>
+      <cacheState>false</cacheState>
+      <maxWait>INDEFINITE</maxWait>
+      <maxConnectionLifetime>INDEFINITE</maxConnectionLifetime>
+      <autoCommitOnReturn>true</autoCommitOnReturn>
+      <rollbackOnReturn>true</rollbackOnReturn>
+      <removeAbandoned on="maintenance" timeout="300"/>
+      <abandonedUsageTracking>true</abandonedUsageTracking>
+      <allowAccessToUnderlyingConnection>false</allowAccessToUnderlyingConnection>
+      <eviction>
+        <timeBetweenRuns>300000</timeBetweenRuns>
+        <numTestsPerRun>3</numTestsPerRun>
+        <minIdleTime>1800000</minIdleTime>
+        <softMinIdleTime>INDEFINITE</softMinIdleTime>
+        <policyClassName>org.openjax.dbcp.MockEvictionPolicy</policyClassName>
+      </eviction>
+    </pool>
+    <validation>
+      <query>SELECT 1 FROM SYSIBM.SYSDUMMY1</query>
+      <testOnBorrow>false</testOnBorrow>
+      <testOnReturn>false</testOnReturn>
+      <testWhileIdle>false</testWhileIdle>
+      <fastFail>
+        <disconnectionSqlCodes>42X01 42X02 42X03</disconnectionSqlCodes>
+      </fastFail>
+    </validation>
+    <logging>
+      <level>INFO</level>
+      <logExpiredConnections>true</logExpiredConnections>
+      <logAbandoned>true</logAbandoned>
+    </logging>
+  </dbcp>
    ```
 
 1. Add `org.openjax:dbcp` dependency to the POM.

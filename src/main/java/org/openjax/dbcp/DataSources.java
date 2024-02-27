@@ -121,9 +121,9 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link Dbcp dbcp} JAX-B bindings that match
-   * the specified {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the {@link BasicDataSource} when it loads
-   * the JDBC driver.
+   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link Dbcp dbcp} JAX-B bindings that match the
+   * specified {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the {@link BasicDataSource} when it loads the
+   * JDBC driver.
    *
    * @param id The id of the {@link Dbcp dbcp} bindings to match, or {@code null} to match all bindings.
    * @param dbcps Array of {@link Dbcp} JAX-B bindings.
@@ -136,9 +136,8 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link Dbcp dbcp} JAX-B bindings that match
-   * any {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the {@link BasicDataSource} when it loads the JDBC
-   * driver.
+   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link Dbcp dbcp} JAX-B bindings that match any
+   * {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the {@link BasicDataSource} when it loads the JDBC driver.
    *
    * @param dbcps Array of {@link Dbcp} JAX-B bindings.
    * @return The {@link BasicDataSource} instance.
@@ -181,8 +180,8 @@ public final class DataSources {
 
   /**
    * Create a {@link BasicDataSource} from the configuration supplied by the {@code /dbcp:dbcp} child elements of the provided
-   * {@link org.openjax.dbcp_1_2.Dbcps} JAX-B binding that match the specified {@code id}.
-   * {@link ClassLoader#getSystemClassLoader()} will be used by the {@link BasicDataSource} when it loads the JDBC driver.
+   * {@link org.openjax.dbcp_1_2.Dbcps} JAX-B binding that match the specified {@code id}. {@link ClassLoader#getSystemClassLoader()}
+   * will be used by the {@link BasicDataSource} when it loads the JDBC driver.
    *
    * @param id The id of the {@code /dbcp:dbcp} child elements of the provided {@link org.openjax.dbcp_1_2.Dbcps} to match, or
    *          {@code null} to match all child elements.
@@ -213,8 +212,8 @@ public final class DataSources {
 
   /**
    * Create a {@link BasicDataSource} from the configuration supplied by the {@code /dbcp:dbcp} child elements of the provided
-   * {@link Dbcps} JAX-SB binding that match the specified {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by
-   * the {@link BasicDataSource} when it loads the JDBC driver.
+   * {@link Dbcps} JAX-SB binding that match the specified {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the
+   * {@link BasicDataSource} when it loads the JDBC driver.
    *
    * @param id The id of the {@code /dbcp:dbcp} child elements of the provided {@link Dbcps} to match, or {@code null} to match all
    *          child elements.
@@ -336,9 +335,9 @@ public final class DataSources {
   }
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link Dbcp dbcp} JAX-B bindings that that
-   * match any {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the {@link BasicDataSource} when it loads the
-   * JDBC driver.
+   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link Dbcp dbcp} JAX-B bindings that that match
+   * any {@code id}. {@link ClassLoader#getSystemClassLoader()} will be used by the {@link BasicDataSource} when it loads the JDBC
+   * driver.
    *
    * @param dbcp The {@link Dbcp} JAX-B bindings providing the configuration.
    * @return The {@link BasicDataSource} instance.
@@ -413,8 +412,8 @@ public final class DataSources {
   private boolean logAbandoned = false;
 
   /**
-   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link Dbcp dbcp} JAX-B bindings that match
-   * the specified {@code id}.
+   * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link Dbcp dbcp} JAX-B bindings that match the
+   * specified {@code id}.
    *
    * @param id The id of the {@link Dbcp dbcp} bindings to match, or {@code null} to match all bindings.
    * @param driverClassLoader Class loader to be used by the {@link BasicDataSource} when it loads the JDBC driver.
@@ -493,7 +492,8 @@ public final class DataSources {
           final int i$ = properties.size();
           if (i$ > 0) {
             if (CollectionUtil.isRandomAccess(properties)) {
-              int i = 0; do { // [RA]
+              int i = 0;
+              do { // [RA]
                 final Dbcp.Connection.Properties.Property property = properties.get(i);
                 final String name = property.getName();
                 final String value = property.getValue();
@@ -503,7 +503,8 @@ public final class DataSources {
               while (++i < i$);
             }
             else {
-              final Iterator<Dbcp.Connection.Properties.Property> it = properties.iterator(); do { // [I]
+              final Iterator<Dbcp.Connection.Properties.Property> it = properties.iterator();
+              do { // [I]
                 final Dbcp.Connection.Properties.Property property = it.next();
                 final String name = property.getName();
                 final String value = property.getValue();
@@ -730,7 +731,8 @@ public final class DataSources {
           final int i$ = properties.size();
           if (i$ > 0) {
             if (CollectionUtil.isRandomAccess(properties)) {
-              int i = 0; do { // [RA]
+              int i = 0;
+              do { // [RA]
                 final $Dbcp.Connection.Properties.Property property = properties.get(i);
                 final $Dbcp.Connection.Properties.Property.Name$ name = property.getName$();
                 final $Dbcp.Connection.Properties.Property.Value$ value = property.getValue$();
@@ -740,7 +742,8 @@ public final class DataSources {
               while (++i < i$);
             }
             else {
-              final Iterator<$Dbcp.Connection.Properties.Property> it = properties.iterator(); do { // [I]
+              final Iterator<$Dbcp.Connection.Properties.Property> it = properties.iterator();
+              do { // [I]
                 final $Dbcp.Connection.Properties.Property property = it.next();
                 final $Dbcp.Connection.Properties.Property.Name$ name = property.getName$();
                 final $Dbcp.Connection.Properties.Property.Value$ value = property.getValue$();
@@ -758,12 +761,15 @@ public final class DataSources {
         if (initSqls != null && (size = (sqls = initSqls.getInitSql()).size()) > 0) {
           final String[] sql = new String[size];
           if (CollectionUtil.isRandomAccess(sqls)) {
-            int i = 0; do // [RA]
+            int i = 0;
+            do // [RA]
               sql[i] = sqls.get(i).text();
             while (++i < size);
           }
           else {
-            int i = -1; final Iterator<$StringNonEmpty> it = sqls.iterator(); do // [I]
+            int i = -1;
+            final Iterator<$StringNonEmpty> it = sqls.iterator();
+            do // [I]
               sql[++i] = it.next().text();
             while (it.hasNext());
           }
