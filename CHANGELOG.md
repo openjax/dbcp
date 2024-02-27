@@ -1,11 +1,14 @@
 # Changes by Version
 
-## [v1.3.0-SNAPSHOT](https://github.com/libj/util/compare/78c6ffabb880ecea652255e8ee67efeed26be3ff..HEAD)
+## [v1.3.1-SNAPSHOT](https://github.com/libj/util/compare/c55d8e6cff9a530e073cb7fc94c5d5ffa008f4a2..HEAD)
+
+## [v1.3.0](https://github.com/libj/util/compare/78c6ffabb880ecea652255e8ee67efeed26be3ff..c55d8e6cff9a530e073cb7fc94c5d5ffa008f4a2) (2024-02-27)
+* #8 Apply auto-formatting
 
 ## [v1.2.0](https://github.com/openjax/dbcp/compare/ac501f1b8dfa61a3b3f87c345fa3e716b29623da..78c6ffabb880ecea652255e8ee67efeed26be3ff) (2023-09-20)
-* #6 Throw SQL[Non]TransientConnectionException from getConnection()
+* #6 Throw `SQL[Non]TransientConnectionException` from `getConnection()`
 * #5 Support aggregate configuration via multiple bindings
-* #4 Support {poolPreparedStatements, testOnCreate, validationTimeout, jmxName}
+* #4 Support {`poolPreparedStatements`, `testOnCreate`, `validationTimeout`, `jmxName`}
 * #2 Upgrade Maven dependencies
 * #1 Transition to GitHub Actions
 
