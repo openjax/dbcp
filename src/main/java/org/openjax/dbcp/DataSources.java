@@ -493,24 +493,14 @@ public final class DataSources {
           if (i$ > 0) {
             if (CollectionUtil.isRandomAccess(properties)) {
               int i = 0;
-              do { // [RA]
-                final Dbcp.Connection.Properties.Property property = properties.get(i);
-                final String name = property.getName();
-                final String value = property.getValue();
-                if (name != null && value != null)
-                  dataSource.addConnectionProperty(name, value);
-              }
+              do // [RA]
+                add(properties.get(i));
               while (++i < i$);
             }
             else {
               final Iterator<Dbcp.Connection.Properties.Property> it = properties.iterator();
-              do { // [I]
-                final Dbcp.Connection.Properties.Property property = it.next();
-                final String name = property.getName();
-                final String value = property.getValue();
-                if (name != null && value != null)
-                  dataSource.addConnectionProperty(name, value);
-              }
+              do // [I]
+                add(it.next());
               while (it.hasNext());
             }
           }
@@ -679,6 +669,20 @@ public final class DataSources {
     }
   }
 
+  private void add(final $Dbcp.Connection.Properties.Property property) {
+    final $Dbcp.Connection.Properties.Property.Name$ name = property.getName$();
+    final $Dbcp.Connection.Properties.Property.Value$ value = property.getValue$();
+    if (name != null && value != null)
+      dataSource.addConnectionProperty(name.text(), value.text());
+  }
+
+  private void add(final Dbcp.Connection.Properties.Property property) {
+    final String name = property.getName();
+    final String value = property.getValue();
+    if (name != null && value != null)
+      dataSource.addConnectionProperty(name, value);
+  }
+
   private DataSources(final String id, final ClassLoader driverClassLoader, final $Dbcp ... dbcps) {
     this.driverClassLoader = driverClassLoader;
     for (final $Dbcp dbcp : dbcps) { // [A]
@@ -732,24 +736,14 @@ public final class DataSources {
           if (i$ > 0) {
             if (CollectionUtil.isRandomAccess(properties)) {
               int i = 0;
-              do { // [RA]
-                final $Dbcp.Connection.Properties.Property property = properties.get(i);
-                final $Dbcp.Connection.Properties.Property.Name$ name = property.getName$();
-                final $Dbcp.Connection.Properties.Property.Value$ value = property.getValue$();
-                if (name != null && value != null)
-                  dataSource.addConnectionProperty(name.text(), value.text());
-              }
+              do // [RA]
+                add(properties.get(i));
               while (++i < i$);
             }
             else {
               final Iterator<$Dbcp.Connection.Properties.Property> it = properties.iterator();
-              do { // [I]
-                final $Dbcp.Connection.Properties.Property property = it.next();
-                final $Dbcp.Connection.Properties.Property.Name$ name = property.getName$();
-                final $Dbcp.Connection.Properties.Property.Value$ value = property.getValue$();
-                if (name != null && value != null)
-                  dataSource.addConnectionProperty(name.text(), value.text());
-              }
+              do // [I]
+                add(it.next());
               while (it.hasNext());
             }
           }
