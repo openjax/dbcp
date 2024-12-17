@@ -362,55 +362,6 @@ public final class DataSources {
     return createDataSource(null, ClassLoader.getSystemClassLoader(), dbcp);
   }
 
-  private final ClassLoader driverClassLoader;
-  private BasicDataSource dataSource = null;
-  private String driverClassName = null;
-  private String url = null;
-
-  private boolean autoCommit = true;
-  private boolean readOnly = false;
-
-  private Integer queryTimeout = null;
-  private String transactionIsolation = null;
-
-  private int initialSize = 0;
-  private int minIdle = 0;
-  private String maxIdle = INDEFINITE;
-  private String maxTotal = INDEFINITE;
-  private boolean poolPreparedStatements = false;
-  private String maxOpen = INDEFINITE;
-
-  private boolean lifo = true;
-
-  private boolean cacheState = true;
-  private String maxWait = INDEFINITE;
-  private String maxConnLifetime = INDEFINITE;
-  private boolean autoCommitOnReturn = true;
-  private boolean rollbackOnReturn = true;
-  private String removeAbandonedOn = null;
-  private int removeAbandonedTimeout = 0;
-  private boolean abandonedUsageTracking = false;
-  private boolean accessToUnderlyingConnectionAllowed = false;
-  private boolean hasEviction = false;
-  private String timeBetweenEvictionRunsMillis = INDEFINITE;
-  private int numTestsPerRun = 3;
-  private long minEvictableIdleTimeMillis = 1800000;
-  private String softMinEvictableIdleTimeMillis = INDEFINITE;
-  private String policyClassName = null;
-
-  private boolean hasValidation = false;
-  private String validationQuery = null;
-  private String validationQueryTimeout = INDEFINITE;
-  private boolean testOnCreate = false;
-  private boolean testOnBorrow = true;
-  private boolean testOnReturn = false;
-  private boolean testWhileIdle = false;
-  private List<String> disconnectionQueryCodes = null;
-
-  private String loggingLevel = null;
-  private boolean logExpiredConnections = false;
-  private boolean logAbandoned = false;
-
   /**
    * Create a {@link BasicDataSource} from the configuration supplied by the array of {@link Dbcp dbcp} JAX-B bindings that match the
    * specified {@code id}.
@@ -423,7 +374,7 @@ public final class DataSources {
    * @throws IllegalArgumentException If the {@code /dbcp:jdbc} element is missing from all members in {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final Dbcp ... dbcps) {
-    return new DataSources(id, driverClassLoader, dbcps).build();
+    return DataSources(id, driverClassLoader, dbcps);
   }
 
   /**
@@ -438,11 +389,58 @@ public final class DataSources {
    * @throws IllegalArgumentException If the {@code /dbcp:jdbc} element is missing from all members in {@code dbcps}.
    */
   public static BasicDataSource createDataSource(final String id, final ClassLoader driverClassLoader, final $Dbcp ... dbcps) {
-    return new DataSources(id, driverClassLoader, dbcps).build();
+    return DataSources(id, driverClassLoader, dbcps);
   }
 
-  private DataSources(final String id, final ClassLoader driverClassLoader, final Dbcp ... dbcps) {
-    this.driverClassLoader = driverClassLoader;
+  static BasicDataSource DataSources(final String id, final ClassLoader driverClassLoader, final Dbcp ... dbcps) {
+    BasicDataSource dataSource = null;
+    String driverClassName = null;
+    String url = null;
+
+    boolean autoCommit = true;
+    boolean readOnly = false;
+
+    Integer queryTimeout = null;
+    String transactionIsolation = null;
+
+    int initialSize = 0;
+    int minIdle = 0;
+    String maxIdle = INDEFINITE;
+    String maxTotal = INDEFINITE;
+    boolean poolPreparedStatements = false;
+    String maxOpen = INDEFINITE;
+
+    boolean lifo = true;
+
+    boolean cacheState = true;
+    String maxWait = INDEFINITE;
+    String maxConnLifetime = INDEFINITE;
+    boolean autoCommitOnReturn = true;
+    boolean rollbackOnReturn = true;
+    String removeAbandonedOn = null;
+    int removeAbandonedTimeout = 0;
+    boolean abandonedUsageTracking = false;
+    boolean accessToUnderlyingConnectionAllowed = false;
+    boolean hasEviction = false;
+    String timeBetweenEvictionRunsMillis = INDEFINITE;
+    int numTestsPerRun = 3;
+    long minEvictableIdleTimeMillis = 1800000;
+    String softMinEvictableIdleTimeMillis = INDEFINITE;
+    String policyClassName = null;
+
+    boolean hasValidation = false;
+    String validationQuery = null;
+    String validationQueryTimeout = INDEFINITE;
+    boolean testOnCreate = false;
+    boolean testOnBorrow = true;
+    boolean testOnReturn = false;
+    boolean testWhileIdle = false;
+    List<String> disconnectionQueryCodes = null;
+
+    String loggingLevel = null;
+    boolean logExpiredConnections = false;
+    boolean logAbandoned = false;
+
     for (final Dbcp dbcp : dbcps) { // [A]
       if (id != null && !id.equals(dbcp.getId()))
         continue;
@@ -494,13 +492,13 @@ public final class DataSources {
             if (CollectionUtil.isRandomAccess(properties)) {
               int i = 0;
               do // [RA]
-                add(properties.get(i));
+                add(dataSource, properties.get(i));
               while (++i < i$);
             }
             else {
               final Iterator<Dbcp.Connection.Properties.Property> it = properties.iterator();
               do // [I]
-                add(it.next());
+                add(dataSource, it.next());
               while (it.hasNext());
             }
           }
@@ -667,24 +665,73 @@ public final class DataSources {
 
       dataSource.setJmxName(dbcp.getJmxName());
     }
+
+    return build(driverClassLoader, dataSource, driverClassName, url, autoCommit, readOnly, queryTimeout, transactionIsolation, initialSize, minIdle, maxIdle, maxTotal, poolPreparedStatements, maxOpen, lifo, cacheState, maxWait, maxConnLifetime, autoCommitOnReturn, rollbackOnReturn, removeAbandonedOn, removeAbandonedTimeout, abandonedUsageTracking, accessToUnderlyingConnectionAllowed, hasEviction, timeBetweenEvictionRunsMillis, numTestsPerRun, minEvictableIdleTimeMillis, softMinEvictableIdleTimeMillis, policyClassName, hasValidation, validationQuery, validationQueryTimeout, testOnCreate, testOnBorrow, testOnReturn, testWhileIdle, disconnectionQueryCodes, loggingLevel, logExpiredConnections, logAbandoned);
   }
 
-  private void add(final $Dbcp.Connection.Properties.Property property) {
+  private static void add(final BasicDataSource dataSource, final $Dbcp.Connection.Properties.Property property) {
     final $Dbcp.Connection.Properties.Property.Name$ name = property.getName$();
     final $Dbcp.Connection.Properties.Property.Value$ value = property.getValue$();
     if (name != null && value != null)
       dataSource.addConnectionProperty(name.text(), value.text());
   }
 
-  private void add(final Dbcp.Connection.Properties.Property property) {
+  private static void add(final BasicDataSource dataSource, final Dbcp.Connection.Properties.Property property) {
     final String name = property.getName();
     final String value = property.getValue();
     if (name != null && value != null)
       dataSource.addConnectionProperty(name, value);
   }
 
-  private DataSources(final String id, final ClassLoader driverClassLoader, final $Dbcp ... dbcps) {
-    this.driverClassLoader = driverClassLoader;
+  static BasicDataSource DataSources(final String id, final ClassLoader driverClassLoader, final $Dbcp ... dbcps) {
+    BasicDataSource dataSource = null;
+    String driverClassName = null;
+    String url = null;
+
+    boolean autoCommit = true;
+    boolean readOnly = false;
+
+    Integer queryTimeout = null;
+    String transactionIsolation = null;
+
+    int initialSize = 0;
+    int minIdle = 0;
+    String maxIdle = INDEFINITE;
+    String maxTotal = INDEFINITE;
+    boolean poolPreparedStatements = false;
+    String maxOpen = INDEFINITE;
+
+    boolean lifo = true;
+
+    boolean cacheState = true;
+    String maxWait = INDEFINITE;
+    String maxConnLifetime = INDEFINITE;
+    boolean autoCommitOnReturn = true;
+    boolean rollbackOnReturn = true;
+    String removeAbandonedOn = null;
+    int removeAbandonedTimeout = 0;
+    boolean abandonedUsageTracking = false;
+    boolean accessToUnderlyingConnectionAllowed = false;
+    boolean hasEviction = false;
+    String timeBetweenEvictionRunsMillis = INDEFINITE;
+    int numTestsPerRun = 3;
+    long minEvictableIdleTimeMillis = 1800000;
+    String softMinEvictableIdleTimeMillis = INDEFINITE;
+    String policyClassName = null;
+
+    boolean hasValidation = false;
+    String validationQuery = null;
+    String validationQueryTimeout = INDEFINITE;
+    boolean testOnCreate = false;
+    boolean testOnBorrow = true;
+    boolean testOnReturn = false;
+    boolean testWhileIdle = false;
+    List<String> disconnectionQueryCodes = null;
+
+    String loggingLevel = null;
+    boolean logExpiredConnections = false;
+    boolean logAbandoned = false;
+
     for (final $Dbcp dbcp : dbcps) { // [A]
       final $Dbcp.Id$ id$ = dbcp.getId$();
       if (id != null && (id$ == null || !id.equals(id$.text())))
@@ -737,13 +784,13 @@ public final class DataSources {
             if (CollectionUtil.isRandomAccess(properties)) {
               int i = 0;
               do // [RA]
-                add(properties.get(i));
+                add(dataSource, properties.get(i));
               while (++i < i$);
             }
             else {
               final Iterator<$Dbcp.Connection.Properties.Property> it = properties.iterator();
               do // [I]
-                add(it.next());
+                add(dataSource, it.next());
               while (it.hasNext());
             }
           }
@@ -931,9 +978,53 @@ public final class DataSources {
       if (dbcp.getJmxName() != null)
         dataSource.setJmxName(dbcp.getJmxName().text());
     }
+
+    return build(driverClassLoader, dataSource, driverClassName, url, autoCommit, readOnly, queryTimeout, transactionIsolation, initialSize, minIdle, maxIdle, maxTotal, poolPreparedStatements, maxOpen, lifo, cacheState, maxWait, maxConnLifetime, autoCommitOnReturn, rollbackOnReturn, removeAbandonedOn, removeAbandonedTimeout, abandonedUsageTracking, accessToUnderlyingConnectionAllowed, hasEviction, timeBetweenEvictionRunsMillis, numTestsPerRun, minEvictableIdleTimeMillis, softMinEvictableIdleTimeMillis, policyClassName, hasValidation, validationQuery, validationQueryTimeout, testOnCreate, testOnBorrow, testOnReturn, testWhileIdle, disconnectionQueryCodes, loggingLevel, logExpiredConnections, logAbandoned);
   }
 
-  private BasicDataSource build() {
+  private static BasicDataSource build(
+    final ClassLoader driverClassLoader,
+    final BasicDataSource dataSource,
+    final String driverClassName,
+    final String url,
+    final boolean autoCommit,
+    final boolean readOnly,
+    final Integer queryTimeout,
+    final String transactionIsolation,
+    final int initialSize,
+    final int minIdle,
+    final String maxIdle,
+    final String maxTotal,
+    final boolean poolPreparedStatements,
+    final String maxOpen,
+    final boolean lifo,
+    final boolean cacheState,
+    final String maxWait,
+    final String maxConnLifetime,
+    final boolean autoCommitOnReturn,
+    final boolean rollbackOnReturn,
+    final String removeAbandonedOn,
+    final int removeAbandonedTimeout,
+    final boolean abandonedUsageTracking,
+    final boolean accessToUnderlyingConnectionAllowed,
+    final boolean hasEviction,
+    final String timeBetweenEvictionRunsMillis,
+    final int numTestsPerRun,
+    final long minEvictableIdleTimeMillis,
+    final String softMinEvictableIdleTimeMillis,
+    final String policyClassName,
+    final boolean hasValidation,
+    final String validationQuery,
+    final String validationQueryTimeout,
+    final boolean testOnCreate,
+    final boolean testOnBorrow,
+    final boolean testOnReturn,
+    final boolean testWhileIdle,
+    final List<String> disconnectionQueryCodes,
+    final String loggingLevel,
+    final boolean logExpiredConnections,
+    final boolean logAbandoned
+  ) {
     if (dataSource == null)
       return null;
 
@@ -1031,5 +1122,8 @@ public final class DataSources {
     }
 
     return dataSource;
+  }
+
+  private DataSources() {
   }
 }
