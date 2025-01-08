@@ -83,6 +83,12 @@ class BasicDataSource extends org.apache.commons.dbcp2.BasicDataSource {
   }
 
   @Override
+  protected void log(final String message) {
+    if (!message.startsWith("DBCP DataSource configured without a '"))
+      super.log(message);
+  }
+
+  @Override
   public void setLogWriter(final PrintWriter logWriter) throws SQLException {
     if (settingLogWriter.get())
       return;
